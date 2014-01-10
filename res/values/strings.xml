@@ -4,5 +4,49 @@
     <string name="app_name">NUMAD14S-DushyantDeshmukh</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="about_label">About</string>
+    <string name="gen_error_label">Generate Error</string>
+    <string name="sudoku_label">Sudoku</string>
+    <string name="quit_label">Quit</string>
+    <string name="about_text">\
+Sample about text. Needs to be updated...</string>
+
+    <!-- About screen strings -->
+    <string name="about_name">Dushyant Deshmukh</string>
+    <string name="about_email">deshmukh.d@husky.neu.edu</string>
+    <string name="about_school_year">2nd year MS</string>
+    <string name="about_degree_prog">MS in Computer Science</string>
+    <string name="about_phone_unique_id"></string>
+    
+    <string name="about_ok_label">OK</string>
+    
+    <!-- Sudoku strings -->
+    <string name="sudoku_main_title">Android Sudoku</string>
+    <string name="sudoku_continue_label">Continue</string>
+    <string name="sudoku_new_game_label">New Game</string>
+    <string name="sudoku_about_label">About</string>
+    <string name="sudoku_exit_label">Exit</string>
+    <string name="sudoku_settings_label">Settings...</string>
+    <string name="sudoku_settings_title">Sudoku settings</string>
+    <string name="sudoku_settings_shortcut">s</string>
+    <string name="sudoku_music_title">Music</string>
+    <string name="sudoku_music_summary">Play background music</string>
+    <string name="sudoku_hints_title">Hints</string>
+    <string name="sudoku_hints_summary">Show hints during play</string>
+    <string name="sudoku_new_game_title">Difficulty</string>
+    <string name="sudoku_easy_label">Easy</string>
+    <string name="sudoku_medium_label">Medium</string>
+    <string name="sudoku_hard_label">Hard</string>
+    <string name="sudoku_game_title">Game</string>
+    <string name="sudoku_no_moves_label">No moves</string>
+    <string name="sudoku_keypad_title">Keypad</string>
+    <string name="sudoku_about_title">About Android Sudoku</string>
+    <string name="sudoku_about_text">\
+Sudoku is a logic-based number placement puzzle.
+Starting with a partially completed 9x9 grid, the
+objective is to fill the grid so that each
+row, each column, and each of the 3x3 boxes
+(also called <i>blocks</i>) contains the digits
+1 to 9 exactly once.</string>
 
 </resources>
