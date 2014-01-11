@@ -10,46 +10,47 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import edu.neu.madcourse.dushyantdeshmukh.sudoku.*;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        
-     // Set up click listeners for all the buttons
-        View quitButton = findViewById(R.id.quit_button);
-        quitButton.setOnClickListener(this);
-        View aboutButton = findViewById(R.id.about_button);
-        aboutButton.setOnClickListener(this);
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
+		// Set up click listeners for all the buttons
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-    
-    public void onClick(View v) {
-        switch (v.getId()) {
-//        case R.id.continue_button:
-//           startGame(Game.DIFFICULTY_CONTINUE);
-//           break;
-//           // ...
-        case R.id.about_button:
-           Intent i = new Intent(this, About.class);
-           startActivity(i);
-           break;
-//        // More buttons go here (if any) ...
-//        case R.id.new_button:
-//           openNewGameDialog();
-//           break;
-        case R.id.quit_button:
-           finish();
-           break;
-        }
-     }
+		View aboutButton = findViewById(R.id.about_button);
+		aboutButton.setOnClickListener(this);
+
+		View sudokuButton = findViewById(R.id.sudoku_button);
+		sudokuButton.setOnClickListener(this);
+
+		View quitButton = findViewById(R.id.quit_button);
+		quitButton.setOnClickListener(this);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.about_button:
+			Intent i = new Intent(this, About.class);
+			startActivity(i);
+			break;
+		case R.id.sudoku_button:
+			Intent i2 = new Intent(this, Sudoku.class);
+			startActivity(i2);
+			break;
+		case R.id.quit_button:
+			finish();
+			break;
+		}
+	}
 }

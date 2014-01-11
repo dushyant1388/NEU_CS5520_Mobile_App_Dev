@@ -26,6 +26,19 @@
               android:label="@string/about_label"
               android:theme="@android:style/Theme.Dialog">
         </activity>
+        
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.sudoku.Sudoku"
+              android:label="@string/sudoku_app_name">
+        </activity>
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.sudoku.About"
+              android:label="@string/sudoku_about_title"
+              android:theme="@android:style/Theme.Dialog">
+        </activity>
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.sudoku.Prefs"
+              android:label="@string/sudoku_settings_title">
+        </activity>
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.sudoku.Game"
+              android:label="@string/sudoku_game_title"/>
     </application>
 
 </manifest>
