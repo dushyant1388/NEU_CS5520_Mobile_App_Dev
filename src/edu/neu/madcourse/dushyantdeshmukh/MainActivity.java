@@ -24,6 +24,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		View aboutButton = findViewById(R.id.about_button);
 		aboutButton.setOnClickListener(this);
 
+		View genErrorButton = findViewById(R.id.gen_error_button);
+		genErrorButton.setOnClickListener(this);
+		
 		View sudokuButton = findViewById(R.id.sudoku_button);
 		sudokuButton.setOnClickListener(this);
 
@@ -44,6 +47,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			Intent i = new Intent(this, About.class);
 			startActivity(i);
 			break;
+		case R.id.gen_error_button:
+			throw new RuntimeException("Test runtime exception thrown by the 'Generate Error' button.");
 		case R.id.sudoku_button:
 			Intent i2 = new Intent(this, Sudoku.class);
 			startActivity(i2);

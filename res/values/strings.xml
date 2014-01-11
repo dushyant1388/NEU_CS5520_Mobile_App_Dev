@@ -12,12 +12,11 @@
 Sample about text. Needs to be updated&#8230;</string>
 
     <!-- About screen strings -->
-    <string name="about_name">Dushyant Deshmukh</string>
-    <string name="about_email">deshmukh.d@husky.neu.edu</string>
-    <string name="about_school_year">2nd year MS</string>
-    <string name="about_degree_prog">MS in Computer Science</string>
-    <string name="about_phone_unique_id"></string>
-    
+    <string name="about_name">Name: Dushyant Deshmukh</string>
+    <string name="about_email">Email: deshmukh.d@husky.neu.edu</string>
+    <string name="about_school_year">Year: 2nd year MS</string>
+    <string name="about_degree_prog">Program: MS in Computer Science</string>
+    <string name="about_phone_unique_id_label">Unique ID of Phone</string>    
     <string name="about_ok_label">OK</string>
     
     <!-- Sudoku strings -->

@@ -43,10 +43,16 @@
 
         <ImageView
         android:id="@+id/head_shot_pic"
-        android:src="@drawable/ic_launcher"
+        android:src="@drawable/head_shot_pic"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scaleType="fitCenter"/>
+        
+        <TextView
+            android:id="@+id/about_phone_unique_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="" />
         
         <Button
             android:id="@+id/ok_button"
