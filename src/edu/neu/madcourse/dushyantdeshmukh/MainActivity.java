@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import edu.neu.madcourse.dushyantdeshmukh.dictionary.Dictionary;
 import edu.neu.madcourse.dushyantdeshmukh.sudoku.*;
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -29,6 +30,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		
 		View sudokuButton = findViewById(R.id.sudoku_button);
 		sudokuButton.setOnClickListener(this);
+		
+		View dictionaryButton = findViewById(R.id.dictionary_button);
+		dictionaryButton.setOnClickListener(this);
 
 		View quitButton = findViewById(R.id.quit_button);
 		quitButton.setOnClickListener(this);
@@ -52,6 +56,10 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.sudoku_button:
 			Intent i2 = new Intent(this, Sudoku.class);
 			startActivity(i2);
+			break;
+		case R.id.dictionary_button:
+			Intent i3 = new Intent(this, Dictionary.class);
+			startActivity(i3);
 			break;
 		case R.id.quit_button:
 			finish();

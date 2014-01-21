@@ -8,6 +8,7 @@
     <string name="welcome_msg">Welcome!</string>
     <string name="gen_error_label">Generate Error</string>
     <string name="sudoku_label">Sudoku</string>
+    <string name="dictionary_label">Dictionary</string>
     <string name="quit_label">Quit</string>
     <string name="about_text">\
 Sample about text. Needs to be updated&#8230;</string>
@@ -19,6 +20,13 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="about_degree_prog">Program: MS in Computer Science</string>
     <string name="about_phone_unique_id_label">Unique ID of Phone</string>    
     <string name="about_ok_label">OK</string>
+    
+    <!-- Dictionary screen strings -->
+    <string name="dictionary_title_label">Test Dictionary</string>
+    <string name="dictionary_clear">Clear</string>
+    <string name="dictionary_return">Return to Menu</string>
+    <string name="dictionary_ack">Acknowledgements</string>
+    <string name="dictionary_textbox_hint">Enter your word here&#8230;</string>
     
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>

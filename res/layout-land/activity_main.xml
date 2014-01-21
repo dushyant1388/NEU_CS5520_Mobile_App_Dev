@@ -28,6 +28,7 @@
         android:stretchColumns="*" >
 
         <TableRow>
+
             <Button
                 android:id="@+id/about_button"
                 android:layout_width="match_parent"
@@ -42,11 +43,18 @@
         </TableRow>
 
         <TableRow>
+
             <Button
                 android:id="@+id/sudoku_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/sudoku_label" />
+
+            <Button
+                android:id="@+id/dictionary_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dictionary_label" />
 
             <Button
                 android:id="@+id/quit_button"

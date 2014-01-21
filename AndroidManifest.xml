@@ -40,6 +40,10 @@
         </activity>
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.sudoku.Game"
               android:label="@string/sudoku_game_title"/>
+        
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.dictionary.Dictionary"
+              android:label="@string/dictionary_title_label" />
+        
     </application>
 
 </manifest>
