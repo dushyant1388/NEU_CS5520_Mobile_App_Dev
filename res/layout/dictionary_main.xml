@@ -30,7 +30,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
             android:text="@string/dictionary_clear" />
 
         <Button
@@ -38,7 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
             android:text="@string/dictionary_return" />
 
         <Button
@@ -46,8 +44,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
             android:text="@string/dictionary_ack" />
+        
+        <TextView
+            android:id="@+id/dictionary_wordlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="" />
     </LinearLayout>
 
 </ScrollView>
