@@ -1,40 +1,40 @@
 package edu.neu.madcourse.dushyantdeshmukh.dictionary;
 
 import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import edu.neu.madcourse.dushyantdeshmukh.About;
-import edu.neu.madcourse.dushyantdeshmukh.MainActivity;
-import edu.neu.madcourse.dushyantdeshmukh.R;
-import edu.neu.madcourse.dushyantdeshmukh.sudoku.Sudoku;
-import edu.neu.madcourse.dushyantdeshmukh.util.BloomFilter;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.res.AssetManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.widget.EditText;
 import android.widget.TextView;
+import edu.neu.madcourse.dushyantdeshmukh.R;
+import edu.neu.madcourse.dushyantdeshmukh.util.BloomFilter;
 
 public class Dictionary extends Activity implements OnClickListener {
 
-	BloomFilter<String> bloomFilter = new BloomFilter<String>(0.0001, 450000);
+	private TextView tvWordsList;
+	private MediaPlayer mp;
+	private int beepResId = R.raw.dictionary_beep;
+
+	private BloomFilter<String> bloomFilter;
 	HashSet<String> wordList = new HashSet<String>();
-	
+
+	final static String TAG = "\n\n#DEBUG Dictionary";
+
 	public Dictionary() {
-		
+
 	}
 
 	@Override
@@ -43,19 +43,20 @@ public class Dictionary extends Activity implements OnClickListener {
 		loadBitsetFromFile("compressedWordlist.txt");
 		renderWorList();
 	}
-	
+
 	private void renderWorList() {
-		TextView textView = (TextView) findViewById(R.id.dictionary_wordlist);
-		textView.setText(getWordListCharSeq());
+		Log.d(TAG, "Inside renderWorList() \n\n");
+		tvWordsList.setText(getWordListCharSeq());
 	}
 
 	private CharSequence getWordListCharSeq() {
 		String wordListSeq = "WORD LIST: ";
-		
 		Iterator<String> iterator = wordList.iterator();
-        while (iterator.hasNext()) {
-        	wordListSeq += iterator.next() + ", ";
-        }
+		while (iterator.hasNext()) {
+			wordListSeq += iterator.next() + ", ";
+		}
+		wordListSeq = wordListSeq.substring(0, wordListSeq.length() - 2);
+		Log.d(TAG, "WordListSeq - " + wordListSeq + " \n\n");
 		return wordListSeq;
 	}
 
@@ -63,36 +64,39 @@ public class Dictionary extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dictionary_main);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		tvWordsList = (TextView) findViewById(R.id.dictionary_wordlist);
 
 		// Set up click listeners for all the buttons
 		EditText editText = (EditText) findViewById(R.id.dictionary_editText);
-		 
-		// add a keylistener to keep track user input
-		editText.addTextChangedListener(new TextWatcher(){
+
+		// add a text change listener to keep track user input
+		editText.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void afterTextChanged(Editable arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence arg0, int arg1,
 					int arg2, int arg3) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
 					int arg3) {
+				Log.d(TAG, "Inside onTextChanged(), arg0 - " + arg0 + " \n\n");
 				if (arg0.length() > 2) {
 					checkWord(arg0.toString());
 				}
 			}
-			
+
 		});
-		
+
 		View clearButton = findViewById(R.id.dictionary_clear_button);
 		clearButton.setOnClickListener(this);
 
@@ -105,8 +109,21 @@ public class Dictionary extends Activity implements OnClickListener {
 
 	protected void checkWord(String ipWord) {
 		if (bloomFilter.contains(ipWord)) {
+			Log.d(TAG, ipWord + " exists");
+			playValidWordBeep();
 			addWord(ipWord);
-		}
+		} else
+			Log.d(TAG, ipWord + " does not exist");
+	}
+
+	private void playValidWordBeep() {
+		// Release any resources from previous MediaPlayer
+		if (mp != null) {
+			mp.release();
+		}		
+		// Create a new MediaPlayer to play this sound
+		mp = MediaPlayer.create(this, beepResId);
+		mp.start();
 	}
 
 	private void addWord(String ipWord) {
@@ -120,35 +137,36 @@ public class Dictionary extends Activity implements OnClickListener {
 		case R.id.dictionary_clear_button:
 			EditText editText = (EditText) findViewById(R.id.dictionary_editText);
 			editText.setText("");
+			wordList.clear();renderWorList();
 			break;
 		case R.id.dictionary_return_button:
-//			Intent i = new Intent(this, MainActivity.class);
-//			startActivity(i);
 			finish();
 			break;
 		case R.id.dictionary_ack_button:
-//			Intent i3 = new Intent(this, Dictionary.class);
-//			startActivity(i3);
+			// Intent i3 = new Intent(this, Dictionary.class);
+			// startActivity(i3);
 			break;
 		}
 	}
 
-	public BloomFilter<String> loadBitsetFromFile(String filepath) {
+	private BloomFilter<String> loadBitsetFromFile(String filepath) {
 		try {
 			AssetManager am = this.getAssets();
+			int fileLength = (int) am.openFd(filepath).getLength();
+			Log.d(TAG, "compressed file length = " + fileLength);
 			InputStream is = am.open(filepath);
-			
-		    byte[] fileData = new byte[1110000];
-		    DataInputStream dis = new DataInputStream(is);
-		    dis.readFully(fileData);
-		    dis.close();
-		    bloomFilter = BloomFilter.loadBitsetWithByteArray(fileData, bloomFilter);		    
-		    
+
+			byte[] fileData = new byte[fileLength];
+			DataInputStream dis = new DataInputStream(is);
+			dis.readFully(fileData);
+			dis.close();
+			bloomFilter = new BloomFilter<String>(0.0001, 450000);
+			bloomFilter = BloomFilter.loadBitsetWithByteArray(fileData,
+					bloomFilter);
+
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return bloomFilter;

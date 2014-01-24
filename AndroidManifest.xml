@@ -42,6 +42,7 @@
               android:label="@string/sudoku_game_title"/>
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.dictionary.Dictionary"
+          	  android:configChanges="orientation"
               android:label="@string/dictionary_title_label" />
         
     </application>
