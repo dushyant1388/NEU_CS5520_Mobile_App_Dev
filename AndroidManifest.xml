@@ -44,6 +44,9 @@
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.dictionary.Dictionary"
           	  android:configChanges="orientation"
               android:label="@string/dictionary_title_label" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.dictionary.Acknowledgements"
+              android:label="@string/dictionary_ack_title"
+              android:theme="@android:style/Theme.Dialog" />
         
     </application>
 

@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -74,16 +75,12 @@ public class Dictionary extends Activity implements OnClickListener {
 		editText.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void afterTextChanged(Editable arg0) {
-				// TODO Auto-generated method stub
-
+			public void afterTextChanged(Editable arg0) {	
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence arg0, int arg1,
 					int arg2, int arg3) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
@@ -143,8 +140,8 @@ public class Dictionary extends Activity implements OnClickListener {
 			finish();
 			break;
 		case R.id.dictionary_ack_button:
-			// Intent i3 = new Intent(this, Dictionary.class);
-			// startActivity(i3);
+			Intent i = new Intent(this, Acknowledgements.class);
+			startActivity(i);
 			break;
 		}
 	}
@@ -163,7 +160,6 @@ public class Dictionary extends Activity implements OnClickListener {
 			bloomFilter = new BloomFilter<String>(0.0001, 450000);
 			bloomFilter = BloomFilter.loadBitsetWithByteArray(fileData,
 					bloomFilter);
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
