@@ -41,7 +41,7 @@ public class Dictionary extends Activity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		loadBitsetFromFile("compressedWordlist.txt");
+		//loadBitsetFromFile("compressedWordlist.txt");
 		renderWorList();
 	}
 
@@ -65,6 +65,7 @@ public class Dictionary extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dictionary_main);
+		loadBitsetFromFile("compressedWordlist.txt");
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		tvWordsList = (TextView) findViewById(R.id.dictionary_wordlist);
 
@@ -105,6 +106,7 @@ public class Dictionary extends Activity implements OnClickListener {
 	}
 
 	protected void checkWord(String ipWord) {
+		ipWord = ipWord.toLowerCase();
 		if (bloomFilter.contains(ipWord)) {
 			Log.d(TAG, ipWord + " exists");
 			playValidWordBeep();

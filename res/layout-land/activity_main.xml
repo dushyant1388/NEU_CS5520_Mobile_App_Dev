@@ -22,8 +22,8 @@
         android:typeface="serif" />
 
     <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:stretchColumns="*" >
 
@@ -31,13 +31,13 @@
 
             <Button
                 android:id="@+id/about_button"
-                android:layout_width="match_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/about_label" />
 
             <Button
                 android:id="@+id/gen_error_button"
-                android:layout_width="fill_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/gen_error_label" />
         </TableRow>
@@ -46,13 +46,13 @@
 
             <Button
                 android:id="@+id/sudoku_button"
-                android:layout_width="fill_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/sudoku_label" />
 
             <Button
                 android:id="@+id/dictionary_button"
-                android:layout_width="fill_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/dictionary_label" />
         </TableRow>
@@ -60,10 +60,12 @@
         <TableRow>
 
             <Button
+                android:layout_span="2"
                 android:id="@+id/quit_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/quit_label" />
+                android:text="@string/quit_label"
+                 />
         </TableRow>
     </TableLayout>
 
