@@ -107,7 +107,7 @@ public class Dictionary extends Activity implements OnClickListener {
 
 	protected void checkWord(String ipWord) {
 		ipWord = ipWord.toLowerCase();
-		if (bloomFilter.contains(ipWord)) {
+		if (bloomFilter.contains(ipWord) && !wordList.contains(ipWord)) {
 			Log.d(TAG, ipWord + " exists");
 			playValidWordBeep();
 			addWord(ipWord);
