@@ -46,6 +46,12 @@
         android:text="@string/dictionary_label" />
     
     <Button
+        android:id="@+id/wordgame_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/wordgame_title_label" />
+    
+    <Button
         android:id="@+id/quit_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

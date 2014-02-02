@@ -41,6 +41,16 @@ Sample about text. Needs to be updated&#8230;</string>
 									   http://www.exampledepot.8waytrips.com/egs/java.util/Bits2Array.html\r\n
 									   http://stackoverflow.com/questions/6197411/converting-from-bitset-to-byte-array\r\n</string>
 
+    <!-- Word Game screen strings -->
+    <string name="wordgame_title_label">Word Game</string>
+    <string name="wordgame_newgame">New Game</string>
+    <string name="wordgame_continue">Continue</string>
+    <string name="wordgame_return">Return to Menu</string>
+    <string name="wordgame_ack">Acknowledgements</string>
+    <string name="wordgame_ack_ok_label">OK</string>
+    <string name="wordgame_acks">Thank you al! :-) </string>
+    
+    
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>
     <string name="sudoku_main_title">Android Sudoku</string>

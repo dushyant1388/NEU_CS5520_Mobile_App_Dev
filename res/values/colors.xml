@@ -9,6 +9,7 @@
 -->
 <resources>
 
+    <!-- Sudoku colors -->
     <color name="main_background">#550080</color>
     <color name="main_welcome_msg">#9999FF</color>
     <color name="sudoku_background">#3500ffff</color>
@@ -22,4 +23,10 @@
     <color name="sudoku_puzzle_hint_2">#2000ff80</color>
     <color name="sudoku_puzzle_selected">#64ff8000</color>
 
+    <!-- Word Game colors -->
+    <color name="board_background">#3500ffff</color>
+    <color name="board_tile">#64c6d4ef</color>
+    <color name="board_letter">#64000000</color>
+    <color name="board_selected">#64ff8000</color>
+    <color name="board_gridlines">#6456648f</color>
 </resources>

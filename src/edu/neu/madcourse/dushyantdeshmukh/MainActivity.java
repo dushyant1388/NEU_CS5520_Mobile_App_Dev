@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import edu.neu.madcourse.dushyantdeshmukh.dictionary.Dictionary;
 import edu.neu.madcourse.dushyantdeshmukh.sudoku.*;
+import edu.neu.madcourse.dushyantdeshmukh.wordgame.WordGame;
 
 public class MainActivity extends Activity implements OnClickListener {
 
@@ -33,6 +34,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		
 		View dictionaryButton = findViewById(R.id.dictionary_button);
 		dictionaryButton.setOnClickListener(this);
+		
+		View wordgameButton = findViewById(R.id.wordgame_button);
+		wordgameButton.setOnClickListener(this);
 
 		View quitButton = findViewById(R.id.quit_button);
 		quitButton.setOnClickListener(this);
@@ -61,6 +65,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			Intent i3 = new Intent(this, Dictionary.class);
 			startActivity(i3);
 			break;
+		case R.id.wordgame_button:
+      Intent i4 = new Intent(this, WordGame.class);
+      startActivity(i4);
+      break;
 		case R.id.quit_button:
 			finish();
 			break;

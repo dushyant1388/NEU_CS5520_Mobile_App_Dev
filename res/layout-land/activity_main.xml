@@ -58,14 +58,18 @@
         </TableRow>
 
         <TableRow>
+            
+            <Button
+                android:id="@+id/wordgame_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/wordgame_title_label" />
 
             <Button
-                android:layout_span="2"
                 android:id="@+id/quit_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/quit_label"
-                 />
+                android:text="@string/quit_label" />
         </TableRow>
     </TableLayout>
 
