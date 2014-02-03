@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.util.BloomFilter;
@@ -13,6 +15,7 @@ import android.app.Activity;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,8 +46,66 @@ public class Game extends Activity implements OnClickListener {
     private boolean isCurrWordValid = false;
     private int currScore = 0;
 
+    private char letterSet1[] = {'B', 'C', 'D', 'G', 'H','K', 'L', 
+                                'M', 'N', 'P', 'R', 'S', 'T'};
+    private char letterSet2[] = {'A', 'E', 'I', 'O', 'U'};
+    private char letterSet3[] = {'F', 'J', 'V', 'Q', 'W', 'X', 'Y', 'Z'};
+    private int letterSetCount = 0;
+    
+    final Handler myHandler = new Handler();
+    
+    final Runnable myRunnable = new Runnable() {
+        public void run() {
+            //  introduce a new letter
+            char newLetter = getNewLetter();
+            Log.d(TAG, "Inserting new letter: " + newLetter);
+            insertNewLetter(newLetter);
+        }
+     };
+    
     public Game() {
         // TODO Auto-generated constructor stub
+    }
+
+    protected void insertNewLetter(char newLetter) {
+        for (int i = total_rows - 1; i >= 0; i--) {
+            for (int j = 0; j < total_cols; j++) {
+                if (board[i][j] == '\u0000'){
+                    board[i][j] = newLetter;
+                    BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
+                    boardView.clearRect(j, i);
+                    return;
+                }
+            }
+        }
+        //  Game over!!!
+    }
+
+    /**
+     * Selects a letter from the 3 sets in the folowing ratio
+     *  letterSet1 : letterSet2 : letterSet3 = 4 : 2 : 1
+     * @return
+     */
+    protected char getNewLetter() {
+        char retChar;
+        letterSetCount = (letterSetCount + 1) % 7;
+        if (letterSetCount == 1 || letterSetCount == 2 
+                || letterSetCount == 4 || letterSetCount == 5) {
+            //  get next letter from set 1
+            retChar = getRandomChar(this.letterSet1);
+        } else if (letterSetCount == 3 || letterSetCount == 6) {
+            //  get next letter from set 2
+            retChar = getRandomChar(this.letterSet2);
+        } else {
+            //  get next letter from set 3
+            retChar = getRandomChar(this.letterSet3);
+        }
+        return retChar;
+    }
+
+    private char getRandomChar(char[] letterSet) {
+        int randomIndex = (int)(Math.random() * letterSet.length); 
+        return letterSet[randomIndex];
     }
 
     @Override
@@ -76,6 +137,18 @@ public class Game extends Activity implements OnClickListener {
 
         View quitButton = findViewById(R.id.wordgame_quit_button);
         quitButton.setOnClickListener(this);
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Timer myTimer = new Timer();
+        myTimer.schedule(new TimerTask() {
+           @Override
+           public void run() {
+               myHandler.post(myRunnable);
+           }
+        }, 0, 5000);
     }
 
     @Override
@@ -121,15 +194,17 @@ public class Game extends Activity implements OnClickListener {
 
     private void removeCurrWordLetters() {
         Iterator<String> iterator = this.currSelections.iterator();
+        BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
         while (iterator.hasNext()) {
             String tempStrArr[] = iterator.next().split(",");
             int i = Integer.parseInt(tempStrArr[0]);
             int j = Integer.parseInt(tempStrArr[1]);
             board[i][j] = '\u0000';
+            boardView.clearRect(j, i);
         }
         this.currSelections.clear();
-        BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
-        boardView.postInvalidate();
+        
+        
     }
 
     private char[][] getInitialBoard(int diff) {
@@ -145,23 +220,23 @@ public class Game extends Activity implements OnClickListener {
         board[3][3] = 'A';
         board[1][4] = 'M';
         
-        board[1][3] = 'R';
-        board[1][2] = 'A';
-        board[5][1] = 'O';
-        board[5][3] = 'E';
-        board[6][2] = 'H';
-        
-        board[1][0] = 'P';
-        board[1][2] = 'L';
-        board[5][4] = 'O';
-        board[5][3] = 'E';
-        board[6][4] = 'U';
-        
-        board[0][3] = 'S';
-        board[4][2] = 'C';
-        board[3][1] = 'T';
-        board[3][2] = 'A';
-        board[1][1] = 'W';
+//        board[1][3] = 'R';
+//        board[1][2] = 'A';
+//        board[5][1] = 'O';
+//        board[5][3] = 'E';
+//        board[6][2] = 'H';
+//        
+//        board[1][0] = 'P';
+//        board[1][2] = 'L';
+//        board[5][4] = 'O';
+//        board[5][3] = 'E';
+//        board[6][4] = 'U';
+//        
+//        board[0][3] = 'S';
+//        board[4][2] = 'C';
+//        board[3][1] = 'T';
+//        board[3][2] = 'A';
+//        board[1][1] = 'W';
         return board;
     }
 
