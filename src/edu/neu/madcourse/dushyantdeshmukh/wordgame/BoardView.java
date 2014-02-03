@@ -7,7 +7,9 @@ import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class BoardView extends View {
@@ -19,33 +21,32 @@ public class BoardView extends View {
   private int selX; // X index of selection
   private int selY; // Y index of selection
   private final Rect selRect = new Rect();
-  
+
   Paint bgPaint = new Paint();
   Paint gridlinePaint = new Paint();
   Paint tilePaint = new Paint();
   Paint letterPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-  public BoardView(Context context) {
-    super(context);
+  public BoardView(Context context, AttributeSet attrs) {
+    super(context, attrs);
     this.game = (Game) context;
     setFocusable(true);
     setFocusableInTouchMode(true);
-    
+
     bgPaint.setColor(getResources().getColor(R.color.board_background));
     gridlinePaint.setColor(getResources().getColor(R.color.board_gridlines));
     tilePaint.setColor(getResources().getColor(R.color.board_tile));
-    
+
     letterPaint.setColor(getResources().getColor(R.color.board_letter));
     letterPaint.setStyle(Style.FILL);
-    
-    
+
   }
 
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     width = (float) (w / (this.game.total_cols * 1.0));
     height = (float) (h / (this.game.total_rows * 1.0));
-//    getRect(selX, selY, selRect);
+    // getRect(selX, selY, selRect);
     Log.d(TAG, "onSizeChanged: width " + width + ", height " + height);
     super.onSizeChanged(w, h, oldw, oldh);
   }
@@ -53,11 +54,12 @@ public class BoardView extends View {
   @Override
   protected void onDraw(Canvas canvas) {
     // Draw the background...
-    
+
     canvas.drawRect(0, 0, getWidth(), getHeight(), this.bgPaint);
     // Draw the board...
     for (int i = 0; i < this.game.total_rows; i++) {
-      canvas.drawLine(0, i * height, getWidth(), i * height, this.gridlinePaint);
+      canvas
+          .drawLine(0, i * height, getWidth(), i * height, this.gridlinePaint);
     }
     for (int i = 0; i < this.game.total_cols; i++) {
       canvas.drawLine(i * width, 0, i * width, getHeight(), this.gridlinePaint);
@@ -68,7 +70,7 @@ public class BoardView extends View {
       for (int j = 0; j < this.game.total_cols; j++) {
         char currChar = this.game.board[i][j];
         if (currChar != '\u0000') {
-          drawLetter(canvas, currChar, i * width, j * height);
+          drawLetter(canvas, currChar, j * width, i * height);
         }
       }
     }
@@ -83,7 +85,7 @@ public class BoardView extends View {
     getRect(x, y, selRect);
     canvas.drawRect(selRect, this.tilePaint);
 
-    // Draw the letter in the center of the tile    
+    // Draw the letter in the center of the tile
     FontMetrics fm = letterPaint.getFontMetrics();
     // Centering in X: use alignment (and X at midpoint)
     float x2 = this.width / 2;
@@ -91,12 +93,26 @@ public class BoardView extends View {
     float y2 = this.height / 2 - (fm.ascent + fm.descent) / 2;
     letterPaint.setTextSize(height * 0.75f);
     letterPaint.setTextScaleX(width / height);
-    
+
     canvas.drawText("" + c, x + x2, y + y2, letterPaint);
   }
 
- private void getRect(float x, float y, Rect rect) {
-    rect.set((int) (x), (int) (y), (int) (x
-          + width), (int) (y + height));
- }
+  private void getRect(float x, float y, Rect rect) {
+    rect.set((int) (x), (int) (y), (int) (x + width), (int) (y + height));
+  }
+
+  @Override
+  public boolean onTouchEvent(MotionEvent event) {
+    if (event.getAction() != MotionEvent.ACTION_DOWN)
+      return super.onTouchEvent(event);
+    int xIndex = (int) (event.getX() / width);
+    int yIndex = (int) (event.getY() / height);
+    Log.d(TAG, "Selecting letter at x:" + xIndex + ", y:" + yIndex);
+    this.game.selectLetter(yIndex, xIndex);
+
+    Log.d(TAG, "onTouchEvent: x " + selX + ", y " + selY);
+    return true;
+  }
+
+  
 }
