@@ -54,6 +54,7 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="wordgame_resume">Resume Game</string>
     <string name="wordgame_hint">Hint</string>
     <string name="wordgame_quit">Quit</string>
+    <string name="wordgame_currscore">Score: 0</string>
     
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>
