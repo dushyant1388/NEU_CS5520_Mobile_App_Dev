@@ -17,6 +17,8 @@ public class Prefs extends PreferenceActivity {
     private static final String OPT_ROWS_DEF = "7";
     private static final String OPT_COLS = "cols";
     private static final String OPT_COLS_DEF = "5";
+    private static final String OPT_DIFF = "difficulty";
+    private static final String OPT_DIFF_DEF = "1";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,16 @@ public class Prefs extends PreferenceActivity {
     public static int getCols(Context context) {
         return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(OPT_COLS, OPT_COLS_DEF));
+    }
+    
+    /**
+     * Get the current value of the difficulty level option
+     * 
+     * @return the optCols
+     */
+    public static int getDifficultyLevel(Context context) {
+        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(OPT_DIFF, OPT_DIFF_DEF));
     }
 
 }

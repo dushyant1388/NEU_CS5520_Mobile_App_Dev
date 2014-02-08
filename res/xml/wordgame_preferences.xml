@@ -31,4 +31,10 @@
             android:summary="@string/pref_wordgame_cols_summary"
             android:entryValues="@array/wordgame_cols_values"
             android:title="@string/pref_wordgame_cols" />
+   <ListPreference
+            android:key="difficulty"
+            android:entries="@array/wordgame_difficulty"
+            android:summary="@string/pref_wordgame_difficulty_summary"
+            android:entryValues="@array/wordgame_difficulty_values"
+            android:title="@string/pref_wordgame_difficulty" />
 </PreferenceScreen>

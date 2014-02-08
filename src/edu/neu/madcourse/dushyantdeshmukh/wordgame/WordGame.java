@@ -43,19 +43,19 @@ public class WordGame extends Activity implements OnClickListener {
     returnButton.setOnClickListener(this);
   }
   
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-     super.onCreateOptionsMenu(menu);
-     MenuInflater inflater = getMenuInflater();
-     inflater.inflate(R.menu.wordgame_menu, menu);
-     return true;
-  }
+//  @Override
+//  public boolean onCreateOptionsMenu(Menu menu) {
+//     super.onCreateOptionsMenu(menu);
+//     MenuInflater inflater = getMenuInflater();
+//     inflater.inflate(R.menu.wordgame_menu, menu);
+//     return true;
+//  }
   
   @Override
   public void onClick(View v) {
     switch (v.getId()) {
     case R.id.wordgame_newgame_button:
-      startGame(1);
+      startGame();
       break;
     case R.id.wordgame_continue_button:
       break;
@@ -73,10 +73,10 @@ public class WordGame extends Activity implements OnClickListener {
   }
   
   /** Start a new game with the given difficulty level */
-  protected void startGame(int i) {
-     Log.d(TAG, "clicked on " + i);
+  protected void startGame() {
+//     Log.d(TAG, "clicked on " + i);
      Intent intent = new Intent(this, Game.class);
-     intent.putExtra(Game.KEY_DIFFICULTY, i);
+//     intent.putExtra(Game.KEY_DIFFICULTY, i);
      startActivity(intent);
   }
 }

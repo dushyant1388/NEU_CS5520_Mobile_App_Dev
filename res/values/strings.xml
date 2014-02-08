@@ -72,7 +72,8 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="pref_wordgame_rows">Rows</string>
     <string name="pref_wordgame_cols_summary">No of cols on the board</string>
     <string name="pref_wordgame_cols">Cols</string>
-
+	<string name="pref_wordgame_difficulty_summary">Difficulty level of the game</string>
+    <string name="pref_wordgame_difficulty">Difficulty</string>
     
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>

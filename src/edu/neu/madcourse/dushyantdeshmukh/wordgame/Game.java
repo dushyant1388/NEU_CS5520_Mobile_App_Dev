@@ -26,11 +26,14 @@ import android.widget.TextView;
 public class Game extends Activity implements OnClickListener {
 
     private static final String TAG = "Word Game";
-    public static final String KEY_DIFFICULTY = "wordgame_dificulty";
-    public static final int DIFFICULTY_EASY = 0;
-    public static final int DIFFICULTY_MEDIUM = 1;
-    public static final int DIFFICULTY_HARD = 2;
-    protected static final int DIFFICULTY_CONTINUE = -1;
+//    public static final String KEY_DIFFICULTY = "wordgame_dificulty";
+    public static final int DIFFICULTY_EASY = 1;
+    public static final int DIFFICULTY_MEDIUM = 2;
+    public static final int DIFFICULTY_HARD = 3;
+    
+    public static final int DIFFICULTY_EASY_TIME_INTERVAL = 1800;
+    public static final int DIFFICULTY_MEDIUM_TIME_INTERVAL = 1200;
+    public static final int DIFFICULTY_HARD_TIME_INTERVAL = 600;
 
     public int total_rows = 7;
     public int total_cols = 5;
@@ -40,103 +43,56 @@ public class Game extends Activity implements OnClickListener {
 
     private String currWord = "";
     protected HashSet<String> currSelections = new HashSet<String>();
-    
+
     private BloomFilter<String> bloomFilter;
     private HashSet<String> wordList = new HashSet<String>();
-    
+
     private boolean isCurrWordValid = false;
     private static int currScore = 0;
 
-    private char letterSet1[] = {'B', 'C', 'D', 'G', 'H','K', 'L', 
-                                'M', 'N', 'P', 'R', 'S', 'T'};
-    private char letterSet2[] = {'A', 'E', 'I', 'O', 'U'};
-    private char letterSet3[] = {'F', 'J', 'V', 'Q', 'W', 'X', 'Y', 'Z'};
+    private char letterSet1[] = { 'B', 'C', 'D', 'G', 'H', 'K', 'L', 'M', 'N',
+            'P', 'R', 'S', 'T' };
+    private char letterSet2[] = { 'A', 'E', 'I', 'O', 'U' };
+    private char letterSet3[] = { 'F', 'J', 'V', 'Q', 'W', 'X', 'Y', 'Z' };
     private int letterSetCount = 0;
-    
+
     Timer myTimer = new Timer();
     final Handler myTimerHandler = new Handler();
-    
-    final int newLetterInterval = 2300;
-     
+
+    int newLetterInterval = 2300;
+
     TimerTask newLetterTimerTask;
-    
+
     final Runnable newLetterRunnable = new Runnable() {
         public void run() {
-            //  introduce a new letter
+            // introduce a new letter
             char newLetter = getNewLetter();
             Log.d(TAG, "Inserting new letter: " + newLetter);
             insertNewLetter(newLetter);
         }
-     };
-     
+    };
+
     public Game() {
-        
-    }
 
-    protected void insertNewLetter(char newLetter) {
-        for (int i = total_rows - 1; i >= 0; i--) {
-            for (int j = 0; j < total_cols; j++) {
-                if (board[i][j] == '\u0000'){
-                    board[i][j] = newLetter;
-                    BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
-                    boardView.invalidateRect(j, i);
-                    return;
-                }
-            }
-        }
-        //  Game over!!!
-        stopNewLetterTimer();
-        Intent i = new Intent(this, GameOver.class);
-        startActivity(i);
-        finish();
-    }
-
-    /**
-     * Selects a letter from the 3 sets in the folowing ratio
-     *  letterSet1 : letterSet2 : letterSet3 = 4 : 4 : 1
-     * @return
-     */
-    protected char getNewLetter() {
-        char retChar;
-        letterSetCount = (letterSetCount + 1) % 9;
-        if (letterSetCount == 1 || letterSetCount == 3 
-                || letterSetCount == 5 || letterSetCount == 7) {
-            //  get next letter from set 1
-            retChar = getRandomChar(this.letterSet1);
-        } else if (letterSetCount == 2 || letterSetCount == 4 
-                || letterSetCount == 6 || letterSetCount == 8) {
-            //  get next letter from set 2
-            retChar = getRandomChar(this.letterSet2);
-        } else {
-            //  get next letter from set 3
-            retChar = getRandomChar(this.letterSet3);
-        }
-        return retChar;
-    }
-
-    private char getRandomChar(char[] letterSet) {
-        int randomIndex = (int)(Math.random() * letterSet.length); 
-        return letterSet[randomIndex];
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-        
+
         total_rows = Prefs.getRows(this);
         total_cols = Prefs.getCols(this);
-        
+
         Log.d(TAG, "Loading dictionary from file...");
         loadBitsetFromFile("compressedWordlist.txt");
-        
-        //  Set timer
-        //startNewLetterTimer();
-        
-        int diff = getIntent().getIntExtra(KEY_DIFFICULTY, DIFFICULTY_EASY);
-        
-        board = getInitialBoard(diff);
-        
+
+        // Set timer
+        // startNewLetterTimer();
+        newLetterInterval = getNewLetterInterval(Prefs.getDifficultyLevel(this));
+
+        board = getInitialBoard();
+
         // calculateUsedTiles();
         // boardView = new BoardView(this);
         // setContentView(boardView);
@@ -160,7 +116,23 @@ public class Game extends Activity implements OnClickListener {
         View quitButton = findViewById(R.id.wordgame_quit_button);
         quitButton.setOnClickListener(this);
     }
-    
+
+    private int getNewLetterInterval(int diff) {
+        int timeInterval;
+        switch (diff) {
+        case DIFFICULTY_HARD:
+            timeInterval = DIFFICULTY_HARD_TIME_INTERVAL;
+            break;
+        case DIFFICULTY_MEDIUM:
+            timeInterval = DIFFICULTY_MEDIUM_TIME_INTERVAL;
+            break;
+        case DIFFICULTY_EASY:
+        default:
+            timeInterval = DIFFICULTY_EASY_TIME_INTERVAL;
+        }
+        return timeInterval;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -174,14 +146,61 @@ public class Game extends Activity implements OnClickListener {
         super.onPause();
         stopNewLetterTimer();
     }
-    
+
+    protected void insertNewLetter(char newLetter) {
+        for (int i = total_rows - 1; i >= 0; i--) {
+            for (int j = 0; j < total_cols; j++) {
+                if (board[i][j] == '\u0000') {
+                    board[i][j] = newLetter;
+                    BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
+                    boardView.invalidateRect(j, i);
+                    return;
+                }
+            }
+        }
+        // Game over!!!
+        stopNewLetterTimer();
+        Intent i = new Intent(this, GameOver.class);
+        startActivity(i);
+        finish();
+    }
+
+    /**
+     * Selects a letter from the 3 sets in the folowing ratio letterSet1 :
+     * letterSet2 : letterSet3 = 4 : 4 : 1
+     * 
+     * @return
+     */
+    protected char getNewLetter() {
+        char retChar;
+        letterSetCount = (letterSetCount + 1) % 9;
+        if (letterSetCount == 1 || letterSetCount == 3 || letterSetCount == 5
+                || letterSetCount == 7) {
+            // get next letter from set 1
+            retChar = getRandomChar(this.letterSet1);
+        } else if (letterSetCount == 2 || letterSetCount == 4
+                || letterSetCount == 6 || letterSetCount == 8) {
+            // get next letter from set 2
+            retChar = getRandomChar(this.letterSet2);
+        } else {
+            // get next letter from set 3
+            retChar = getRandomChar(this.letterSet3);
+        }
+        return retChar;
+    }
+
+    private char getRandomChar(char[] letterSet) {
+        int randomIndex = (int) (Math.random() * letterSet.length);
+        return letterSet[randomIndex];
+    }
+
     private void startNewLetterTimer() {
         newLetterTimerTask = new TimerTask() {
             @Override
             public void run() {
                 myTimerHandler.post(newLetterRunnable);
             }
-         };
+        };
         myTimer.schedule(newLetterTimerTask, 0, newLetterInterval);
     }
 
@@ -245,18 +264,17 @@ public class Game extends Activity implements OnClickListener {
             boardView.invalidateRect(j, i);
         }
         this.currSelections.clear();
-        
-        
+
     }
 
-    private char[][] getInitialBoard(int diff) {
+    private char[][] getInitialBoard() {
         board = new char[total_rows][total_cols];
         // for (int i = 0; i < total_rows; i++) {
         // for (int j = 0; j < total_cols; j++) {
         // board[i][j] = 'o';
         // }
         // }
-        
+
         for (int j = 0; j < total_cols; j++) {
             board[total_rows - 1][j] = getNewLetter();
         }
@@ -280,29 +298,30 @@ public class Game extends Activity implements OnClickListener {
                 isCurrWordValid = true;
             } else {
                 isCurrWordValid = false;
-                currWordBtn.setTextColor(getResources().getColor(R.color.board_letter));
+                currWordBtn.setTextColor(getResources().getColor(
+                        R.color.board_letter));
             }
         }
     }
-    
+
     protected boolean isWordValid(String ipWord) {
         ipWord = ipWord.toLowerCase();
         if (bloomFilter.contains(ipWord) && !wordList.contains(ipWord)) {
             Log.d(TAG, ipWord + " is a valid word.");
-            //playValidWordBeep();
-            //addWord(ipWord);
+            // playValidWordBeep();
+            // addWord(ipWord);
             return true;
         } else {
             Log.d(TAG, ipWord + " is an invalid word.");
             return false;
         }
     }
-    
+
     private void addWord(String ipWord) {
         wordList.add(ipWord);
-        //renderWorList();
+        // renderWorList();
     }
-    
+
     private BloomFilter<String> loadBitsetFromFile(String filepath) {
         try {
             AssetManager am = this.getAssets();
