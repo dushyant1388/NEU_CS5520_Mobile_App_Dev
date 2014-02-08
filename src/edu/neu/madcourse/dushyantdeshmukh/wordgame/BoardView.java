@@ -21,8 +21,7 @@ public class BoardView extends View {
     private final Game game;
     private float width; // width of one tile
     private float height; // height of one tile
-//    private int selX; // X index of selection
-//    private int selY; // Y index of selection
+
     private final Rect selRect = new Rect();
 
     Paint bgPaint = new Paint();
@@ -40,10 +39,11 @@ public class BoardView extends View {
         bgPaint.setColor(getResources().getColor(R.color.board_background));
         gridlinePaint
                 .setColor(getResources().getColor(R.color.board_gridlines));
-        
+
         tilePaint.setColor(getResources().getColor(R.color.board_tile));
-        selectedTilePaint.setColor(getResources().getColor(R.color.board_selected));
-        
+        selectedTilePaint.setColor(getResources().getColor(
+                R.color.board_selected));
+
         letterPaint.setColor(getResources().getColor(R.color.board_letter));
         letterPaint.setStyle(Style.FILL);
 
@@ -79,9 +79,11 @@ public class BoardView extends View {
                 char currChar = this.game.board[i][j];
                 if (currChar != '\u0000') {
                     if (this.game.currSelections.contains(i + "," + j)) {
-                        drawLetter(canvas, currChar, j * width, i * height, true);
+                        drawLetter(canvas, currChar, j * width, i * height,
+                                true);
                     } else {
-                        drawLetter(canvas, currChar, j * width, i * height, false);
+                        drawLetter(canvas, currChar, j * width, i * height,
+                                false);
                     }
                 }
             }
@@ -90,9 +92,10 @@ public class BoardView extends View {
         // Draw the selection...
     }
 
-    private void drawLetter(Canvas canvas, char c, float x, float y, boolean selected) {
+    private void drawLetter(Canvas canvas, char c, float x, float y,
+            boolean selected) {
         // canvas.
-        //Log.d(TAG, "Draw letter '" + c + "' at x:" + x + ", y:" + y);
+        // Log.d(TAG, "Draw letter '" + c + "' at x:" + x + ", y:" + y);
         getRect(x, y, selRect);
         if (selected) {
             Log.d(TAG, "selRect: " + selRect);
@@ -122,14 +125,16 @@ public class BoardView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() != MotionEvent.ACTION_DOWN)
             return super.onTouchEvent(event);
-        int xIndex = (int) (event.getX() / width);
-        int yIndex = (int) (event.getY() / height);
-        //Log.d(TAG, "Selecting letter at x:" + xIndex + ", y:" + yIndex);
-        this.game.selectLetter(yIndex, xIndex);
+        if (!this.game.isPaused) {
+            int xIndex = (int) (event.getX() / width);
+            int yIndex = (int) (event.getY() / height);
+            // Log.d(TAG, "Selecting letter at x:" + xIndex + ", y:" + yIndex);
+            this.game.selectLetter(yIndex, xIndex);
 
-        //Log.d(TAG, "onTouchEvent: x " + selX + ", y " + selY);
-        //drawSelectedletter(event.getX(), event.getY());
-        invalidateRect(xIndex, yIndex);
+            // Log.d(TAG, "onTouchEvent: x " + selX + ", y " + selY);
+            // drawSelectedletter(event.getX(), event.getY());
+            invalidateRect(xIndex, yIndex);
+        }
         return true;
     }
 

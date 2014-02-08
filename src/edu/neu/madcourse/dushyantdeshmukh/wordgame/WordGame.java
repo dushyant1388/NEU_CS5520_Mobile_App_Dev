@@ -55,9 +55,10 @@ public class WordGame extends Activity implements OnClickListener {
   public void onClick(View v) {
     switch (v.getId()) {
     case R.id.wordgame_newgame_button:
-      startGame();
+      startGame(false);
       break;
     case R.id.wordgame_continue_button:
+        startGame(true);
       break;
     case R.id.wordgame_settings_button:
         startActivity(new Intent(this, Prefs.class));
@@ -73,10 +74,10 @@ public class WordGame extends Activity implements OnClickListener {
   }
   
   /** Start a new game with the given difficulty level */
-  protected void startGame() {
+  protected void startGame(boolean continueGame) {
 //     Log.d(TAG, "clicked on " + i);
      Intent intent = new Intent(this, Game.class);
-//     intent.putExtra(Game.KEY_DIFFICULTY, i);
+     intent.putExtra(Game.CONTINUE_GAME, continueGame);
      startActivity(intent);
   }
 }
