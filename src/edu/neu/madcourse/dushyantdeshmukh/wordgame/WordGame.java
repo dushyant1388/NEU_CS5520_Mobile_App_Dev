@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import edu.neu.madcourse.dushyantdeshmukh.R;
+import edu.neu.madcourse.dushyantdeshmukh.wordgame.Prefs;
 import edu.neu.madcourse.dushyantdeshmukh.wordgame.Game;
 import edu.neu.madcourse.dushyantdeshmukh.wordgame.Acknowledgements;
 import android.view.View.OnClickListener;
@@ -30,11 +33,22 @@ public class WordGame extends Activity implements OnClickListener {
     View continueButton = findViewById(R.id.wordgame_continue_button);
     continueButton.setOnClickListener(this);
     
-    View returnButton = findViewById(R.id.wordgame_return_button);
-    returnButton.setOnClickListener(this);
-    
     View ackButton = findViewById(R.id.wordgame_ack_button);
     ackButton.setOnClickListener(this);
+    
+    View settingsButton = findViewById(R.id.wordgame_settings_button);
+    settingsButton.setOnClickListener(this);
+    
+    View returnButton = findViewById(R.id.wordgame_return_button);
+    returnButton.setOnClickListener(this);
+  }
+  
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+     super.onCreateOptionsMenu(menu);
+     MenuInflater inflater = getMenuInflater();
+     inflater.inflate(R.menu.wordgame_menu, menu);
+     return true;
   }
   
   @Override
@@ -45,18 +59,21 @@ public class WordGame extends Activity implements OnClickListener {
       break;
     case R.id.wordgame_continue_button:
       break;
-    case R.id.wordgame_return_button:
-      finish();
-      break;
+    case R.id.wordgame_settings_button:
+        startActivity(new Intent(this, Prefs.class));
+        break;
     case R.id.wordgame_ack_button:
       Intent i = new Intent(this, Acknowledgements.class);
       startActivity(i);
       break;
+    case R.id.wordgame_return_button:
+        finish();
+        break;
     }
   }
   
   /** Start a new game with the given difficulty level */
-  private void startGame(int i) {
+  protected void startGame(int i) {
      Log.d(TAG, "clicked on " + i);
      Intent intent = new Intent(this, Game.class);
      intent.putExtra(Game.KEY_DIFFICULTY, i);

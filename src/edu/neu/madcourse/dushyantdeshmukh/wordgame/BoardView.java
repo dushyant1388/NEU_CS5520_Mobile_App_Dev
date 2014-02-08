@@ -1,5 +1,8 @@
 package edu.neu.madcourse.dushyantdeshmukh.wordgame;
 
+import java.util.HashSet;
+import java.util.Iterator;
+
 import edu.neu.madcourse.dushyantdeshmukh.R;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -18,13 +21,14 @@ public class BoardView extends View {
     private final Game game;
     private float width; // width of one tile
     private float height; // height of one tile
-    private int selX; // X index of selection
-    private int selY; // Y index of selection
+//    private int selX; // X index of selection
+//    private int selY; // Y index of selection
     private final Rect selRect = new Rect();
 
     Paint bgPaint = new Paint();
     Paint gridlinePaint = new Paint();
     Paint tilePaint = new Paint();
+    Paint selectedTilePaint = new Paint();
     Paint letterPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public BoardView(Context context, AttributeSet attrs) {
@@ -36,8 +40,10 @@ public class BoardView extends View {
         bgPaint.setColor(getResources().getColor(R.color.board_background));
         gridlinePaint
                 .setColor(getResources().getColor(R.color.board_gridlines));
+        
         tilePaint.setColor(getResources().getColor(R.color.board_tile));
-
+        selectedTilePaint.setColor(getResources().getColor(R.color.board_selected));
+        
         letterPaint.setColor(getResources().getColor(R.color.board_letter));
         letterPaint.setStyle(Style.FILL);
 
@@ -72,7 +78,11 @@ public class BoardView extends View {
             for (int j = 0; j < this.game.total_cols; j++) {
                 char currChar = this.game.board[i][j];
                 if (currChar != '\u0000') {
-                    drawLetter(canvas, currChar, j * width, i * height);
+                    if (this.game.currSelections.contains(i + "," + j)) {
+                        drawLetter(canvas, currChar, j * width, i * height, true);
+                    } else {
+                        drawLetter(canvas, currChar, j * width, i * height, false);
+                    }
                 }
             }
         }
@@ -80,13 +90,18 @@ public class BoardView extends View {
         // Draw the selection...
     }
 
-    private void drawLetter(Canvas canvas, char c, float x, float y) {
+    private void drawLetter(Canvas canvas, char c, float x, float y, boolean selected) {
         // canvas.
-        Log.d(TAG, "Draw letter '" + c + "' at x:" + x + ", y:" + y);
-        letterPaint.setTextAlign(Paint.Align.CENTER);
+        //Log.d(TAG, "Draw letter '" + c + "' at x:" + x + ", y:" + y);
         getRect(x, y, selRect);
-        canvas.drawRect(selRect, this.tilePaint);
+        if (selected) {
+            Log.d(TAG, "selRect: " + selRect);
+            canvas.drawRect(selRect, this.selectedTilePaint);
+        } else {
+            canvas.drawRect(selRect, this.tilePaint);
+        }
 
+        letterPaint.setTextAlign(Paint.Align.CENTER);
         // Draw the letter in the center of the tile
         FontMetrics fm = letterPaint.getFontMetrics();
         // Centering in X: use alignment (and X at midpoint)
@@ -109,15 +124,27 @@ public class BoardView extends View {
             return super.onTouchEvent(event);
         int xIndex = (int) (event.getX() / width);
         int yIndex = (int) (event.getY() / height);
-        Log.d(TAG, "Selecting letter at x:" + xIndex + ", y:" + yIndex);
+        //Log.d(TAG, "Selecting letter at x:" + xIndex + ", y:" + yIndex);
         this.game.selectLetter(yIndex, xIndex);
 
-        Log.d(TAG, "onTouchEvent: x " + selX + ", y " + selY);
+        //Log.d(TAG, "onTouchEvent: x " + selX + ", y " + selY);
+        //drawSelectedletter(event.getX(), event.getY());
+        invalidateRect(xIndex, yIndex);
         return true;
     }
 
-    public void clearRect(int j, int i) {
+    public void invalidateRect(int j, int i) {
         getRect((j * width), (i * height), selRect);
         invalidate(selRect);
+    }
+
+    public void inValidateMultipleRects(HashSet<String> rectList) {
+        Iterator<String> iterator = rectList.iterator();
+        while (iterator.hasNext()) {
+            String tempStrArr[] = iterator.next().split(",");
+            int i = Integer.parseInt(tempStrArr[0]);
+            int j = Integer.parseInt(tempStrArr[1]);
+            invalidateRect(j, i);
+        }
     }
 }

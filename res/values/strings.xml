@@ -45,6 +45,8 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="wordgame_title_label">Word Game</string>
     <string name="wordgame_newgame">New Game</string>
     <string name="wordgame_continue">Continue</string>
+    <string name="wordgame_settings">Settings</string>
+    <string name="wordgame_settings_shortcut">s</string>
     <string name="wordgame_return">Return to Menu</string>
     <string name="wordgame_ack">Acknowledgements</string>
     <string name="wordgame_ack_ok_label">OK</string>
@@ -55,6 +57,22 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="wordgame_hint">Hint</string>
     <string name="wordgame_quit">Quit</string>
     <string name="wordgame_currscore">Score: 0</string>
+    
+    <!-- Word Game - Game Over screen strings -->
+    <string name="wordgame_gameover_title">Game Over</string>
+    <string name="wordgame_gameover_msg">Game Over!</string>
+    <string name="wordgame_gameover_score">Score: </string>
+    <string name="wordgame_gameover_accuracy">Accuracy: </string>
+    <string name="wordgame_gameover_longestword">Longest word: </string>
+    <string name="wordgame_gameover_restart_label">RESTART</string>
+    <string name="wordgame_gameover_quit_label">QUIT</string>
+    
+    <!-- Word Game - Preference screen strings -->
+    <string name="pref_wordgame_rows_summary">No of rows on the board</string>
+    <string name="pref_wordgame_rows">Rows</string>
+    <string name="pref_wordgame_cols_summary">No of cols on the board</string>
+    <string name="pref_wordgame_cols">Cols</string>
+
     
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>
