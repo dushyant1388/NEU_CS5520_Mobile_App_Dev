@@ -50,6 +50,8 @@ public class Game extends Activity implements OnClickListener {
 
     public int total_rows = 7;
     public int total_cols = 5;
+    private int totalCells = 35;
+    private int totalLetters = 0;
     
     private boolean playBgMusic = false;
     private boolean showHint = false;
@@ -88,6 +90,9 @@ public class Game extends Activity implements OnClickListener {
     private MediaPlayer mpGameOver;
     private int gameOverResId = R.raw.game_over_gong;
     
+    private MediaPlayer mpCountDown;
+    private int countDownResId = R.raw.count_down;
+    
     private boolean gameOver = false;
 
     Timer myTimer = new Timer();
@@ -103,9 +108,27 @@ public class Game extends Activity implements OnClickListener {
             char newLetter = getNewLetter();
             Log.d(TAG, "Inserting new letter: " + newLetter);
             insertNewLetter(newLetter);
+            
         }
+
+        
     };
 
+    private void chkCountdown() {
+        if (mpCountDown != null) {
+            mpCountDown.release();
+        }
+        if (totalLetters >= (totalCells - (2 * total_cols) - 1)) {
+//            Log.d(TAG, "totalLetters = " + totalLetters);
+//            Log.d(TAG, "totalCells = " + totalCells);
+//            Log.d(TAG, "total_cols = " + total_cols);
+                // Create a new MediaPlayer to play this sound
+                mpCountDown = MediaPlayer.create(this, countDownResId);
+                mpCountDown.start();
+                mpCountDown.setLooping(true);
+        }
+    }
+    
     public Game() {
 
     }
@@ -118,6 +141,7 @@ public class Game extends Activity implements OnClickListener {
 
         total_rows = Prefs.getRows(this);
         total_cols = Prefs.getCols(this);
+        totalCells = total_rows * total_cols;
         
         Log.d(TAG, "Loading dictionary from file...");
         loadBitsetFromFile("compressedWordlist.txt");
@@ -305,6 +329,9 @@ private void playBgMusic() {
                     board[i][j] = newLetter;
                     BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
                     boardView.invalidateRect(j, i);
+                    
+                    totalLetters++;
+                    chkCountdown();
                     return;
                 }
             }
@@ -312,10 +339,14 @@ private void playBgMusic() {
         // Game over!!!
         Log.d(TAG, "\n Gameover case start, this.gameOver= " + this.gameOver);
         this.gameOver = true;
+        stopNewLetterTimer();
+        if (mpCountDown != null) {
+            mpCountDown.release();
+        }
         playSound(mpGameOver, gameOverResId, false);
 //        getPreferences(MODE_PRIVATE).edit()
 //                .putBoolean(Game.PREF_GAME_OVER, true).commit();
-        stopNewLetterTimer();
+        
         Intent i = new Intent(this, GameOver.class);
         i.putExtra(PREF_CURR_SCORE, this.currScore);
         i.putExtra(PREF_LONGEST_WORD, this.longestWord);
@@ -327,7 +358,7 @@ private void playBgMusic() {
     }
 
     /**
-     * Selects a letter from the 3 sets in the folowing ratio letterSet1 :
+     * Selects a letter from the 3 sets in the following ratio letterSet1 :
      * letterSet2 : letterSet3 = 4 : 4 : 1
      * 
      * @return
@@ -437,6 +468,10 @@ private void playBgMusic() {
             this.longestWord = currWord;
         }
         this.totalCorrectWords++;
+        Log.d(TAG, "old totalLetters = " + totalLetters);
+        Log.d(TAG, "totalLetters = " + totalLetters);
+        this.totalLetters = this.totalLetters - currWordLength;
+        Log.d(TAG, "new totalLetters = " + totalLetters);
         removeCurrWordLetters();
     }
 
