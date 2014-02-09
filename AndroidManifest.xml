@@ -31,6 +31,7 @@
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.wordgame.WordGame" android:configChanges="orientation" android:label="@string/wordgame_title_label" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.wordgame.Acknowledgements" android:label="@string/wordgame_ack" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.wordgame.Instructions" android:label="@string/wordgame_instructions_title" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.wordgame.Game" android:configChanges="orientation" android:label="@string/wordgame_title_label" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.wordgame.GameOver" android:configChanges="orientation" android:label="@string/wordgame_gameover_title" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.wordgame.Prefs" android:label="@string/wordgame_settings" />

@@ -41,6 +41,9 @@ public class WordGame extends Activity implements OnClickListener {
     View ackButton = findViewById(R.id.wordgame_ack_button);
     ackButton.setOnClickListener(this);
     
+    View instructionsButton = findViewById(R.id.wordgame_instructions_button);
+    instructionsButton.setOnClickListener(this);
+    
     View settingsButton = findViewById(R.id.wordgame_settings_button);
     settingsButton.setOnClickListener(this);
     
@@ -95,6 +98,10 @@ public class WordGame extends Activity implements OnClickListener {
       Intent i = new Intent(this, Acknowledgements.class);
       startActivity(i);
       break;
+    case R.id.wordgame_instructions_button:
+        Intent i2 = new Intent(this, Instructions.class);
+        startActivity(i2);
+        break;
     case R.id.wordgame_return_button:
         if (mpMenuMusic != null) {
             mpMenuMusic.release();

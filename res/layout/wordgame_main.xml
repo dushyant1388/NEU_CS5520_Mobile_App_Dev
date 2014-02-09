@@ -39,6 +39,13 @@
             android:text="@string/wordgame_ack" />
         
         <Button
+            android:id="@+id/wordgame_instructions_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/wordgame_instructions_title" />
+        
+        <Button
             android:id="@+id/wordgame_settings_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
