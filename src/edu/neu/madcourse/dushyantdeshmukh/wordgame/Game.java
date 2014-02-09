@@ -18,11 +18,13 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;;
 
 public class Game extends Activity implements OnClickListener {
 
@@ -96,6 +98,7 @@ public class Game extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
+        
 
         total_rows = Prefs.getRows(this);
         total_cols = Prefs.getCols(this);
@@ -110,8 +113,16 @@ public class Game extends Activity implements OnClickListener {
         checkAndHandleContinueGame();
 
         setContentView(R.layout.wordgame_game);
-        // boardView.requestFocus();
-
+        
+        //  set board size on screen
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+        Log.d(TAG, "height = " + height + ", width = " + width);
+        BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
+        boardView.setLayoutParams(new LayoutParams((width * 9)/10, (height * 65)/100));
+        
         // Set up click listeners for all the buttons
 
         View clearButton = findViewById(R.id.wordgame_clear_button);
