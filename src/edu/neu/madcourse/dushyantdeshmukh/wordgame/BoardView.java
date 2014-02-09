@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -29,6 +30,9 @@ public class BoardView extends View {
     Paint tilePaint = new Paint();
     Paint selectedTilePaint = new Paint();
     Paint letterPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    
+    private MediaPlayer mpBtnPress;
+    private int btnPressResId = R.raw.button_press;
 
     public BoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -125,6 +129,7 @@ public class BoardView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() != MotionEvent.ACTION_DOWN)
             return super.onTouchEvent(event);
+        this.game.playSound(mpBtnPress, btnPressResId, false);
         if (!this.game.isPaused) {
             int xIndex = (int) (event.getX() / width);
             int yIndex = (int) (event.getY() / height);

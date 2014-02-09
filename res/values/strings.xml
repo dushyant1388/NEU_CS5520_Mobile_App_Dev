@@ -60,7 +60,7 @@ Sample about text. Needs to be updated&#8230;</string>
     
     <!-- Word Game - Game Over screen strings -->
     <string name="wordgame_gameover_title">Game Over</string>
-    <string name="wordgame_gameover_msg">Game Over!</string>
+    <string name="wordgame_gameover_msg">Game over! But you did well :-)</string>
     <string name="wordgame_gameover_score">Score: </string>
     <string name="wordgame_gameover_accuracy">Accuracy: </string>
     <string name="wordgame_gameover_longestword">Longest word: </string>

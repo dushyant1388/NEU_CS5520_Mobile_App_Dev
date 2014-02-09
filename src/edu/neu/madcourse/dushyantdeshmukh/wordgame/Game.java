@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -49,6 +50,9 @@ public class Game extends Activity implements OnClickListener {
 
     public int total_rows = 7;
     public int total_cols = 5;
+    
+    private boolean playBgMusic = false;
+    private boolean showHint = false;
 
     public char board[][];
     protected boolean isPaused = false;
@@ -72,6 +76,18 @@ public class Game extends Activity implements OnClickListener {
     private char letterSet3[] = { 'F', 'J', 'V', 'Q', 'W', 'X', 'Y', 'Z' };
     private int letterSetCount = 0;
 
+    private MediaPlayer mpValidWord;
+    private int validWordBeepResId = R.raw.valid_word_beep;
+    
+    private MediaPlayer mpInvalidWord;
+    private int invalidWordBeepResId = R.raw.invalid_word_beep;
+    
+    private MediaPlayer mpBgMusic;
+    private int bgMusicResId = R.raw.wordgame_bg_music;
+    
+    private MediaPlayer mpGameOver;
+    private int gameOverResId = R.raw.game_over_gong;
+    
     private boolean gameOver = false;
 
     Timer myTimer = new Timer();
@@ -102,7 +118,7 @@ public class Game extends Activity implements OnClickListener {
 
         total_rows = Prefs.getRows(this);
         total_cols = Prefs.getCols(this);
-
+        
         Log.d(TAG, "Loading dictionary from file...");
         loadBitsetFromFile("compressedWordlist.txt");
 
@@ -190,6 +206,9 @@ public class Game extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+        playBgMusic = Prefs.getMusic(this);
+        showHint = Prefs.getHints(this);
+        playBgMusic();
         checkAndHandleContinueGame();
         this.gameOver = false;
         if (!isPaused) {
@@ -197,11 +216,34 @@ public class Game extends Activity implements OnClickListener {
         }
     }
 
+private void playBgMusic() {
+    if (playBgMusic) {
+        if (mpBgMusic != null) {
+            mpBgMusic.release();
+        }       
+        // Create a new MediaPlayer to play this sound
+        mpBgMusic = MediaPlayer.create(this, bgMusicResId);
+        mpBgMusic.start();
+        mpBgMusic.setLooping(true);
+    }
+    }
+
+//    private void playBgMusic(boolean play) {
+//        if (play) {
+//            playSound(mpBgMusic, bgMusicResId);
+//        } else {
+//            mpBgMusic.
+//        }
+//    }
+
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "\n onPause() start, this.gameOver=" + this.gameOver);
         stopNewLetterTimer();
+        if (mpBgMusic != null) {
+            mpBgMusic.release();
+        }
         // Save current state of the board
         storeCurrState();
         Log.d(TAG, "\n onPause() end, this.gameOver=" + this.gameOver);
@@ -270,6 +312,7 @@ public class Game extends Activity implements OnClickListener {
         // Game over!!!
         Log.d(TAG, "\n Gameover case start, this.gameOver= " + this.gameOver);
         this.gameOver = true;
+        playSound(mpGameOver, gameOverResId, false);
 //        getPreferences(MODE_PRIVATE).edit()
 //                .putBoolean(Game.PREF_GAME_OVER, true).commit();
         stopNewLetterTimer();
@@ -348,6 +391,7 @@ public class Game extends Activity implements OnClickListener {
             if (isCurrWordValid) {
                 processValidWord(v);
             } else {
+                playSound(mpInvalidWord, invalidWordBeepResId, false);
                 this.totalIncorrectWords++;
                 ((Button) v).setTextColor(Color.RED);
             }
@@ -355,10 +399,16 @@ public class Game extends Activity implements OnClickListener {
         case R.id.wordgame_pause_button:
             if (isPaused) {
                 isPaused = false;
+                if (playBgMusic) {
+                    playBgMusic();
+                }
                 startNewLetterTimer();
                 ((Button) v).setText(R.string.wordgame_pause);
             } else {
                 isPaused = true;
+                if (mpBgMusic != null) {
+                    mpBgMusic.release();
+                }
                 stopNewLetterTimer();
                 ((Button) v).setText(R.string.wordgame_resume);
             }
@@ -374,6 +424,7 @@ public class Game extends Activity implements OnClickListener {
     }
 
     private void processValidWord(View v) {
+        playSound(mpValidWord, validWordBeepResId, false);
         String currWord = ((Button) v).getText().toString();
         addWord(currWord);
         ((Button) v).setText("");
@@ -450,6 +501,17 @@ public class Game extends Activity implements OnClickListener {
     private void addWord(String ipWord) {
         wordList.add(ipWord);
         // renderWorList();
+    }
+    
+    protected void playSound(MediaPlayer mp, int soundResId, boolean loop) {
+        // Release any resources from previous MediaPlayer
+        if (mp != null) {
+            mp.release();
+        }       
+        // Create a new MediaPlayer to play this sound
+        mp = MediaPlayer.create(this, soundResId);
+        mp.start();
+        mp.setLooping(loop);
     }
 
     private BloomFilter<String> loadBitsetFromFile(String filepath) {

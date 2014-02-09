@@ -2,6 +2,7 @@ package edu.neu.madcourse.dushyantdeshmukh.wordgame;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +17,10 @@ import android.view.View.OnClickListener;
 public class WordGame extends Activity implements OnClickListener {
 
   private static final String TAG = "Word Game";
+  
+  private MediaPlayer mpMenuMusic;
+  private int menuMusicResId = R.raw.wordgame_menu_music;
+  private boolean playBgMusic = false;
   
   public WordGame() {
     // TODO Auto-generated constructor stub
@@ -43,6 +48,29 @@ public class WordGame extends Activity implements OnClickListener {
     returnButton.setOnClickListener(this);
   }
   
+  @Override
+  protected void onResume() {
+      super.onResume();
+      playBgMusic = Prefs.getMusic(this);
+      
+      if (playBgMusic) {
+          if (mpMenuMusic != null) {
+              mpMenuMusic.release();
+          }       
+          // Create a new MediaPlayer to play this sound
+          mpMenuMusic = MediaPlayer.create(this, menuMusicResId);
+          mpMenuMusic.start();
+          mpMenuMusic.setLooping(true);
+      }
+  }
+  
+  protected void onPause() {
+      super.onPause();
+      if (mpMenuMusic != null) {
+          mpMenuMusic.release();
+      }
+  }
+  
 //  @Override
 //  public boolean onCreateOptionsMenu(Menu menu) {
 //     super.onCreateOptionsMenu(menu);
@@ -68,6 +96,9 @@ public class WordGame extends Activity implements OnClickListener {
       startActivity(i);
       break;
     case R.id.wordgame_return_button:
+        if (mpMenuMusic != null) {
+            mpMenuMusic.release();
+        }
         finish();
         break;
     }
