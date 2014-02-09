@@ -24,6 +24,9 @@
     <color name="sudoku_puzzle_selected">#64ff8000</color>
 
     <!-- Word Game colors -->
+    <color name="wordgame_background">#223344dd</color>
+    <color name="wordgame_title">#aa1122ff</color>
+    
     <color name="board_background">#3500ffff</color>
     <color name="board_tile">#64c6d4ef</color>
     <color name="board_letter">#64000000</color>

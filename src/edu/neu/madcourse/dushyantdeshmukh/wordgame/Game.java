@@ -25,7 +25,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;;
+import android.widget.LinearLayout.LayoutParams;
+
+;
 
 public class Game extends Activity implements OnClickListener {
 
@@ -52,12 +54,13 @@ public class Game extends Activity implements OnClickListener {
     public int total_cols = 5;
     private int totalCells = 35;
     private int totalLetters = 0;
-    
+
     private boolean playBgMusic = false;
     private boolean showHint = false;
 
     public char board[][];
     protected boolean isPaused = false;
+    private boolean overrideAndContinue = false;
 
     private String currWord = "";
     protected HashSet<String> currSelections = new HashSet<String>();
@@ -80,19 +83,19 @@ public class Game extends Activity implements OnClickListener {
 
     private MediaPlayer mpValidWord;
     private int validWordBeepResId = R.raw.valid_word_beep;
-    
+
     private MediaPlayer mpInvalidWord;
     private int invalidWordBeepResId = R.raw.invalid_word_beep;
-    
+
     private MediaPlayer mpBgMusic;
     private int bgMusicResId = R.raw.wordgame_bg_music;
-    
+
     private MediaPlayer mpGameOver;
     private int gameOverResId = R.raw.game_over_gong;
-    
+
     private MediaPlayer mpCountDown;
     private int countDownResId = R.raw.count_down;
-    
+
     private boolean gameOver = false;
 
     Timer myTimer = new Timer();
@@ -108,10 +111,9 @@ public class Game extends Activity implements OnClickListener {
             char newLetter = getNewLetter();
             Log.d(TAG, "Inserting new letter: " + newLetter);
             insertNewLetter(newLetter);
-            
+
         }
 
-        
     };
 
     private void chkCountdown() {
@@ -119,16 +121,16 @@ public class Game extends Activity implements OnClickListener {
             mpCountDown.release();
         }
         if (totalLetters >= (totalCells - (2 * total_cols) - 1)) {
-//            Log.d(TAG, "totalLetters = " + totalLetters);
-//            Log.d(TAG, "totalCells = " + totalCells);
-//            Log.d(TAG, "total_cols = " + total_cols);
-                // Create a new MediaPlayer to play this sound
-                mpCountDown = MediaPlayer.create(this, countDownResId);
-                mpCountDown.start();
-                mpCountDown.setLooping(true);
+            // Log.d(TAG, "totalLetters = " + totalLetters);
+            // Log.d(TAG, "totalCells = " + totalCells);
+            // Log.d(TAG, "total_cols = " + total_cols);
+            // Create a new MediaPlayer to play this sound
+            mpCountDown = MediaPlayer.create(this, countDownResId);
+            mpCountDown.start();
+            mpCountDown.setLooping(true);
         }
     }
-    
+
     public Game() {
 
     }
@@ -137,32 +139,30 @@ public class Game extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-        
 
         total_rows = Prefs.getRows(this);
         total_cols = Prefs.getCols(this);
         totalCells = total_rows * total_cols;
-        
+
         Log.d(TAG, "Loading dictionary from file...");
         loadBitsetFromFile("compressedWordlist.txt");
 
-        // Set timer
-        // startNewLetterTimer();
         newLetterInterval = getNewLetterInterval(Prefs.getDifficultyLevel(this));
 
         checkAndHandleContinueGame();
 
         setContentView(R.layout.wordgame_game);
-        
-        //  set board size on screen
+
+        // set board size on screen
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int height = displaymetrics.heightPixels;
         int width = displaymetrics.widthPixels;
         Log.d(TAG, "height = " + height + ", width = " + width);
         BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
-        boardView.setLayoutParams(new LayoutParams((width * 9)/10, (height * 65)/100));
-        
+        boardView.setLayoutParams(new LayoutParams((width * 9) / 10,
+                (height * 65) / 100));
+
         // Set up click listeners for all the buttons
 
         View clearButton = findViewById(R.id.wordgame_clear_button);
@@ -185,6 +185,10 @@ public class Game extends Activity implements OnClickListener {
         boolean continueGame = getIntent()
                 .getBooleanExtra(CONTINUE_GAME, false);
 
+        if (overrideAndContinue) {
+            continueGame = true;
+            overrideAndContinue = false;
+        }
         if (continueGame) {
             // continue game
             this.gameOver = getPreferences(MODE_PRIVATE).getBoolean(
@@ -240,31 +244,26 @@ public class Game extends Activity implements OnClickListener {
         }
     }
 
-private void playBgMusic() {
-    if (playBgMusic) {
-        if (mpBgMusic != null) {
-            mpBgMusic.release();
-        }       
-        // Create a new MediaPlayer to play this sound
-        mpBgMusic = MediaPlayer.create(this, bgMusicResId);
-        mpBgMusic.start();
-        mpBgMusic.setLooping(true);
+    private void playBgMusic() {
+        if (playBgMusic) {
+            if (mpBgMusic != null) {
+                mpBgMusic.release();
+            }
+            // Create a new MediaPlayer to play this sound
+            mpBgMusic = MediaPlayer.create(this, bgMusicResId);
+            mpBgMusic.start();
+            mpBgMusic.setLooping(true);
+        }
     }
-    }
-
-//    private void playBgMusic(boolean play) {
-//        if (play) {
-//            playSound(mpBgMusic, bgMusicResId);
-//        } else {
-//            mpBgMusic.
-//        }
-//    }
 
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "\n onPause() start, this.gameOver=" + this.gameOver);
         stopNewLetterTimer();
+        if (mpCountDown != null) {
+            mpCountDown.release();
+        }
         if (mpBgMusic != null) {
             mpBgMusic.release();
         }
@@ -279,8 +278,6 @@ private void playBgMusic() {
     }
 
     private void storeCurrState() {
-//        getPreferences(MODE_PRIVATE).edit()
-//                .putBoolean(Game.PREF_GAME_OVER, false).commit();
         getPreferences(MODE_PRIVATE).edit()
                 .putString(PREF_BOARD_STATE, toBoardString(this.board))
                 .commit();
@@ -329,7 +326,7 @@ private void playBgMusic() {
                     board[i][j] = newLetter;
                     BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
                     boardView.invalidateRect(j, i);
-                    
+
                     totalLetters++;
                     chkCountdown();
                     return;
@@ -337,16 +334,15 @@ private void playBgMusic() {
             }
         }
         // Game over!!!
-        Log.d(TAG, "\n Gameover case start, this.gameOver= " + this.gameOver);
+        // Log.d(TAG, "\n Gameover case start, this.gameOver= " +
+        // this.gameOver);
         this.gameOver = true;
         stopNewLetterTimer();
         if (mpCountDown != null) {
             mpCountDown.release();
         }
         playSound(mpGameOver, gameOverResId, false);
-//        getPreferences(MODE_PRIVATE).edit()
-//                .putBoolean(Game.PREF_GAME_OVER, true).commit();
-        
+
         Intent i = new Intent(this, GameOver.class);
         i.putExtra(PREF_CURR_SCORE, this.currScore);
         i.putExtra(PREF_LONGEST_WORD, this.longestWord);
@@ -354,7 +350,6 @@ private void playBgMusic() {
         i.putExtra(PREF_INCORRECT_WORDS, this.totalIncorrectWords);
         startActivity(i);
         finish();
-        Log.d(TAG, "\n Gameover case end, this.gameOver= " + this.gameOver);
     }
 
     /**
@@ -445,10 +440,18 @@ private void playBgMusic() {
             }
             break;
         case R.id.wordgame_hint_button:
+            if (showHint) {
+                //stopNewLetterTimer();
+                Intent i = new Intent(this, Hints.class);
+                i.putExtra(Game.PREF_BOARD_STATE, toBoardString(board));
+                //i.putExtra(Game.CONTINUE_GAME, true);
+                overrideAndContinue = true;
+                startActivity(i);
+            }
             break;
         case R.id.wordgame_quit_button:
-             getPreferences(MODE_PRIVATE).edit()
-             .putBoolean(Game.PREF_GAME_OVER, false).commit();
+            getPreferences(MODE_PRIVATE).edit()
+                    .putBoolean(Game.PREF_GAME_OVER, false).commit();
             finish();
             break;
         }
@@ -537,12 +540,12 @@ private void playBgMusic() {
         wordList.add(ipWord);
         // renderWorList();
     }
-    
+
     protected void playSound(MediaPlayer mp, int soundResId, boolean loop) {
         // Release any resources from previous MediaPlayer
         if (mp != null) {
             mp.release();
-        }       
+        }
         // Create a new MediaPlayer to play this sound
         mp = MediaPlayer.create(this, soundResId);
         mp.start();

@@ -1,6 +1,7 @@
 package edu.neu.madcourse.dushyantdeshmukh.wordgame;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -60,8 +61,11 @@ public class GameOver extends Activity implements OnClickListener {
         switch (v.getId()) {
         case R.id.wordgame_gameover_restart_button:
             finish();
-            WordGame wordGame = new WordGame();
-            wordGame.startGame(false);
+//            WordGame wordGame = new WordGame();
+//            wordGame.startGame(false);
+            Intent intent = new Intent(this, Game.class);
+            intent.putExtra(Game.CONTINUE_GAME, false);
+            startActivity(intent);
             break;
         case R.id.wordgame_gameover_quit_button:
             Log.d(TAG, "\n Gameover Quit btn start");

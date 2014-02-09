@@ -21,24 +21,28 @@
             android:id="@+id/wordgame_gameover_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/wordgame_gameover_msg" />
         
         <TextView
             android:id="@+id/wordgame_gameover_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/wordgame_gameover_score" />
         
         <TextView
             android:id="@+id/wordgame_gameover_accuracy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/wordgame_gameover_accuracy" />
         
         <TextView
             android:id="@+id/wordgame_gameover_longestword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/wordgame_gameover_longestword" />
         
         <Button
@@ -47,7 +51,7 @@
             android:layout_height="wrap_content"
             android:text="@string/wordgame_gameover_restart_label"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
              />
         
         <Button
@@ -56,7 +60,7 @@
             android:layout_height="wrap_content"
             android:text="@string/wordgame_gameover_quit_label"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
              />
 
     </LinearLayout>

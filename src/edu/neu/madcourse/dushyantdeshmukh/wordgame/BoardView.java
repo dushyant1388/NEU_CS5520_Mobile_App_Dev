@@ -50,6 +50,7 @@ public class BoardView extends View {
 
         letterPaint.setColor(getResources().getColor(R.color.board_letter));
         letterPaint.setStyle(Style.FILL);
+        letterPaint.setTextAlign(Paint.Align.CENTER);
 
     }
 
@@ -102,7 +103,7 @@ public class BoardView extends View {
         // Log.d(TAG, "Draw letter '" + c + "' at x:" + x + ", y:" + y);
         getRect(x, y, selRect);
         if (selected) {
-            Log.d(TAG, "selRect: " + selRect);
+//            Log.d(TAG, "selRect: " + selRect);
             canvas.drawRect(selRect, this.selectedTilePaint);
         } else {
             canvas.drawRect(selRect, this.tilePaint);
