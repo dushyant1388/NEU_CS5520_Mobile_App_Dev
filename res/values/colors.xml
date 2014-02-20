@@ -32,4 +32,9 @@
     <color name="board_letter">#64000000</color>
     <color name="board_selected">#64ff8000</color>
     <color name="board_gridlines">#6456648f</color>
+    
+    <!-- Communication colors -->
+    <color name="communication_background">#2233dd22</color>
+    <color name="communication_heading">#dd22ff22</color>
+    
 </resources>
