@@ -28,6 +28,9 @@ public class Communication extends Activity implements OnClickListener {
 
     View interphoneCommButton = findViewById(R.id.communication_interphone_comm_button);
     interphoneCommButton.setOnClickListener(this);
+    
+    View ackButton = findViewById(R.id.communication_ack_button);
+    ackButton.setOnClickListener(this);
 
     View quitButton = findViewById(R.id.communication_quit_button);
     quitButton.setOnClickListener(this);
@@ -42,6 +45,10 @@ public class Communication extends Activity implements OnClickListener {
       break;
     case R.id.communication_interphone_comm_button:
       i = new Intent(this, TestInterphoneComm.class);
+      startActivity(i);
+      break;
+    case R.id.communication_ack_button:
+      i = new Intent(this, Acknowledgements.class);
       startActivity(i);
       break;
     case R.id.communication_quit_button:

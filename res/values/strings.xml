@@ -105,6 +105,7 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="communication_heading_label">Communication Tests</string>
     <string name="communication_storing_data">Storing Data on Cloud</string>
     <string name="communication_interphone_comm">Inter Phone Communication</string>
+    <string name="communication_ack_label">Acknowledgements</string>
     <string name="communication_quit">Quit</string>
     
     <string name="communication_storing_data_title_label">Test Storing Data</string>
@@ -117,7 +118,27 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="communication_storing_data_quit">Return to menu</string>
     
     <string name="communication_interphone_comm_title_label">Test Inter-phone Communication</string>
+    <string name="communication_interphone_comm_username_hint">Enter username here&#8230;</string>
+    <string name="communication_interphone_comm_startgame">Start Game</string>
+    <string name="communication_interphone_comm_sendmsg_hint">Enter your message here&#8230;</string>
+    <string name="communication_interphone_comm_sendmsg">Send Message</string>
+    <string name="communication_interphone_comm_quit">Return to menu</string>
     
+    <string name="communication_ack_ok_label">OK</string>
+    <string name="communication_acks">Following is the list of online resources referred:\r\n \r\n
+        1. Google Cloud Messaging (GCM) \r\n
+        http://developer.android.com/google/gcm/index.html \r\n \r\n
+        1. Making HTTP post call: \r\n
+        http://www.mkyong.com/java/how-to-send-http-request-getpost-in-java/ \r\n \r\n
+        2. Setting up a broadcast receiver: \r\n
+        http://www.androidsnippets.com/how-to-set-up-a-broadcastreceiver-intent \r\n \r\n
+        3. Checking if activity is currently actuve: \r\n
+        http://androidblog.reindustries.com/check-if-an-android-activity-is-currently-running/ \r\n \r\n
+        4. Intent flags while launching activity: \r\n
+        http://blog.akquinet.de/2010/04/15/android-activites-and-tasks-series-intent-flags/ \r\n \r\n
+        5. Checking if internet is available: \r\n
+        http://stackoverflow.com/questions/8573176/internet-connection-error \r\n
+        </string>
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>
     <string name="sudoku_main_title">Android Sudoku</string>

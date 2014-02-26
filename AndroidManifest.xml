@@ -11,8 +11,29 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    
+    <permission android:name="edu.neu.madcourse.dushyantdeshmukh.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="edu.neu.madcourse.dushyantdeshmukh.permission.C2D_MESSAGE" />
     
     <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
+        <meta-data android:name="com.google.android.gms.version"
+           android:value="@integer/google_play_services_version" />
+        
+        <receiver
+            android:name="edu.neu.madcourse.dushyantdeshmukh.communication.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="edu.neu.madcourse.dushyantdeshmukh" />
+            </intent-filter>
+        </receiver>
+        <service android:name="edu.neu.madcourse.dushyantdeshmukh.communication.GcmIntentService" />
+        
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.MainActivity" android:label="@string/my_name">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
@@ -40,11 +61,11 @@
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.wordgame.Game" android:screenOrientation="portrait" android:configChanges="orientation" android:label="@string/wordgame_title_label" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.wordgame.GameOver" android:screenOrientation="portrait" android:configChanges="orientation" android:label="@string/wordgame_gameover_title" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.wordgame.Prefs" android:screenOrientation="portrait" android:label="@string/wordgame_settings" />
-        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.wordgame.PauseDialog" android:screenOrientation="portrait" android:label="@string/wordgame_pause_dialog_title" android:theme="@android:style/Theme.Dialog" />
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.communication.Communication" android:label="@string/communication_title_label" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.communication.TestStoringData" android:label="@string/communication_storing_data_title_label" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.communication.TestInterphoneComm" android:label="@string/communication_interphone_comm_title_label" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.communication.Acknowledgements" android:label="@string/communication_ack_label" android:theme="@android:style/Theme.Dialog" />
     </application>
 
     
