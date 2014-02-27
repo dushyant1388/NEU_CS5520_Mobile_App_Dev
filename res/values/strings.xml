@@ -132,7 +132,7 @@ Sample about text. Needs to be updated&#8230;</string>
         http://www.mkyong.com/java/how-to-send-http-request-getpost-in-java/ \r\n \r\n
         2. Setting up a broadcast receiver: \r\n
         http://www.androidsnippets.com/how-to-set-up-a-broadcastreceiver-intent \r\n \r\n
-        3. Checking if activity is currently actuve: \r\n
+        3. Checking if activity is currently active: \r\n
         http://androidblog.reindustries.com/check-if-an-android-activity-is-currently-running/ \r\n \r\n
         4. Intent flags while launching activity: \r\n
         http://blog.akquinet.de/2010/04/15/android-activites-and-tasks-series-intent-flags/ \r\n \r\n

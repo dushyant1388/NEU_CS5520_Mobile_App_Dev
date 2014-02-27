@@ -62,6 +62,7 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
   protected static final String MSG_TYPE_CONNECT = "CONNECT";
   protected static final String KEY_MESSAGE = "MESSAGE";
   protected static final String KEY_NOTIFICATION_DATA = "NOTIFICATION_DATA";
+  private static final String NETWORK_UNAVAILABLE_MSG = "Network unavailable. Please make sure you are connected to the internet.";
 
   /**
    * This is the project number you got from the API Console, as described in
@@ -117,17 +118,19 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
       String msgType = dataMap.get(KEY_MSG_TYPE);
       Log.d(TAG, KEY_MSG_TYPE + ": " + msgType);
       if (msgType.equals(MSG_TYPE_CONNECT)) {
-//        Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + MSG_TYPE_CONNECT);
+        // Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + MSG_TYPE_CONNECT);
         opponentName = dataMap.get(KEY_USERNAME);
         opponentRegId = dataMap.get(KEY_REG_ID);
         Editor ed = getCommSharedPreferences(context).edit();
         ed.putString(PREF_OPPONENT_REG_ID, opponentRegId);
         ed.putString(PREF_OPPONENT_NAME, opponentName);
         ed.commit();
-        Log.d(TAG,"Message sent to displayMsg() => Connected to opponent:" + opponentName + " (" + opponentRegId + ")");
-        displayMsg("Connected to opponent:" + opponentName + " (" + opponentRegId + ")");
+        Log.d(TAG, "Message sent to displayMsg() => Connected to opponent:"
+            + opponentName + " (" + opponentRegId + ")");
+        displayMsg("Connected to opponent:" + opponentName + " ("
+            + opponentRegId + ")");
       } else if (msgType.equals(MSG_TYPE_MOVE)) {
-//        Log.d(TAG, "Inside MSG_TYPE_MOVE = " + MSG_TYPE_MOVE);
+        // Log.d(TAG, "Inside MSG_TYPE_MOVE = " + MSG_TYPE_MOVE);
         String msgFromOpponent = dataMap.get(KEY_MESSAGE);
         displayMsg("Message from opponent '" + opponentName + "': "
             + msgFromOpponent);
@@ -147,6 +150,28 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
       Log.d(TAG, "'" + tempKey + "' : '" + tempVal + "'");
     }
     return dataMap;
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+    new AsyncTask<String, Integer, String>() {
+      @Override
+      protected String doInBackground(String... params) {
+        if (!InternetConnUtil.hasActiveInternetConnection(context)) {
+          return NETWORK_UNAVAILABLE_MSG;
+        }
+        return "";
+      }
+
+      @Override
+      protected void onPostExecute(String result) {
+        // mDisplay.append(msg + "\n");
+        if (!result.equals("")) {
+          displayMsg(result);
+        }
+      }
+    }.execute(null, null, null);
   }
 
   @Override
@@ -173,7 +198,7 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
         + ", opponentRegId: " + opponentRegId);
     // This needs to be in the activity that will end up receiving the broadcast
     registerReceiver(receiver, new IntentFilter("INTENT_ACTION"));
-    
+
     handleNotification(sp);
   }
 
@@ -204,8 +229,8 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
     switch (v.getId()) {
     case R.id.communication_interphone_comm_startgame_button:
       if (opponentRegId != null && !opponentRegId.equals("")) {
-        displayMsg("Already connected to '" + opponentName + "' (RegistrationId = "
-            + opponentRegId + ").");
+        displayMsg("Already connected to '" + opponentName
+            + "' (RegistrationId = " + opponentRegId + ").");
         return;
       }
       EditText usernameEditText = (EditText) findViewById(R.id.communication_interphone_comm_username_editText);
@@ -218,7 +243,7 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
         usernameEditText.setText("");
 
         if (!InternetConnUtil.isNetworkAvailable(context)) {
-          displayMsg("Network unavailable.");
+          displayMsg(NETWORK_UNAVAILABLE_MSG);
           return;
         }
         // check if user is waiting
@@ -242,8 +267,8 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
                 if (!result.contains("Error")) {
                   // displayMsg("No player waiting... putting your regId "
                   // + myRegId + " in WAITING_PLAYER.");
-                  retVal = "No player waiting... storing your RegistrationId " + myRegId
-                      + " on server.";
+                  retVal = "No player waiting... storing your RegistrationId "
+                      + myRegId + " on server.";
                 } else {
                   // displayMsg("Error while putting your regId on server: "
                   // + result);
@@ -262,8 +287,10 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
                   KeyValueAPI.clear(TEAM_NAME, PASSWORD);
                   opponentRegId = oppRegId;
                   opponentName = oppName;
-                  Log.d(TAG, "Storing data got from server '" + waitingPlayerVal + "' in shared preference...\n"
-                      + "opponentName= " + opponentName + ", opponentRegId= " + opponentRegId);
+                  Log.d(TAG, "Storing data got from server '"
+                      + waitingPlayerVal + "' in shared preference...\n"
+                      + "opponentName= " + opponentName + ", opponentRegId= "
+                      + opponentRegId);
                   Editor ed = getCommSharedPreferences(context).edit();
                   ed.putString(PREF_OPPONENT_REG_ID, opponentRegId);
                   ed.putString(PREF_OPPONENT_NAME, opponentName);
@@ -313,7 +340,7 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
         sendmsgEditText.setText("");
 
         if (!InternetConnUtil.isNetworkAvailable(context)) {
-          displayMsg("Network unavailable.");
+          displayMsg(NETWORK_UNAVAILABLE_MSG);
           return;
         }
         new AsyncTask<String, Integer, String>() {
@@ -326,7 +353,8 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
                   + "&data." + KEY_MESSAGE + "=" + msgForOpponent);
               Log.d(TAG, "Result of HTTP POST: " + result);
               // displayMsg("Message sent to opponent (" + opponentName + ")");
-              retVal = "Message sent to opponent '" + opponentName + "': " + msgForOpponent;
+              retVal = "Message sent to opponent '" + opponentName + "': "
+                  + msgForOpponent;
               // sendPost("data=" + myRegId);
             } catch (Exception e) {
               // TODO Auto-generated catch block
@@ -441,7 +469,6 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
    */
   private void registerInBackground() {
     if (!InternetConnUtil.isNetworkAvailable(context)) {
-      displayMsg("Network unavailable.");
       return;
     }
     new AsyncTask<String, Integer, String>() {
