@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import edu.neu.madcourse.dushyantdeshmukh.communication.Communication;
 import edu.neu.madcourse.dushyantdeshmukh.dictionary.Dictionary;
 import edu.neu.madcourse.dushyantdeshmukh.sudoku.*;
+import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TwoPlayerWordGame;
 import edu.neu.madcourse.dushyantdeshmukh.wordgame.WordGame;
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -41,6 +42,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		
 		View communicationButton = findViewById(R.id.communication_button);
 		communicationButton.setOnClickListener(this);
+		
+		View two_player_wordgameButton = findViewById(R.id.two_player_wordgame_button);
+		two_player_wordgameButton.setOnClickListener(this);
 
 		View quitButton = findViewById(R.id.quit_button);
 		quitButton.setOnClickListener(this);
@@ -76,6 +80,10 @@ public class MainActivity extends Activity implements OnClickListener {
 		case R.id.communication_button:
       Intent i5 = new Intent(this, Communication.class);
       startActivity(i5);
+      break;
+		case R.id.two_player_wordgame_button:
+      Intent i6 = new Intent(this, TwoPlayerWordGame.class);
+      startActivity(i6);
       break;
 		case R.id.quit_button:
 			finish();

@@ -66,6 +66,17 @@
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.communication.TestStoringData" android:label="@string/communication_storing_data_title_label" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.communication.TestInterphoneComm" android:label="@string/communication_interphone_comm_title_label" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.communication.Acknowledgements" android:label="@string/communication_ack_label" android:theme="@android:style/Theme.Dialog" />
+        
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TwoPlayerWordGame" android:screenOrientation="portrait" android:configChanges="orientation" android:label="@string/two_player_wordgame_title_label" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Acknowledgements" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_ack" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Instructions" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_instructions_title" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Game" android:screenOrientation="portrait" android:configChanges="orientation" android:label="@string/two_player_wordgame_title_label" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.GameOver" android:screenOrientation="portrait" android:configChanges="orientation" android:label="@string/two_player_wordgame_gameover_title" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Prefs" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_settings" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.ChooseOpponent" android:screenOrientation="portrait" android:configChanges="orientation" android:label="@string/two_player_wordgame_choose_opponent_title" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.WaitingForOpponent" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_waiting_for_opponent" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.MsgFromOpponent" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_msg_from_opponent" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.RequestFromOpponent" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_request_from_opponent" android:theme="@android:style/Theme.Dialog" />
     </application>
 
     

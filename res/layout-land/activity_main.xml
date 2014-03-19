@@ -75,12 +75,16 @@
             </TableRow>
 
             <TableRow>
-
+                <Button
+			        android:id="@+id/two_player_wordgame_button"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:text="@string/two_player_wordgame_title_label" />
+                
                 <Button
                     android:id="@+id/quit_button"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_span="2"
                     android:text="@string/quit_label" />
             </TableRow>
         </TableLayout>

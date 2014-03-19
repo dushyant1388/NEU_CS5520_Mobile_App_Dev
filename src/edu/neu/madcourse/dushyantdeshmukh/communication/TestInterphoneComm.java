@@ -16,7 +16,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import edu.neu.madcourse.dushyantdeshmukh.R;
-import edu.neu.madcourse.dushyantdeshmukh.util.InternetConnUtil;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.InternetConnUtil;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 import edu.neu.mhealth.api.KeyValueAPI;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -70,8 +71,6 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
    */
 
   GoogleCloudMessaging gcm;
-  AtomicInteger msgId = new AtomicInteger();
-  SharedPreferences prefs;
   Context context;
 
   private String username, opponentName, myRegId, opponentRegId,
@@ -113,7 +112,7 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
 
   protected void handleOpponentResponse(String data) {
     Log.d(TAG, "Inside handleOpponentResponse()");
-    HashMap<String, String> dataMap = getDataMap(data);
+    HashMap<String, String> dataMap = Util.getDataMap(data, TAG);
     if (dataMap.containsKey(KEY_MSG_TYPE)) {
       String msgType = dataMap.get(KEY_MSG_TYPE);
       Log.d(TAG, KEY_MSG_TYPE + ": " + msgType);
@@ -136,20 +135,6 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
             + msgFromOpponent);
       }
     }
-  }
-
-  private HashMap<String, String> getDataMap(String bundlesStr) {
-    HashMap<String, String> dataMap = new HashMap<String, String>();
-    bundlesStr = bundlesStr.substring(8, bundlesStr.length() - 2);
-    String keyValArr[] = bundlesStr.split(", ");
-    for (String str : keyValArr) {
-      String tempArr[] = str.split("=");
-      String tempKey = tempArr[0];
-      String tempVal = tempArr[1];
-      dataMap.put(tempKey, tempVal);
-      Log.d(TAG, "'" + tempKey + "' : '" + tempVal + "'");
-    }
-    return dataMap;
   }
 
   @Override

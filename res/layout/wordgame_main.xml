@@ -20,14 +20,14 @@
          >
 
         <TextView
-	      android:text="@string/wordgame_title_label"
-	      android:layout_height="wrap_content"
-	      android:layout_width="wrap_content"
-	      android:layout_marginBottom="25dip"
-	      android:textSize="24.5sp"
-	      android:typeface="serif"
-	      android:layout_gravity="center"
-	      android:textColor="@color/wordgame_title" />
+          android:text="@string/wordgame_title_label"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:layout_marginBottom="25dip"
+          android:textSize="24.5sp"
+          android:typeface="serif"
+          android:layout_gravity="center"
+          android:textColor="@color/wordgame_title" />
         
         <Button
             android:id="@+id/wordgame_newgame_button"
@@ -72,5 +72,5 @@
             android:text="@string/wordgame_return" />
       
     </LinearLayout>
-
+    
 </ScrollView>

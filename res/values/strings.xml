@@ -139,6 +139,66 @@ Sample about text. Needs to be updated&#8230;</string>
         5. Checking if internet is available: \r\n
         http://stackoverflow.com/questions/8573176/internet-connection-error \r\n
         </string>
+        
+    <!-- 2P Word Game screen strings -->
+    <string name="two_player_wordgame_title_label">Two Player Word Game</string>
+    <string name="two_player_wordgame_welcome_msg">Hello </string>
+    <string name="two_player_wordgame_username_hint">Enter username&#8230;</string>
+    <string name="two_player_wordgame_newgame">New Game</string>
+    <string name="two_player_wordgame_continue">Continue</string>
+    <string name="two_player_wordgame_top_scorers">Top Scorers</string>
+    <string name="two_player_wordgame_settings">Settings</string>
+    <string name="two_player_wordgame_settings_shortcut">s</string>
+    <string name="two_player_wordgame_return">Return to Menu</string>
+    <string name="two_player_wordgame_ack">Acknowledgements</string>
+    <string name="two_player_wordgame_ack_ok_label">OK</string>
+    <string name="two_player_wordgame_instructions_title">How to Play</string>
+    <string name="two_player_wordgame_instructions_ok_label">OK</string>
+    
+    <string name="two_player_wordgame_clear">Clear</string>
+    <string name="two_player_wordgame_pause">Pause</string>
+    <string name="two_player_wordgame_resume">Resume Game</string>
+    <string name="two_player_wordgame_quit">Quit</string>
+    <string name="two_player_wordgame_currscore">Score: 0</string>
+    
+    <!-- 2P Word Game - Game Over screen strings -->
+    <string name="two_player_wordgame_gameover_title">Game Over</string>
+    <string name="two_player_wordgame_gameover_msg">You can do better ;-)</string>
+    <string name="two_player_wordgame_gameover_score">Score: </string>
+    <string name="two_player_wordgame_gameover_accuracy">Accuracy: </string>
+    <string name="two_player_wordgame_gameover_longestword">Longest word: </string>
+    <string name="two_player_wordgame_gameover_restart_label">RESTART</string>
+    <string name="two_player_wordgame_gameover_quit_label">QUIT</string>
+    
+    <!-- 2P Word Game - Preference screen strings -->
+    <string name="pref_two_player_wordgame_rows_summary">No of rows on the board</string>
+    <string name="pref_two_player_wordgame_rows">Rows</string>
+    <string name="pref_two_player_wordgame_cols_summary">No of cols on the board</string>
+    <string name="pref_two_player_wordgame_cols">Cols</string>
+    
+    <!-- 2P Word Game Choose Opponent strings -->
+    <string name="two_player_wordgame_choose_opponent_title">Choose Opponent</string>
+    <string name="two_player_wordgame_opponent_name_hint">Enter opponent username here&#8230;</string>
+    <string name="two_player_wordgame_find_opponent">Find Opponent</string>
+    <string name="two_player_wordgame_random_opponent">Random Opponent</string>
+    <string name="two_player_wordgame_back">Back</string>
+    
+    <!-- 2P Word Game Waiting for Opponent strings -->
+    <string name="two_player_wordgame_waiting_for_opponent">Waiting for opponent</string>
+    <string name="two_player_wordgame_waiting_for_opponent_text">Waiting for opponent to accept 
+        your game request&#8230;</string>
+        
+    <!-- 2P Word Game Message from Opponent strings -->
+    <string name="two_player_wordgame_msg_from_opponent">Message from opponent</string>
+    <string name="two_player_wordgame_msg_from_opponent_text">Message from opponent.</string>
+    <string name="two_player_wordgame_play">Play</string>
+    
+    <!-- 2P Word Game Request from Opponent strings -->
+    <string name="two_player_wordgame_request_from_opponent">Request from opponent</string>
+    <string name="two_player_wordgame_request_from_opponent_text">Request from opponent</string>
+    <string name="two_player_wordgame_accept">Accept</string>
+    <string name="two_player_wordgame_reject">Reject</string>
+    
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>
     <string name="sudoku_main_title">Android Sudoku</string>

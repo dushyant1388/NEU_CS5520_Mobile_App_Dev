@@ -21,7 +21,7 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 import edu.neu.madcourse.dushyantdeshmukh.R;
-import edu.neu.madcourse.dushyantdeshmukh.util.BloomFilter;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.BloomFilter;
 
 public class Dictionary extends Activity implements OnClickListener {
 

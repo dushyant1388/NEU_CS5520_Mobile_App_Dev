@@ -37,4 +37,9 @@
     <color name="communication_background">#2233dd22</color>
     <color name="communication_heading">#dd22ff22</color>
     
+    <!-- Two Player Word Game colors -->
+    <color name="two_player_wordgame_background">#223344dd</color>
+    <color name="two_player_wordgame_title">#aa1122ff</color>
+    <color name="two_player_wordgame_welcome_msg">#aa1199ff</color>
+    
 </resources>

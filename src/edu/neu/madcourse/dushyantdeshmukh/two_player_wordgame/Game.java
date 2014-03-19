@@ -1,4 +1,4 @@
-package edu.neu.madcourse.dushyantdeshmukh.wordgame;
+package edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame;
 
 import java.io.DataInputStream;
 import java.io.FileNotFoundException;
@@ -11,6 +11,7 @@ import java.util.TimerTask;
 
 import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.BloomFilter;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -144,13 +145,13 @@ public class Game extends Activity implements OnClickListener {
     totalCells = total_rows * total_cols;
 
     Log.d(TAG, "Loading dictionary from file...");
-    loadBitsetFromFile("compressedWordlist.txt");
+    bloomFilter = Util.loadBitsetFromFile("compressedWordlist.txt", this.getAssets());
 
     newLetterInterval = getNewLetterInterval(Prefs.getDifficultyLevel(this));
 
     checkAndHandleContinueGame();
 
-    setContentView(R.layout.wordgame_game);
+    setContentView(R.layout.two_player_wordgame_game);
 
     // set board size on screen
     DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -158,25 +159,25 @@ public class Game extends Activity implements OnClickListener {
     int height = displaymetrics.heightPixels;
     int width = displaymetrics.widthPixels;
     Log.d(TAG, "height = " + height + ", width = " + width);
-    BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
+    BoardView boardView = (BoardView) findViewById(R.id.two_player_wordgame_board_view);
     boardView.setLayoutParams(new LayoutParams((width * 9) / 10,
         (height * 65) / 100));
 
     // Set up click listeners for all the buttons
 
-    View clearButton = findViewById(R.id.wordgame_clear_button);
+    View clearButton = findViewById(R.id.two_player_wordgame_clear_button);
     clearButton.setOnClickListener(this);
 
-    View currwordButton = findViewById(R.id.wordgame_currword_button);
+    View currwordButton = findViewById(R.id.two_player_wordgame_currword_button);
     currwordButton.setOnClickListener(this);
 
-    View pauseButton = findViewById(R.id.wordgame_pause_button);
+    View pauseButton = findViewById(R.id.two_player_wordgame_pause_button);
     pauseButton.setOnClickListener(this);
 
-    View hintButton = findViewById(R.id.wordgame_hint_button);
-    hintButton.setOnClickListener(this);
+//    View hintButton = findViewById(R.id.two_player_wordgame_hint_button);
+//    hintButton.setOnClickListener(this);
 
-    View quitButton = findViewById(R.id.wordgame_quit_button);
+    View quitButton = findViewById(R.id.two_player_wordgame_quit_button);
     quitButton.setOnClickListener(this);
   }
 
@@ -323,7 +324,7 @@ public class Game extends Activity implements OnClickListener {
       for (int j = 0; j < total_cols; j++) {
         if (board[i][j] == '\u0000') {
           board[i][j] = newLetter;
-          BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
+          BoardView boardView = (BoardView) findViewById(R.id.two_player_wordgame_board_view);
           boardView.invalidateRect(j, i);
 
           totalLetters++;
@@ -342,7 +343,7 @@ public class Game extends Activity implements OnClickListener {
     if (mpCountDown != null) {
       mpCountDown.release();
     }
-    playSound(mpGameOver, gameOverResId, false);
+    Util.playSound(this.getApplicationContext(), mpGameOver, gameOverResId, false);
 
     Intent i = new Intent(this, GameOver.class);
     i.putExtra(PREF_CURR_SCORE, this.currScore);
@@ -399,42 +400,42 @@ public class Game extends Activity implements OnClickListener {
   @Override
   public void onClick(View v) {
     switch (v.getId()) {
-    case R.id.wordgame_clear_button:
+    case R.id.two_player_wordgame_clear_button:
       if (isPaused) {
         return;
       }
-      Button currwordButton = (Button) findViewById(R.id.wordgame_currword_button);
+      Button currwordButton = (Button) findViewById(R.id.two_player_wordgame_currword_button);
       currwordButton.setText("");
       this.currWord = "";
-      BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
+      BoardView boardView = (BoardView) findViewById(R.id.two_player_wordgame_board_view);
       HashSet<String> tempRectList = currSelections;
       boardView.inValidateMultipleRects(tempRectList);
       this.currSelections.clear();
       break;
-    case R.id.wordgame_currword_button:
+    case R.id.two_player_wordgame_currword_button:
       if (isPaused) {
         return;
       }
       if (isCurrWordValid) {
         processValidWord(v);
       } else {
-        playSound(mpInvalidWord, invalidWordBeepResId, false);
+        Util.playSound(this.getApplicationContext(), mpInvalidWord, invalidWordBeepResId, false);
         this.totalIncorrectWords++;
         ((Button) v).setTextColor(Color.RED);
       }
       break;
-    case R.id.wordgame_pause_button:
+    case R.id.two_player_wordgame_pause_button:
 //      isPaused = true;
 //      Intent i = new Intent(this, PauseDialog.class);
 //      startActivity(i);
-      BoardView boardView2 = (BoardView) findViewById(R.id.wordgame_board_view);
+      BoardView boardView2 = (BoardView) findViewById(R.id.two_player_wordgame_board_view);
       if (isPaused) {
         isPaused = false;
         if (playBgMusic) {
           playBgMusic();
         }
         startNewLetterTimer();
-        ((Button) v).setText(R.string.wordgame_pause);
+        ((Button) v).setText(R.string.two_player_wordgame_pause);
         boardView2.setVisibility(View.VISIBLE);
       } else {
         isPaused = true;
@@ -445,21 +446,21 @@ public class Game extends Activity implements OnClickListener {
           mpCountDown.release();
         }
         stopNewLetterTimer();
-        ((Button) v).setText(R.string.wordgame_resume);
+        ((Button) v).setText(R.string.two_player_wordgame_resume);
         boardView2.setVisibility(View.INVISIBLE);
       }
       break;
-    case R.id.wordgame_hint_button:
-      if (showHint) {
-        // stopNewLetterTimer();
-        Intent i2 = new Intent(this, Hints.class);
-        i2.putExtra(Game.PREF_BOARD_STATE, toBoardString(board));
-        // i.putExtra(Game.CONTINUE_GAME, true);
-        overrideAndContinue = true;
-        startActivity(i2);
-      }
-      break;
-    case R.id.wordgame_quit_button:
+//    case R.id.wordgame_hint_button:
+//      if (showHint) {
+//        // stopNewLetterTimer();
+//        Intent i2 = new Intent(this, Hints.class);
+//        i2.putExtra(Game.PREF_BOARD_STATE, toBoardString(board));
+//        // i.putExtra(Game.CONTINUE_GAME, true);
+//        overrideAndContinue = true;
+//        startActivity(i2);
+//      }
+//      break;
+    case R.id.two_player_wordgame_quit_button:
       getPreferences(MODE_PRIVATE).edit()
           .putBoolean(Game.PREF_GAME_OVER, false).commit();
       finish();
@@ -468,14 +469,14 @@ public class Game extends Activity implements OnClickListener {
   }
 
   private void processValidWord(View v) {
-    playSound(mpValidWord, validWordBeepResId, false);
+    Util.playSound(this.getApplicationContext(), mpValidWord, validWordBeepResId, false);
     String currWord = ((Button) v).getText().toString();
     addWord(currWord);
     ((Button) v).setText("");
     this.currWord = "";
     int currWordLength = currWord.length();
     this.currScore += currWordLength;
-    TextView currScoreView = (TextView) findViewById(R.id.wordgame_currscore);
+    TextView currScoreView = (TextView) findViewById(R.id.two_player_wordgame_currscore);
     currScoreView.setText("Score: " + currScore);
     if (currWordLength > this.longestWord.length()) {
       this.longestWord = currWord;
@@ -490,7 +491,7 @@ public class Game extends Activity implements OnClickListener {
 
   private void removeCurrWordLetters() {
     Iterator<String> iterator = this.currSelections.iterator();
-    BoardView boardView = (BoardView) findViewById(R.id.wordgame_board_view);
+    BoardView boardView = (BoardView) findViewById(R.id.two_player_wordgame_board_view);
     while (iterator.hasNext()) {
       String tempStrArr[] = iterator.next().split(",");
       int i = Integer.parseInt(tempStrArr[0]);
@@ -516,7 +517,7 @@ public class Game extends Activity implements OnClickListener {
         && !currSelections.contains(row + "," + col)) {
       Log.d(TAG, "Selected letter '" + board[row][col] + "'");
       // add letter to currWord
-      Button currWordBtn = (Button) findViewById(R.id.wordgame_currword_button);
+      Button currWordBtn = (Button) findViewById(R.id.two_player_wordgame_currword_button);
       currWord = currWordBtn.getText().toString();
       currWord += board[row][col];
       currWordBtn.setText(currWord);
@@ -550,35 +551,5 @@ public class Game extends Activity implements OnClickListener {
     // renderWorList();
   }
 
-  protected void playSound(MediaPlayer mp, int soundResId, boolean loop) {
-    // Release any resources from previous MediaPlayer
-    if (mp != null) {
-      mp.release();
-    }
-    // Create a new MediaPlayer to play this sound
-    mp = MediaPlayer.create(this, soundResId);
-    mp.start();
-    mp.setLooping(loop);
-  }
-
-  private BloomFilter<String> loadBitsetFromFile(String filepath) {
-    try {
-      AssetManager am = this.getAssets();
-      int fileLength = (int) am.openFd(filepath).getLength();
-      Log.d(TAG, "compressed file length = " + fileLength);
-      InputStream is = am.open(filepath);
-
-      byte[] fileData = new byte[fileLength];
-      DataInputStream dis = new DataInputStream(is);
-      dis.readFully(fileData);
-      dis.close();
-      bloomFilter = new BloomFilter<String>(0.0001, 450000);
-      bloomFilter = BloomFilter.loadBitsetWithByteArray(fileData, bloomFilter);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return bloomFilter;
-  }
+  
 }
