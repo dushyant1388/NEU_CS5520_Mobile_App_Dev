@@ -74,6 +74,7 @@ public class Util {
   }
 
   public static void addValuesToKeyOnServer(String keyname, String val1, String val2) {
+    Log.d(TAG, "\n\n\n Adding (" + val1 + "-" + val2 + ") on server.\n\n\n");
     new AsyncTask<String, Integer, String>() {
       @Override
       protected String doInBackground(String... params) {
@@ -152,6 +153,7 @@ public class Util {
   }
   
   public static void removeValuesFromKeyOnServer(String keyname, String val1, String val2) {
+    Log.d(TAG, "\n\n\n Removing (" + val1 + "-" + val2 + ") from server.\n\n\n");
     new AsyncTask<String, Integer, String>() {
       @Override
       protected String doInBackground(String... params) {

@@ -93,6 +93,10 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
         }
       }
     };
+    
+    //  Read and set username from SP
+    this.username = getSharedPreferences(Constants.SHARED_PREF_CONST,
+        context.MODE_PRIVATE).getString(Constants.PREF_USERNAME, "");
   }
 
   @Override
@@ -211,7 +215,7 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
         } else {
           Editor ed = getSharedPreferences(Constants.SHARED_PREF_CONST,
               Context.MODE_PRIVATE).edit();
-          ed.putString(Constants.PREF_USERNAME, this.username);
+          ed.putString(Constants.PREF_USERNAME, this.username).commit();
 
           Log.d(TAG, "adding username to Available users list on server");
           // Add username to AVAILABLE_USERS list on server
