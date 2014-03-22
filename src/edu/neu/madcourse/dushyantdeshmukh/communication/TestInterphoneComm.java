@@ -55,14 +55,14 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
   protected static final String PREF_OPPONENT_NAME = "OPPONENT_NAME";
 
   protected static final String KEY_WAITING_PLAYER = "WAITING_PLAYER";
-  protected static final String ACTIVITY_ACTIVE_PREF = "ACTIVITY_ACTIVE";
+  public static final String ACTIVITY_ACTIVE_PREF = "ACTIVITY_ACTIVE";
   protected static final String KEY_REG_ID = "REG_ID";
   protected static final String KEY_USERNAME = "USERNAME";
   protected static final String KEY_MSG_TYPE = "MSG_TYPE";
   protected static final String MSG_TYPE_MOVE = "MOVE";
   protected static final String MSG_TYPE_CONNECT = "CONNECT";
   protected static final String KEY_MESSAGE = "MESSAGE";
-  protected static final String KEY_NOTIFICATION_DATA = "NOTIFICATION_DATA";
+  public static final String KEY_NOTIFICATION_DATA = "NOTIFICATION_DATA";
   private static final String NETWORK_UNAVAILABLE_MSG = "Network unavailable. Please make sure you are connected to the internet.";
 
   /**
@@ -100,7 +100,7 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
       public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Inside onReceive of Broadcast receiver");
         String action = intent.getAction();
-        if (action.equals("INTENT_ACTION")) {
+        if (action.equals("TEST COMM INTENT_ACTION")) {
           String data = intent.getStringExtra("data");
           Log.d(TAG, "data = " + data);
           handleOpponentResponse(data);

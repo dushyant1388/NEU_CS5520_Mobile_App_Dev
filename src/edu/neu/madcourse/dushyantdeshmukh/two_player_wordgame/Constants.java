@@ -15,7 +15,7 @@ public class Constants {
   public static final String TOP_SCORERS_LIST = "TOP_SCORERS_LIST";
   
   //  Shared Preference Constants
-  protected static final String SHARED_PREF_CONST = "TWO_PLAYER_WORD_GAME";
+  public static final String SHARED_PREF_CONST = "TWO_PLAYER_WORD_GAME";
   public static final String ACTIVITY_ACTIVE_PREF = "ACTIVITY_ACTIVE";
   public static final String PREF_USERNAME = "USERNAME";
   public static final String PREF_REG_ID = "registration_id";
@@ -28,10 +28,10 @@ public class Constants {
   //  
     
   public static final String KEY_MSG_TYPE = "MSG_TYPE";
-  public static final String MSG_TYPE_MOVE = "MOVE";
-  public static final String MSG_TYPE_CONNECT = "CONNECT";
-  public static final String MSG_TYPE_ACK_ACCEPT = "ACK_ACCEPT";
-  public static final String MSG_TYPE_ACK_REJECT = "ACK_REJECT";
+  public static final String MSG_TYPE_2P_MOVE = "2P_MOVE";
+  public static final String MSG_TYPE_2P_CONNECT = "2P_CONNECT";
+  public static final String MSG_TYPE_2P_ACK_ACCEPT = "ACK_ACCEPT";
+  public static final String MSG_TYPE_2P_ACK_REJECT = "ACK_REJECT";
   
   public static final String KEY_REG_ID = "REG_ID";
   public static final String KEY_USERNAME = "USERNAME";
@@ -40,8 +40,16 @@ public class Constants {
   public static final String EXTRA_OPPONENT_NAME = "OPPONENT_NAME";
   public static final String EXTRA_OPPONENT_REDID = "OPPONENT_REGID";
   public static final String EXTRA_MSG = "MSG";
+  public static final String EXTRA_ROUND = "ROUND";
+  public static final String EXTRA_OPP_CURR_SCORE = "OPP_CURR_SCORE";
+
   
   public static final String KEY_NOTIFICATION_DATA = "NOTIFICATION_DATA";
   public static final String NETWORK_UNAVAILABLE_MSG = "Network unavailable. Please make sure you are connected to the internet.";
+  protected static final String NO_PLAYER_ONLINE = "No player is available online. Please try again later.";
+  
+  //  Game constants
+  public static final int NO_OF_ROUNDS = 5;
+  public static final int TIME_PER_ROUND_IN_SECS = 20;
   
 }

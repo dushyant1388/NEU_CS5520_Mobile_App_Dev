@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Timer;
@@ -13,12 +15,14 @@ import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.BloomFilter;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -49,6 +53,7 @@ public class Game extends Activity implements OnClickListener {
   protected static final String PREF_LONGEST_WORD = "LONGEST_WORD";
   protected static final String PREF_GAME_OVER = "GAME_OVER";
   protected static final String PREF_CONTINUE_GAME = "CONTINUE_GAME";
+  private static final String PREF_TIME_REMAINING = "TIME_REMAINING";
 
   public int total_rows = 7;
   public int total_cols = 5;
@@ -116,6 +121,23 @@ public class Game extends Activity implements OnClickListener {
 
   };
 
+  final Runnable updateTimerRunnable = new Runnable() {
+    public void run() {
+      // introduce a new letter
+      char newLetter = getNewLetter();
+      Log.d(TAG, "Inserting new letter: " + newLetter);
+      insertNewLetter(newLetter);
+
+    }
+
+  };
+  
+  CountDownTimer timeRemainingCounter;
+  
+  protected int timeRemaining = Constants.TIME_PER_ROUND_IN_SECS * 1000;
+  
+  private String username, opponentName;
+  
   private void chkCountdown() {
     if (mpCountDown != null) {
       mpCountDown.release();
@@ -163,10 +185,24 @@ public class Game extends Activity implements OnClickListener {
     boardView.setLayoutParams(new LayoutParams((width * 9) / 10,
         (height * 65) / 100));
 
+    //  evaluate extras
+    Intent intent = getIntent();
+    int roundNo = intent.getIntExtra(Constants.EXTRA_ROUND, 0);
+    if (roundNo > 0) {
+      int oppScore = intent.getIntExtra(Constants.EXTRA_OPP_CURR_SCORE, 0);
+      updateScoreboard(1, roundNo, oppScore);
+    }
+    
+    SharedPreferences sp = getSharedPreferences(Constants.SHARED_PREF_CONST,
+        Context.MODE_PRIVATE);
+    this.username = sp.getString(Constants.PREF_USERNAME, "");
+    this.opponentName = sp.getString(Constants.PREF_OPPONENT_NAME, "");
+    
+    
     // Set up click listeners for all the buttons
 
-    View clearButton = findViewById(R.id.two_player_wordgame_clear_button);
-    clearButton.setOnClickListener(this);
+//    View clearButton = findViewById(R.id.two_player_wordgame_clear_button);
+//    clearButton.setOnClickListener(this);
 
     View currwordButton = findViewById(R.id.two_player_wordgame_currword_button);
     currwordButton.setOnClickListener(this);
@@ -179,6 +215,23 @@ public class Game extends Activity implements OnClickListener {
 
     View quitButton = findViewById(R.id.two_player_wordgame_quit_button);
     quitButton.setOnClickListener(this);
+  }
+
+  /**
+   * 
+   * @param playerIndex - 0 means my score, 1 means opponent score
+   * @param roundNo
+   * @param ocurrScore
+   */
+  private void updateScoreboard(int playerIndex, int roundNo, int currScore) {
+    SharedPreferences sp = getSharedPreferences(Constants.SHARED_PREF_CONST,
+        Context.MODE_PRIVATE);
+    String scoreboardStr = sp.getString(Constants.PREF_CURR_SCOREBOARD, "");
+    int[][] scoreboardArr = Util.scoreboardStrToArr(scoreboardStr);
+    scoreboardArr[roundNo][playerIndex] = currScore;
+    
+    scoreboardStr = Util.scoreboardArrToStr(scoreboardArr);
+    sp.edit().putString(Constants.PREF_CURR_SCOREBOARD, scoreboardStr);
   }
 
   private void checkAndHandleContinueGame() {
@@ -195,7 +248,9 @@ public class Game extends Activity implements OnClickListener {
       restoreState();
     } else {
       board = getInitialBoard();
+      timeRemaining = Constants.TIME_PER_ROUND_IN_SECS * 1000;
     }
+    timeRemainingCounter = new TimeRemainingCounter(timeRemaining, 1000);
   }
 
   private void restoreState() {
@@ -205,6 +260,7 @@ public class Game extends Activity implements OnClickListener {
     this.totalCorrectWords = savedState.getInt(PREF_CORRECT_WORDS, 0);
     this.totalIncorrectWords = savedState.getInt(PREF_INCORRECT_WORDS, 0);
     this.longestWord = savedState.getString(PREF_LONGEST_WORD, "");
+    this.timeRemaining = savedState.getInt(PREF_TIME_REMAINING, 0);
 
     String savedBoardStr = savedState.getString(PREF_BOARD_STATE, null);
     if (this.gameOver || savedBoardStr == null) {
@@ -241,6 +297,30 @@ public class Game extends Activity implements OnClickListener {
     if (!isPaused) {
       startNewLetterTimer();
     }
+    updateScoreOnUI();
+  }
+
+  private void updateScoreOnUI() {
+    SharedPreferences sp = getSharedPreferences(Constants.SHARED_PREF_CONST,
+        Context.MODE_PRIVATE);
+    String scoreboardStr = sp.getString(Constants.PREF_CURR_SCOREBOARD, "");
+    int[][] scoreboardArr = Util.scoreboardStrToArr(scoreboardStr);
+    int myTotalScore = 0, oppTotalScore = 0;
+    for (int i = 0; i < scoreboardArr.length; i++) {
+      myTotalScore += scoreboardArr[i][0];
+      oppTotalScore += scoreboardArr[i][1];
+    }
+    TextView p1TxtView = (Button) findViewById(R.id.two_player_wordgame_player1);
+    p1TxtView.setText(this.username);
+    
+    TextView p2TxtView = (Button) findViewById(R.id.two_player_wordgame_player2);
+    p2TxtView.setText(this.opponentName);
+    
+    TextView p1ScoreTxtView = (Button) findViewById(R.id.two_player_wordgame_p1_score);
+    p1ScoreTxtView.setText(myTotalScore);
+    
+    TextView p2ScoreTxtView = (Button) findViewById(R.id.two_player_wordgame_p2_score);
+    p2ScoreTxtView.setText(oppTotalScore);
   }
 
   private void playBgMusic() {
@@ -268,6 +348,7 @@ public class Game extends Activity implements OnClickListener {
     }
     // Save current state of the board
     storeCurrState();
+    timeRemainingCounter.cancel();
     Log.d(TAG, "\n onPause() end, this.gameOver=" + this.gameOver);
     // String boardStr = toBoardString(board);
     // Log.d(TAG, "toBoardString(board): " + toBoardString(board));
@@ -287,6 +368,8 @@ public class Game extends Activity implements OnClickListener {
         .putInt(PREF_INCORRECT_WORDS, this.totalIncorrectWords).commit();
     getPreferences(MODE_PRIVATE).edit()
         .putString(PREF_LONGEST_WORD, this.longestWord).commit();
+    getPreferences(MODE_PRIVATE).edit()
+    .putInt(PREF_TIME_REMAINING, this.timeRemaining).commit();
 
     getSharedPreferences("WORD_GAME", MODE_PRIVATE).edit().putBoolean(PREF_CONTINUE_GAME, !this.gameOver)
         .commit();
@@ -336,22 +419,27 @@ public class Game extends Activity implements OnClickListener {
     // Game over!!!
     // Log.d(TAG, "\n Gameover case start, this.gameOver= " +
     // this.gameOver);
-    this.gameOver = true;
-//    getSharedPreferences("WORD_GAME", MODE_PRIVATE).edit().putBoolean(PREF_CONTINUE_GAME, false)
-//        .commit();
-    stopNewLetterTimer();
-    if (mpCountDown != null) {
-      mpCountDown.release();
-    }
-    Util.playSound(this.getApplicationContext(), mpGameOver, gameOverResId, false);
+    
+    endGame();
+  }
 
-    Intent i = new Intent(this, GameOver.class);
-    i.putExtra(PREF_CURR_SCORE, this.currScore);
-    i.putExtra(PREF_LONGEST_WORD, this.longestWord);
-    i.putExtra(PREF_CORRECT_WORDS, this.totalCorrectWords);
-    i.putExtra(PREF_INCORRECT_WORDS, this.totalIncorrectWords);
-    startActivity(i);
-    finish();
+  private void endGame() {
+    this.gameOver = true;
+    //  getSharedPreferences("WORD_GAME", MODE_PRIVATE).edit().putBoolean(PREF_CONTINUE_GAME, false)
+    //      .commit();
+      stopNewLetterTimer();
+      if (mpCountDown != null) {
+        mpCountDown.release();
+      }
+      Util.playSound(this.getApplicationContext(), mpGameOver, gameOverResId, false);
+    
+      Intent i = new Intent(this, GameOver.class);
+      i.putExtra(PREF_CURR_SCORE, this.currScore);
+      i.putExtra(PREF_LONGEST_WORD, this.longestWord);
+      i.putExtra(PREF_CORRECT_WORDS, this.totalCorrectWords);
+      i.putExtra(PREF_INCORRECT_WORDS, this.totalIncorrectWords);
+      startActivity(i);
+      finish();
   }
 
   /**
@@ -400,18 +488,18 @@ public class Game extends Activity implements OnClickListener {
   @Override
   public void onClick(View v) {
     switch (v.getId()) {
-    case R.id.two_player_wordgame_clear_button:
-      if (isPaused) {
-        return;
-      }
-      Button currwordButton = (Button) findViewById(R.id.two_player_wordgame_currword_button);
-      currwordButton.setText("");
-      this.currWord = "";
-      BoardView boardView = (BoardView) findViewById(R.id.two_player_wordgame_board_view);
-      HashSet<String> tempRectList = currSelections;
-      boardView.inValidateMultipleRects(tempRectList);
-      this.currSelections.clear();
-      break;
+//    case R.id.two_player_wordgame_clear_button:
+//      if (isPaused) {
+//        return;
+//      }
+//      Button currwordButton = (Button) findViewById(R.id.two_player_wordgame_currword_button);
+//      currwordButton.setText("");
+//      this.currWord = "";
+//      BoardView boardView = (BoardView) findViewById(R.id.two_player_wordgame_board_view);
+//      HashSet<String> tempRectList = currSelections;
+//      boardView.inValidateMultipleRects(tempRectList);
+//      this.currSelections.clear();
+//      break;
     case R.id.two_player_wordgame_currword_button:
       if (isPaused) {
         return;
@@ -476,8 +564,8 @@ public class Game extends Activity implements OnClickListener {
     this.currWord = "";
     int currWordLength = currWord.length();
     this.currScore += currWordLength;
-    TextView currScoreView = (TextView) findViewById(R.id.two_player_wordgame_currscore);
-    currScoreView.setText("Score: " + currScore);
+//    TextView currScoreView = (TextView) findViewById(R.id.two_player_wordgame_currscore);
+//    currScoreView.setText("Score: " + currScore);
     if (currWordLength > this.longestWord.length()) {
       this.longestWord = currWord;
     }
@@ -551,5 +639,23 @@ public class Game extends Activity implements OnClickListener {
     // renderWorList();
   }
 
+  public class TimeRemainingCounter extends CountDownTimer{
+    public TimeRemainingCounter(long millisInFuture,long countDownInterval){
+      super(millisInFuture, countDownInterval);
+      
+    }
+
+    @Override
+    public void onFinish() {
+      endGame();
+    }
+
+    @Override
+    public void onTick(long millisUntilFinished) {
+      timeRemaining -= 1000;
+      TextView timeTextView = (TextView) findViewById(R.id.two_player_wordgame_time);
+      timeTextView.setText("Time: " + timeRemaining + " sec(s)");
+    }
+  }
   
 }

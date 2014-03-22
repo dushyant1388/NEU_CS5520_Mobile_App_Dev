@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -40,8 +41,9 @@ public class Util {
     }
     return dataMap;
   }
-  
-  public static void playSound(Context context, MediaPlayer mp, int soundResId, boolean loop) {
+
+  public static void playSound(Context context, MediaPlayer mp, int soundResId,
+      boolean loop) {
     // Release any resources from previous MediaPlayer
     if (mp != null) {
       mp.release();
@@ -52,8 +54,10 @@ public class Util {
     mp.setLooping(loop);
   }
 
-  public static BloomFilter<String> loadBitsetFromFile(String filepath, AssetManager am) {
-    BloomFilter<String> bloomFilter = null;;
+  public static BloomFilter<String> loadBitsetFromFile(String filepath,
+      AssetManager am) {
+    BloomFilter<String> bloomFilter = null;
+    ;
     try {
       int fileLength = (int) am.openFd(filepath).getLength();
       Log.d(TAG, "compressed file length = " + fileLength);
@@ -73,7 +77,8 @@ public class Util {
     return bloomFilter;
   }
 
-  public static void addValuesToKeyOnServer(String keyname, String val1, String val2) {
+  public static void addValuesToKeyOnServer(String keyname, String val1,
+      String val2) {
     Log.d(TAG, "\n\n\n Adding (" + val1 + "-" + val2 + ") on server.\n\n\n");
     new AsyncTask<String, Integer, String>() {
       @Override
@@ -85,8 +90,8 @@ public class Util {
         String retVal = "";
         String result = "";
         if (KeyValueAPI.isServerAvailable()) {
-          String availableUsersVal = KeyValueAPI.get(Constants.TEAM_NAME, Constants.PASSWORD,
-              keyname);
+          String availableUsersVal = KeyValueAPI.get(Constants.TEAM_NAME,
+              Constants.PASSWORD, keyname);
 
           if (availableUsersVal.contains("Error: No Such Key")) {
             Log.d(TAG, "no such key: " + keyname);
@@ -106,32 +111,42 @@ public class Util {
             }
           } else {
             Log.d(TAG, "key exists: " + keyname);
-            String usersArr[] = availableUsersVal.split(",");
+            Log.d(TAG, "availableUsersVal: " + availableUsersVal);
             boolean valuePresent = false;
-            //  Iterate over list of entries in key 'keyname'and check for val1
-            for (int i = 0; i < usersArr.length; i++) {
-              Log.d(TAG, "usersArr[i] = " + usersArr[i]);
-              String tempArr[] = usersArr[i].split("::");
-              String tempUsername = tempArr[0];
-              String tempRegId = tempArr[1];
-              if (tempUsername.equals(val1)){
-                valuePresent = true;
-                break;
+
+            if (availableUsersVal.trim() != "") {
+              String usersArr[] = availableUsersVal.split(",");
+              // Iterate over list of entries in key 'keyname'and check for val1
+              Log.d(TAG, "usersArr.length: " + usersArr.length);
+              for (int i = 0; i < usersArr.length; i++) {
+                Log.d(TAG, "usersArr[" + i + "] = " + usersArr[i]);
+                if (usersArr[i].trim() != "") {
+                  String tempArr[] = usersArr[i].split("::");
+                  String tempUsername = tempArr[0];
+                  String tempRegId = tempArr[1];
+                  if (tempUsername.equals(val1)) {
+                    valuePresent = true;
+                    break;
+                  }
+                }
               }
             }
             if (!valuePresent) {
+              if (availableUsersVal.trim() != "") {
+                availableUsersVal += ",";
+              }
               // append val1-val2 to value of key 'keyname'
-              availableUsersVal += "," + val1 + "::" + val2;
-              
+              availableUsersVal += val1 + "::" + val2;
+
               // store on server
               result = KeyValueAPI.put(Constants.TEAM_NAME, Constants.PASSWORD,
                   keyname, availableUsersVal);
-              
+
               if (!result.contains("Error")) {
                 // displayMsg("Stored your Username-RegistrationId "
-//                    + val1 + "::" + val2 + " on server.");
-                retVal = "Stored your Username::RegistrationId "
-                    + val1 + "::" + val2 + " on server.";
+                // + val1 + "::" + val2 + " on server.");
+                retVal = "Stored your Username::RegistrationId " + val1 + "::"
+                    + val2 + " on server.";
               } else {
                 // displayMsg("Error while putting your username-regId on server: "
                 // + result);
@@ -151,8 +166,9 @@ public class Util {
       }
     }.execute(keyname, val1, val2);
   }
-  
-  public static void removeValuesFromKeyOnServer(String keyname, String val1, String val2) {
+
+  public static void removeValuesFromKeyOnServer(String keyname, String val1,
+      String val2) {
     Log.d(TAG, "\n\n\n Removing (" + val1 + "-" + val2 + ") from server.\n\n\n");
     new AsyncTask<String, Integer, String>() {
       @Override
@@ -163,42 +179,47 @@ public class Util {
         String retVal = "";
         String result = "";
         if (KeyValueAPI.isServerAvailable()) {
-          String availableUsersVal = KeyValueAPI.get(Constants.TEAM_NAME, Constants.PASSWORD,
-              keyname);
+          String availableUsersVal = KeyValueAPI.get(Constants.TEAM_NAME,
+              Constants.PASSWORD, keyname);
 
           if (availableUsersVal.contains("Error: No Such Key")) {
             // Specified key does not exist on server
-              retVal = "Specified key does not exist on server.";
+            retVal = "Specified key does not exist on server.";
           } else {
-            String usersArr[] = availableUsersVal.split(",");
             StringBuilder newVal = new StringBuilder();
-            //  Iterate over list of entries in key 'keyname'and check for val1
-            for (int i = 0; i < usersArr.length; i++) {
-              String tempArr[] = usersArr[i].split("::");
-              String tempUsername = tempArr[0];
-              String tempRegId = tempArr[1];
-              if (!tempUsername.equals(val1) || !tempRegId.equals(val2)){
-                newVal.append(usersArr[i]);
-                newVal.append(",");
+            if (availableUsersVal.trim() != "") {
+              String usersArr[] = availableUsersVal.split(",");
+              // Iterate over list of entries in key 'keyname'and check for val1
+              for (int i = 0; i < usersArr.length; i++) {
+                Log.d(TAG, "usersArr[" + i + "] = " + usersArr[i]);
+                if (usersArr[i].trim() != "") {
+                  String tempArr[] = usersArr[i].split("::");
+                  String tempUsername = tempArr[0];
+                  String tempRegId = tempArr[1];
+                  if (!tempUsername.equals(val1) || !tempRegId.equals(val2)) {
+                    newVal.append(",");
+                    newVal.append(usersArr[i]);
+                  }
+                }
               }
             }
-            String newStrVal = newVal.substring(0, newVal.length());
-            
-              // store new val on server
-              result = KeyValueAPI.put(Constants.TEAM_NAME, Constants.PASSWORD,
-                  keyname, newStrVal);
-              
-              if (!result.contains("Error")) {
-                // displayMsg("Removed your val1-val2 from  "
-//                    + val1 + "-" + val2 + " on server.");
-                retVal = "Removed your val1::val2 from "
-                    + val1 + "::" + val2 + " on server.";
-              } else {
-                // displayMsg("Error while removing val1-val2 from server: "
-                // + result);
-                retVal = "Error while removing val1::val2 from server: "
-                    + result;
-              }
+//            String newStrVal = newVal.substring(0, newVal.length() - 1);
+            String newStrVal = newVal.substring(1);
+
+            // store new val on server
+            result = KeyValueAPI.put(Constants.TEAM_NAME, Constants.PASSWORD,
+                keyname, newStrVal);
+
+            if (!result.contains("Error")) {
+              // displayMsg("Removed your val1-val2 from  "
+              // + val1 + "-" + val2 + " on server.");
+              retVal = "Removed your val1::val2 from " + val1 + "::" + val2
+                  + " on server.";
+            } else {
+              // displayMsg("Error while removing val1-val2 from server: "
+              // + result);
+              retVal = "Error while removing val1::val2 from server: " + result;
+            }
           }
         }
         return retVal;
@@ -211,58 +232,88 @@ public class Util {
       }
     }.execute(keyname, val1, val2);
   }
+
+  // HTTP POST request
+  public static String sendPost(String dataStr, String opponentRegId)
+      throws Exception {
+
+    String url = "https://selfsolve.apple.com/wcResults.do";
+    URL obj = new URL(Constants.SERVER_URL);
+    HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+
+    // add reuqest header
+    con.setRequestMethod("POST");
+    con.setRequestProperty("Authorization", "key=" + Constants.BROWSER_API_KEY);
+    // con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
+
+    String urlParameters = dataStr + "&registration_id=" + opponentRegId;
+
+    // Send post request
+    con.setDoOutput(true);
+    DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+    wr.writeBytes(urlParameters);
+    wr.flush();
+    wr.close();
+
+    int responseCode = con.getResponseCode();
+    System.out.println("\nSending 'POST' request to URL : " + url);
+    System.out.println("Post parameters : " + urlParameters);
+    System.out.println("Response Code : " + responseCode);
+
+    BufferedReader in = new BufferedReader(new InputStreamReader(
+        con.getInputStream()));
+    String inputLine;
+    StringBuffer response = new StringBuffer();
+
+    while ((inputLine = in.readLine()) != null) {
+      response.append(inputLine);
+    }
+    in.close();
+
+    // print result
+    // displayMsg("\n HTTP Post response: " + response.toString());
+    // Log.d(TAG, "HTTP POST response" + response.toString());
+    return response.toString();
+  }
+
+  public static void storeOppnentInSharedpref(SharedPreferences sp,
+      String opponentName, String opponentRegId) {
+    // Store opponent name and regId in SP
+    Editor ed = sp.edit();
+    ed.putString(Constants.PREF_OPPONENT_REG_ID, opponentRegId);
+    ed.putString(Constants.PREF_OPPONENT_NAME, opponentName);
+    ed.commit();
+    Log.d(TAG, "Message sent to displayMsg() => Connected to opponent:"
+        + opponentName + " (" + opponentRegId + ")");
+  }
   
+  public static String getInitialScoreboard() {
+    ArrayList<HashMap<String, Integer>> scoreboardList = new ArrayList<HashMap<String, Integer>>(); 
+    return scoreboardList.toString();
+  }
   
-//HTTP POST request
- public static String sendPost(String dataStr, String opponentRegId) throws Exception {
+  public static int[][] scoreboardStrToArr(String scoreboardStr){
+    int[][] scoreboardArr = new int[5][2];
+    String[] roundArr = scoreboardStr.split(",");
+    for (int i = 0; i < roundArr.length; i++) {
+      String[] scoreArr = roundArr[i].split("-");
+      scoreboardArr[i][0] = Integer.parseInt(scoreArr[0]);
+      scoreboardArr[i][0] = Integer.parseInt(scoreArr[1]);
+    }
+    return scoreboardArr;
+  }
+  
+  public static String scoreboardArrToStr(int[][] scoreboardArr){
+    StringBuilder scoreboardStr = new StringBuilder();
+    for (int i = 0; i < scoreboardArr.length; i++) {
+      int[] scoreArr = scoreboardArr[i];
+      scoreboardStr.append(scoreArr[0]);
+      scoreboardStr.append("-");
+      scoreboardStr.append(scoreArr[1]);
+      scoreboardStr.append(",");
+    }
+    scoreboardStr.substring(0, scoreboardStr.length() - 1);
+    return scoreboardStr.toString();
+  }
 
-   String url = "https://selfsolve.apple.com/wcResults.do";
-   URL obj = new URL(Constants.SERVER_URL);
-   HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-
-   // add reuqest header
-   con.setRequestMethod("POST");
-   con.setRequestProperty("Authorization", "key=" + Constants.BROWSER_API_KEY);
-   // con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
-
-   String urlParameters = dataStr + "&registration_id=" + opponentRegId;
-
-   // Send post request
-   con.setDoOutput(true);
-   DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-   wr.writeBytes(urlParameters);
-   wr.flush();
-   wr.close();
-
-   int responseCode = con.getResponseCode();
-   System.out.println("\nSending 'POST' request to URL : " + url);
-   System.out.println("Post parameters : " + urlParameters);
-   System.out.println("Response Code : " + responseCode);
-
-   BufferedReader in = new BufferedReader(new InputStreamReader(
-       con.getInputStream()));
-   String inputLine;
-   StringBuffer response = new StringBuffer();
-
-   while ((inputLine = in.readLine()) != null) {
-     response.append(inputLine);
-   }
-   in.close();
-
-   // print result
-   // displayMsg("\n HTTP Post response: " + response.toString());
-   // Log.d(TAG, "HTTP POST response" + response.toString());
-   return response.toString();
- }
- 
- public static void storeOppnentInSharedpref(SharedPreferences sp, 
-     String opponentName, String opponentRegId) {
-   // Store opponent name and regId in SP
-   Editor ed = sp.edit();
-   ed.putString(Constants.PREF_OPPONENT_REG_ID, opponentRegId);
-   ed.putString(Constants.PREF_OPPONENT_NAME, opponentName);
-   ed.commit();
-   Log.d(TAG, "Message sent to displayMsg() => Connected to opponent:"
-       + opponentName + " (" + opponentRegId + ")");
- }
 }

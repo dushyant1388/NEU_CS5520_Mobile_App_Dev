@@ -80,19 +80,19 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
 
     context = getApplicationContext();
 
-    // This will handle the broadcast
-    receiver = new BroadcastReceiver() {
-      // @Override
-      public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "Inside onReceive of Broadcast receiver");
-        String action = intent.getAction();
-        if (action.equals("INTENT_ACTION")) {
-          String data = intent.getStringExtra("data");
-          Log.d(TAG, "data = " + data);
-          handleOpponentResponse(data);
-        }
-      }
-    };
+//    // This will handle the broadcast
+//    receiver = new BroadcastReceiver() {
+//      // @Override
+//      public void onReceive(Context context, Intent intent) {
+//        Log.d(TAG, "Inside onReceive of Broadcast receiver");
+//        String action = intent.getAction();
+//        if (action.equals("INTENT_ACTION")) {
+//          String data = intent.getStringExtra("data");
+//          Log.d(TAG, "data = " + data);
+//          handleOpponentResponse(data);
+//        }
+//      }
+//    };
     
     //  Read and set username from SP
     this.username = getSharedPreferences(Constants.SHARED_PREF_CONST,
@@ -152,9 +152,9 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
     Log.d(TAG, "OnResume() - opponentName: " + opponentName
         + ", opponentRegId: " + opponentRegId);
     // This needs to be in the activity that will end up receiving the broadcast
-    registerReceiver(receiver, new IntentFilter("INTENT_ACTION"));
-
-    handleNotification(sp);
+//    registerReceiver(receiver, new IntentFilter("INTENT_ACTION"));
+//
+//    handleNotification(sp);
     // ////////
     playBgMusic = Prefs.getMusic(this);
 
@@ -185,8 +185,7 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
     if (showWelMsg) {
       usernameEditText.setVisibility(View.GONE);
       welMsgTextView.setVisibility(View.VISIBLE);
-      welMsgTextView.append(" ");
-      welMsgTextView.append(username);
+      welMsgTextView.setText("Hello " + username);
     } else {
       welMsgTextView.setVisibility(View.GONE);
       usernameEditText.setVisibility(View.VISIBLE);
@@ -199,13 +198,14 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
       mpMenuMusic.release();
     }
     setActivityActive(false);
-    unregisterReceiver(receiver);
+    //unregisterReceiver(receiver);
   }
 
   @Override
   public void onClick(View v) {
     switch (v.getId()) {
     case R.id.two_player_wordgame_newgame_button:
+      Log.d(TAG, "new game button clicked! this.username : " + this.username);
       if (this.username == null || this.username == "") {
         EditText usernameEditText = (EditText) findViewById(R.id.two_player_wordgame_username_edittext);
         this.username = usernameEditText.getText().toString();
@@ -215,19 +215,18 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
         } else {
           Editor ed = getSharedPreferences(Constants.SHARED_PREF_CONST,
               Context.MODE_PRIVATE).edit();
-          ed.putString(Constants.PREF_USERNAME, this.username).commit();
-
-          Log.d(TAG, "adding username to Available users list on server");
-          // Add username to AVAILABLE_USERS list on server
-          Util.addValuesToKeyOnServer(Constants.AVAILABLE_USERS_LIST,
-              this.username, this.myRegId);
-
-          Log.d(TAG, "Starting ChooseOpponent activity");
-          // Go to new activity for choosing an opponent
-          i = new Intent(this, ChooseOpponent.class);
-          startActivity(i);
+          ed.putString(Constants.PREF_USERNAME, this.username).commit();          
         }
       }
+      Log.d(TAG, "adding username to Available users list on server");
+      // Add username to AVAILABLE_USERS list on server
+      Util.addValuesToKeyOnServer(Constants.AVAILABLE_USERS_LIST,
+          this.username, this.myRegId);
+
+      Log.d(TAG, "Starting ChooseOpponent activity");
+      // Go to new activity for choosing an opponent
+      i = new Intent(this, ChooseOpponent.class);
+      startActivity(i);
 
       break;
     case R.id.two_player_wordgame_continue_button:
@@ -261,7 +260,7 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
     if (dataMap.containsKey(Constants.KEY_MSG_TYPE)) {
       String msgType = dataMap.get(Constants.KEY_MSG_TYPE);
       Log.d(TAG, Constants.KEY_MSG_TYPE + ": " + msgType);
-      if (msgType.equals(Constants.MSG_TYPE_CONNECT)) {
+      if (msgType.equals(Constants.MSG_TYPE_2P_CONNECT)) {
         // Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + MSG_TYPE_CONNECT);
         opponentName = dataMap.get(Constants.KEY_USERNAME);
         opponentRegId = dataMap.get(Constants.KEY_REG_ID);
@@ -280,7 +279,7 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
         // + opponentName + " (" + opponentRegId + ")");
         // displayMsg("Connected to opponent:" + opponentName + " ("
         // + opponentRegId + ")");
-      } else if (msgType.equals(Constants.MSG_TYPE_ACK_ACCEPT)) {
+      } else if (msgType.equals(Constants.MSG_TYPE_2P_ACK_ACCEPT)) {
         // Start Game - Go to MsgFromOpponent activity dialog
         opponentName = dataMap.get(Constants.KEY_USERNAME);
         opponentRegId = dataMap.get(Constants.KEY_REG_ID);
@@ -301,14 +300,14 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
         i.putExtra(Constants.EXTRA_MSG, "Connected to '" + opponentName + "'.");
         startActivity(i);
 
-      } else if (msgType.equals(Constants.MSG_TYPE_ACK_REJECT)) {
+      } else if (msgType.equals(Constants.MSG_TYPE_2P_ACK_REJECT)) {
         // Show reject msg and return to ChooseOpponent activity
         opponentName = dataMap.get(Constants.KEY_USERNAME);
         displayMsg("Game request denied by user '" + opponentName + "'.");
         i = new Intent(this, ChooseOpponent.class);
         startActivity(i);
 
-      } else if (msgType.equals(Constants.MSG_TYPE_MOVE)) {
+      } else if (msgType.equals(Constants.MSG_TYPE_2P_MOVE)) {
         // Log.d(TAG, "Inside MSG_TYPE_MOVE = " + MSG_TYPE_MOVE);
         String msgFromOpponent = dataMap.get(Constants.KEY_MESSAGE);
         displayMsg("Message from opponent '" + opponentName + "': "

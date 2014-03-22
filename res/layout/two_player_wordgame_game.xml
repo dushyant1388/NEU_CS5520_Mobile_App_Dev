@@ -18,60 +18,117 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-		<edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.BoardView 
-		    android:id="@+id/two_player_wordgame_board_view"
-		    android:layout_width="270dp"
+        <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+        
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+                
+                <TextView
+                    android:id="@+id/two_player_wordgame_currround"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/two_player_wordgame_currround" />
+                
+                <TextView
+                    android:id="@+id/two_player_wordgame_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/two_player_wordgame_time" />
+                
+                <TextView
+                    android:id="@+id/two_player_wordgame_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/two_player_wordgame_score" />
+            </LinearLayout>
+            
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="right" >
+                <TableRow>
+                    <TextView
+                    android:id="@+id/two_player_wordgame_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_span="2"
+                    android:textSize="15sp"
+                    android:text="@string/two_player_wordgame_score" />
+                </TableRow>
+                <TableRow >
+                    <TextView
+                    android:id="@+id/two_player_wordgame_player1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/two_player_wordgame_player1" />
+                    
+                    <TextView
+                    android:id="@+id/two_player_wordgame_player2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/two_player_wordgame_player2" />
+                    
+                </TableRow>
+                <TableRow >
+                    <TextView
+                    android:id="@+id/two_player_wordgame_p1_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/two_player_wordgame_p1_score" />
+                    <TextView
+                    android:id="@+id/two_player_wordgame_p2_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="@string/two_player_wordgame_p2_score" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+        
+        <edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.BoardView 
+            android:id="@+id/two_player_wordgame_board_view"
+            android:layout_width="270dp"
             android:layout_height="350dp"
-            android:paddingBottom="20dp"
             android:layout_gravity="center" />
         
-		
-		        <LinearLayout
+        
+                <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-		        
-		        <Button
-            android:id="@+id/two_player_wordgame_clear_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="@string/two_player_wordgame_clear" />
-		        <Button
+                
+              
+                <Button
             android:id="@+id/two_player_wordgame_currword_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="" />
-		        <TextView
-                    android:id="@+id/two_player_wordgame_currscore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="@string/two_player_wordgame_currscore" />
-		        </LinearLayout>
-
-		         <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-		        <Button
+                
+                <Button
             android:id="@+id/two_player_wordgame_pause_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="@string/two_player_wordgame_pause" />
-        
-        <!-- Button
-            android:id="@+id/wordgame_hint_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="@string/wordgame_hint" /-->
+
         
         <Button
             android:id="@+id/two_player_wordgame_quit_button"
@@ -80,7 +137,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="@string/two_player_wordgame_quit" />
-        </LinearLayout>
+                </LinearLayout>
 
     </LinearLayout>
 
