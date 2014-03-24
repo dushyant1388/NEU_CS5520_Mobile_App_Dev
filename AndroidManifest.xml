@@ -36,16 +36,6 @@
         <service android:name="edu.neu.madcourse.dushyantdeshmukh.utilities.GcmIntentService" />
         
         
-        <!--receiver
-            android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="edu.neu.madcourse.dushyantdeshmukh" />
-            </intent-filter>
-        </receiver>
-        <service android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.GcmIntentService" /-->
-        
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.MainActivity" android:label="@string/my_name">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />

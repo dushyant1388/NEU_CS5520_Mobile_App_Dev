@@ -204,8 +204,8 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="two_player_wordgame_time">Time: 0 sec(s)</string>
     <string name="two_player_wordgame_score">Score: 0</string>
     <string name="two_player_wordgame_total_score">Total Score</string>
-    <string name="two_player_wordgame_player1">Player 1</string>
-    <string name="two_player_wordgame_player2">Player 2</string>
+    <string name="two_player_wordgame_player1">Player 1: </string>
+    <string name="two_player_wordgame_player2">Player 2: </string>
     <string name="two_player_wordgame_p1_score">P1 score</string>
     <string name="two_player_wordgame_p2_score">P2 score</string>
     

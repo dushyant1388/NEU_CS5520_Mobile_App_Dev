@@ -159,7 +159,7 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
     playBgMusic = Prefs.getMusic(this);
 
     this.isContinueAvailable = getSharedPreferences("WORD_GAME", MODE_PRIVATE)
-        .getBoolean(Game.PREF_CONTINUE_GAME, false);
+        .getBoolean(Constants.PREF_CONTINUE_GAME, false);
 
     View continueButton = findViewById(R.id.two_player_wordgame_continue_button);
     if (isContinueAvailable) {

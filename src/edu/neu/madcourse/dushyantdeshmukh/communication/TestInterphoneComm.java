@@ -96,7 +96,7 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
 
     // This will handle the broadcast
     receiver = new BroadcastReceiver() {
-      // @Override
+      @Override
       public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Inside onReceive of Broadcast receiver");
         String action = intent.getAction();
@@ -182,7 +182,7 @@ public class TestInterphoneComm extends Activity implements OnClickListener {
     Log.d(TAG, "OnResume() - opponentName: " + opponentName
         + ", opponentRegId: " + opponentRegId);
     // This needs to be in the activity that will end up receiving the broadcast
-    registerReceiver(receiver, new IntentFilter("INTENT_ACTION"));
+    registerReceiver(receiver, new IntentFilter("TEST COMM INTENT_ACTION"));
 
     handleNotification(sp);
   }

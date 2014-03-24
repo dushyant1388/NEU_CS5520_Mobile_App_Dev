@@ -27,6 +27,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 public class GcmIntentService extends IntentService {
   public static final int NOTIFICATION_ID = 1;
@@ -112,7 +113,8 @@ public class GcmIntentService extends IntentService {
         i.putExtra(Constants.EXTRA_OPPONENT_NAME, opponentName);
         i.putExtra(Constants.EXTRA_OPPONENT_REDID, opponentRegId);
         
-        process2PMsg(data, i);
+//        process2PMsg(data, i);
+        process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_CHOOSE_OPPONENT);
         
       } else if (msgType.equals(Constants.MSG_TYPE_2P_ACK_ACCEPT)) {
       Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + Constants.MSG_TYPE_2P_ACK_ACCEPT);
@@ -122,8 +124,11 @@ public class GcmIntentService extends IntentService {
         i.putExtra(Constants.EXTRA_MSG, "Game started with opponent '" + opponentName + "'.\n"
             + "Your opponent goes first!");
         i.putExtra(Constants.EXTRA_ROUND, 0);
+        i.putExtra(Constants.EXTRA_IS_PLAYER_ONE, false);
 //        i.putExtra(Constants.EXTRA_SCOREBOARD, Util.getInitialScoreboard());
-        process2PMsg(data, i);
+//        process2PMsg(data, i);
+//        process2PMsgBroadcast(data, i, "MSG_FOR_OPPONENT");
+        process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_CHOOSE_OPPONENT);
         
       } else if (msgType.equals(Constants.MSG_TYPE_2P_ACK_REJECT)) {
       Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + Constants.MSG_TYPE_2P_ACK_REJECT);
@@ -131,29 +136,66 @@ public class GcmIntentService extends IntentService {
         Log.d(TAG, "Game request denied by user '" + opponentName + "'.");
         i = new Intent(this, ChooseOpponent.class);
   
-        process2PMsg(data, i);
+//        process2PMsg(data, i);
+//        process2PMsgBroadcast(data, i, "MSG_FOR_OPPONENT");
+        process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_CHOOSE_OPPONENT);
         
       } else if (msgType.equals(Constants.MSG_TYPE_2P_MOVE)) {
          Log.d(TAG, "Inside MSG_TYPE_MOVE = " + Constants.MSG_TYPE_2P_MOVE);
-        String msgFromOpponent = dataMap.get(Constants.KEY_MESSAGE);
-        Log.d(TAG, "Message from opponent: "
-            + msgFromOpponent);
+//        String msgFromOpponent = dataMap.get(Constants.KEY_MESSAGE);
+        /*
+        int roundNo = Integer.parseInt(dataMap.get(Constants.KEY_ROUND));
+        int oppScore = Integer.parseInt(dataMap.get(Constants.KEY_OPP_SCORE));
+        String oppName = dataMap.get(Constants.KEY_OPP_NAME);
+        boolean isPlayerOne = Boolean.parseBoolean(dataMap.get(Constants.KEY_IS_PLAYER_ONE));
+//        Log.d(TAG, "Message from opponent: "
+//            + msgFromOpponent);
+        i = new Intent(this, MsgFromOpponent.class);
+        i.putExtra(Constants.EXTRA_IS_PLAYER_ONE, isPlayerOne);
+        i.putExtra(Constants.EXTRA_ROUND, roundNo);
+        i.putExtra(Constants.EXTRA_OPPONENT_NAME, oppName);
+        i.putExtra(Constants.EXTRA_OPP_CURR_SCORE, oppScore);
+        
+        showDebugToast("starting MsgFromOpponent intent"
+            + "\n isPlayerOne - " + isPlayerOne
+            + "\n roundNo - " + roundNo
+            + "\n oppName - " + oppName
+            + "\n oppScore - " + oppScore);
+        */
         i = new Intent(this, Game.class);
+        process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_2P_WORD_GAME);
 
-        process2PMsg(data, i);
-
+      } else if (msgType.equals(Constants.MSG_TYPE_2P_QUIT)) {
+        Log.d(TAG, "Inside MSG_TYPE_MOVE = " + Constants.MSG_TYPE_2P_QUIT);
+        i = new Intent(this, Game.class);
+        process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_2P_WORD_GAME);
       } else {
-        //  Msg for TestinterPhoneCommunication Activity
+        //  Msg for TestInterPhoneCommunication Activity
         processTestCommMsg(data);
       }
     }
   }
 
-  private void process2PMsg(String data, Intent i) {
+  private void process2PMsgBroadcast(String data, Intent i, String intentAction) {
+    Log.d(TAG, "Inside process2PMsgBroadcast()");
     if (isAppActive()) {
       // send broadcast
+      Log.d(TAG, "sending Broadcast");
+      SendBroadcast(data, intentAction);
+    } else {
+      // Post notification of received message.
+      //Intent i = new Intent(this, TestInterphoneComm.class);
+      sendNotification(data, i);
+    }
+  }
+  
+  private void process2PMsg(String data, Intent i) {
+    Log.d(TAG, "Inside process2PMsg()");
+    if (isAppActive()) {
+      Log.d(TAG, "isAppActive - starting activity: " + i.toString());
+      // send broadcast
       //SendBroadcast(data, "2P WORD_GAME INTENT_ACTION");
-      i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
       startActivity(i);
     } else {
       // Post notification of received message.
@@ -221,6 +263,17 @@ public class GcmIntentService extends IntentService {
     mBuilder.setContentIntent(contentIntent);
     mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
+  }
+  
+  public void showDebugToast(String msg) {
+//    Toast t = Toast.makeText(getApplicationContext(), msg, 2000);
+//    t.show();
+    Log.d(TAG, "\n===================================================\n");
+    Log.d(TAG, msg);
+    Log.d(TAG, "\n===================================================\n");
+    // TextView msgTxtView = (TextView)
+    // findViewById(R.id.communication_interphone_comm_msg_textview);
+    // msgTxtView.setText(msg);
   }
   
   ////////////////////////////////

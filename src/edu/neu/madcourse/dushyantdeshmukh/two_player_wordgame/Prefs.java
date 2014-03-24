@@ -14,11 +14,11 @@ public class Prefs extends PreferenceActivity {
     private static final String OPT_HINTS = "hints";
     private static final boolean OPT_HINTS_DEF = true;
     private static final String OPT_ROWS = "rows";
-    private static final String OPT_ROWS_DEF = "7";
+    private static final String OPT_ROWS_DEF = "9";
     private static final String OPT_COLS = "cols";
-    private static final String OPT_COLS_DEF = "5";
+    private static final String OPT_COLS_DEF = "7";
     private static final String OPT_DIFF = "difficulty";
-    private static final String OPT_DIFF_DEF = "1";
+    private static final String OPT_DIFF_DEF = "2";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

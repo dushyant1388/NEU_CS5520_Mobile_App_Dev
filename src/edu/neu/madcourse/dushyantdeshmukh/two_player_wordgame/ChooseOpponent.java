@@ -6,8 +6,10 @@ import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 import edu.neu.mhealth.api.KeyValueAPI;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChooseOpponent extends Activity implements OnClickListener {
@@ -45,19 +48,35 @@ public class ChooseOpponent extends Activity implements OnClickListener {
     View backButton = findViewById(R.id.two_player_wordgame_back_button);
     backButton.setOnClickListener(this);
 
-//    // This will handle the broadcast
-//    receiver = new BroadcastReceiver() {
-//      // @Override
-//      public void onReceive(Context context, Intent intent) {
-//        Log.d(TAG, "Inside onReceive of Broadcast receiver");
-//        String action = intent.getAction();
-//        if (action.equals("INTENT_ACTION")) {
-//          String data = intent.getStringExtra("data");
-//          Log.d(TAG, "data = " + data);
-//          handleOpponentResponse(data);
-//        }
-//      }
-//    };
+    // // This will handle the broadcast
+    // receiver = new BroadcastReceiver() {
+    // // @Override
+    // public void onReceive(Context context, Intent intent) {
+    // Log.d(TAG, "Inside onReceive of Broadcast receiver");
+    // String action = intent.getAction();
+    // if (action.equals("INTENT_ACTION")) {
+    // String data = intent.getStringExtra("data");
+    // Log.d(TAG, "data = " + data);
+    // handleOpponentResponse(data);
+    // }
+    // }
+    // };
+
+    // This will handle the broadcast
+    receiver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        Log.d(TAG,
+            "Inside onReceive of Broadcast receiver of ChooseOpponent.class");
+//        displayMsg("Inside onReceive of Broadcast receiver of ChooseOpponent.");
+        String action = intent.getAction();
+        if (action.equals(Constants.INTENT_ACTION_CHOOSE_OPPONENT)) {
+          String data = intent.getStringExtra("data");
+          Log.d(TAG, "data = " + data);
+          handleOpponentResponse(data);
+        }
+      }
+    };
   }
 
   @Override
@@ -86,7 +105,8 @@ public class ChooseOpponent extends Activity implements OnClickListener {
     // TODO Auto-generated method stub
     super.onResume();
     // This needs to be in the activity that will end up receiving the broadcast
-//    registerReceiver(receiver, new IntentFilter("INTENT_ACTION"));
+    registerReceiver(receiver, new IntentFilter(
+        Constants.INTENT_ACTION_CHOOSE_OPPONENT));
 
     handleNotification(getSharedPreferences(Constants.SHARED_PREF_CONST,
         Context.MODE_PRIVATE));
@@ -96,7 +116,7 @@ public class ChooseOpponent extends Activity implements OnClickListener {
   protected void onPause() {
     // TODO Auto-generated method stub
     super.onPause();
-//    unregisterReceiver(receiver);
+    unregisterReceiver(receiver);
   }
 
   @Override
@@ -185,15 +205,18 @@ public class ChooseOpponent extends Activity implements OnClickListener {
       @Override
       protected void onPostExecute(String result) {
         // mDisplay.append(msg + "\n");
-        Toast t = Toast.makeText(getApplicationContext(), result, 2000);
-        t.show();
+//        Toast t = Toast.makeText(getApplicationContext(), result, 2000);
+//        t.show();
         Log.d(TAG, "\n===================================================\n");
         Log.d(TAG, "result: " + result);
         if (!result.equals(Constants.NO_PLAYER_ONLINE)) {
-          // go to WaitingForOpponent activity dialog
-          Intent i = new Intent(getApplicationContext(),
-              WaitingForOpponent.class);
-          startActivity(i);
+//           go to WaitingForOpponent activity dialog
+//          Intent i = new Intent(getApplicationContext(),
+//              WaitingForOpponent.class);
+//          startActivity(i);
+          //  show msg waiting for user
+          TextView msgTextView = (TextView) findViewById(R.id.two_player_wordgame_msg);
+          msgTextView.setText("Waiting for opponent's response... ");
         }
       }
     }.execute(null, null, null);
@@ -203,17 +226,97 @@ public class ChooseOpponent extends Activity implements OnClickListener {
     Log.d(TAG, "Inside handleOpponentResponse()");
     HashMap<String, String> dataMap = Util.getDataMap(data, TAG);
     if (dataMap.containsKey(Constants.KEY_MSG_TYPE)) {
+      TextView msgTextView = (TextView) findViewById(R.id.two_player_wordgame_msg);
+      msgTextView.setText("");
+          
+      this.oppName = dataMap.get(Constants.KEY_USERNAME);
+        
       String msgType = dataMap.get(Constants.KEY_MSG_TYPE);
       Log.d(TAG, Constants.KEY_MSG_TYPE + ": " + msgType);
-      if (msgType.equals(Constants.MSG_TYPE_2P_ACK_REJECT)) {
-        // Show reject msg and return to ChooseOpponent activity
-        String opponentName = dataMap.get(Constants.KEY_USERNAME);
-        displayMsg("Game request denied by user '" + opponentName + "'.");
-        i = new Intent(this, ChooseOpponent.class);
-        startActivity(i);
+      if (msgType.equals(Constants.MSG_TYPE_2P_CONNECT)) {
+        Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + Constants.MSG_TYPE_2P_CONNECT);
+        this.oppRegId = dataMap.get(Constants.KEY_REG_ID);   
+        getSharedPreferences(Constants.SHARED_PREF_CONST, Context.MODE_PRIVATE)
+        .edit().putString(Constants.PREF_OPPONENT_REG_ID, this.oppRegId).commit();
+//        Log.d(TAG, "\n\n Setting this.oppRegId in SP: " + this.oppRegId + "\n\n");
+//        displayMsg("Setting this.oppRegId in SP: " + this.oppRegId);
+        // show [Accept, Reject] dialog
+        showAcceptRejectDialog();
+      } else if (msgType.equals(Constants.MSG_TYPE_2P_ACK_ACCEPT)) {
+        this.oppRegId = dataMap.get(Constants.KEY_REG_ID);   
+        getSharedPreferences(Constants.SHARED_PREF_CONST, Context.MODE_PRIVATE)
+        .edit().putString(Constants.PREF_OPPONENT_REG_ID, this.oppRegId).commit();
+        Log.d(TAG, "\n\n Setting this.oppRegId in SP: " + this.oppRegId + "\n\n");
+        
+        // Show 'Connected to Opponent' msg and go to Game activity
+//        String opponentName = dataMap.get(Constants.KEY_USERNAME);
+        initiateGame(false);
+        
+        //  Remove urself from AVAILABLE_USERS_LIST
+        Util.removeValuesFromKeyOnServer(Constants.AVAILABLE_USERS_LIST,
+            this.username, this.regId);
 
+      } else if (msgType.equals(Constants.MSG_TYPE_2P_ACK_REJECT)) {
+        // Show 'Request reject' toast and stay on Choose Opponent activity
+//        String opponentName = dataMap.get(Constants.KEY_USERNAME);
+        displayMsg("Game request denied by user '" + oppName + "'.");
       }
     }
+  }
+
+  private void showAcceptRejectDialog() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setCancelable(true);
+    builder.setTitle("Game Request");
+    builder.setMessage("User '" + oppName + "' has sent a game request.");
+//    builder.setInverseBackgroundForced(true);
+    builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        dialog.dismiss();
+        initiateGame(true);
+        // Remove urself from AVAILABLE_USERS_LIST
+        Util.removeValuesFromKeyOnServer(Constants.AVAILABLE_USERS_LIST,
+            username, regId);
+      }
+    });
+    builder.setNegativeButton("Reject", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        dialog.dismiss();
+//      send an reject ack to oppponent
+        sendReqAckToOpponent(false, oppRegId);
+      }
+    });
+    AlertDialog alert = builder.create();
+    alert.show();
+  }
+
+  private void initiateGame(boolean asPLayerOne) {
+    Intent i = new Intent(ChooseOpponent.this, Game.class);
+    // i.putExtra(Constants.EXTRA_SCOREBOARD, this.scoreboard);
+    i.putExtra(Constants.EXTRA_ROUND, 0);
+    i.putExtra(Constants.EXTRA_IS_PLAYER_ONE, asPLayerOne);
+    i.putExtra(Constants.EXTRA_INITIATE_GAME, false);
+    i.putExtra(Constants.EXTRA_OPPONENT_NAME, oppName);
+    
+//    Toast.makeText(ChooseOpponent.this, "on Accept, setting roundNo = " + roundNo 
+//        + "\n isPlayerOne = " + isPlayerOne, 3000).show();
+ // Store opponent name and regId in SP
+    
+    Util.storeOppnentInSharedpref(getSharedPreferences(Constants.SHARED_PREF_CONST,
+        Context.MODE_PRIVATE), oppName, oppRegId);
+    
+    startActivity(i);
+    
+    if (asPLayerOne) {
+      //    send an accept ack to oppponent
+      sendReqAckToOpponent(true, oppRegId);
+    }
+    
+    //  remove urself from AVAILABLE_USERS_LIST
+    Util.removeValuesFromKeyOnServer(Constants.AVAILABLE_USERS_LIST, username, regId);
+    
   }
 
   private void handleNotification(SharedPreferences sp) {
@@ -224,6 +327,46 @@ public class ChooseOpponent extends Activity implements OnClickListener {
     }
   }
 
+  
+  private void sendReqAckToOpponent(boolean accepted, String oppRegId) {
+    Log.d(TAG, "Sending request ack: " 
+  + (accepted? Constants.MSG_TYPE_2P_ACK_ACCEPT : Constants.MSG_TYPE_2P_ACK_REJECT));
+    new AsyncTask<String, Integer, String>() {
+      @Override
+      protected String doInBackground(String... params) {
+        String retVal;
+        boolean accepted = Boolean.parseBoolean(params[0]);
+        String oppRegId = params[1];
+        try {
+          retVal = Util.sendPost("data." + Constants.KEY_MSG_TYPE
+              + "=" + (accepted? Constants.MSG_TYPE_2P_ACK_ACCEPT : Constants.MSG_TYPE_2P_ACK_REJECT) 
+              + "&data." + Constants.KEY_REG_ID + "=" + regId + "&data."
+              + Constants.KEY_USERNAME + "=" + username, oppRegId);
+          Log.d(TAG, "Result of HTTP POST: " + retVal);
+          // displayMsg("Connected to user:" + oppName + " (" +
+          // oppRegId + ")");
+          retVal = "Sent request ack to opponent:"
+              + " (" + oppRegId + ")";
+          // sendPost("data=" + myRegId);
+        } catch (Exception e) {
+          // TODO Auto-generated catch block
+          // displayMsg("Error occurred while making an HTTP post call.");
+          retVal = "Error occured while making an HTTP post call.";
+          e.printStackTrace();
+        }
+        return retVal;
+      }
+      
+      @Override
+      protected void onPostExecute(String result) {
+//        Toast t = Toast.makeText(getApplicationContext(), result, 2000);
+//        t.show();
+        Log.d(TAG, "\n===================================================\n");
+        Log.d(TAG, "result: " + result);
+      }
+    }.execute(String.valueOf(accepted), oppRegId, null);
+  }
+  
   private void displayMsg(String msg) {
     Toast t = Toast.makeText(getApplicationContext(), msg, 2000);
     t.show();

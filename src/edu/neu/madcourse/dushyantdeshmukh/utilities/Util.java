@@ -202,9 +202,11 @@ public class Util {
                   }
                 }
               }
-            }
+              String newStrVal = "";
 //            String newStrVal = newVal.substring(0, newVal.length() - 1);
-            String newStrVal = newVal.substring(1);
+            if (newVal.length() > 0 && newVal.charAt(0) == ',') {
+              newStrVal = newVal.substring(1);
+            }
 
             // store new val on server
             result = KeyValueAPI.put(Constants.TEAM_NAME, Constants.PASSWORD,
@@ -220,6 +222,7 @@ public class Util {
               // + result);
               retVal = "Error while removing val1::val2 from server: " + result;
             }
+          }
           }
         }
         return retVal;
@@ -287,18 +290,30 @@ public class Util {
         + opponentName + " (" + opponentRegId + ")");
   }
   
-  public static String getInitialScoreboard() {
-    ArrayList<HashMap<String, Integer>> scoreboardList = new ArrayList<HashMap<String, Integer>>(); 
-    return scoreboardList.toString();
+  public static int[][] getInitialScoreboard() {
+    int[][] scoreboardArr = new int[5][2];
+    for (int i = 0; i < 5; i++) {
+      scoreboardArr[i][0] = 0;
+      scoreboardArr[i][0] = 0;
+    }
+    return scoreboardArr;
   }
   
   public static int[][] scoreboardStrToArr(String scoreboardStr){
+//    Log.d(TAG, "Converting scoreboard str to array");
+//    Log.d(TAG, "Input scoreboardStr = " + scoreboardStr);
     int[][] scoreboardArr = new int[5][2];
     String[] roundArr = scoreboardStr.split(",");
     for (int i = 0; i < roundArr.length; i++) {
       String[] scoreArr = roundArr[i].split("-");
+//      Log.d(TAG, "i = " + i);
+//      Log.d(TAG, "scoreArr[0] = " + scoreArr[0]);
+//      Log.d(TAG, "Integer.parseInt(scoreArr[0]) = " + Integer.parseInt(scoreArr[0]));
+//      Log.d(TAG, "scoreArr[1] = " + scoreArr[1]);
+//      Log.d(TAG, "Integer.parseInt(scoreArr[1]) = " + Integer.parseInt(scoreArr[1]));
+      
       scoreboardArr[i][0] = Integer.parseInt(scoreArr[0]);
-      scoreboardArr[i][0] = Integer.parseInt(scoreArr[1]);
+      scoreboardArr[i][1] = Integer.parseInt(scoreArr[1]);
     }
     return scoreboardArr;
   }
@@ -315,5 +330,25 @@ public class Util {
     scoreboardStr.substring(0, scoreboardStr.length() - 1);
     return scoreboardStr.toString();
   }
+  
+  public static void printScoreboard(int[][] scoreboardArr){
+    Log.d(TAG, "\n Scoreboard:");
+    for (int i = 0; i < scoreboardArr.length; i++) {
+      Log.d(TAG, "Round " + (i + 1) + ": " + scoreboardArr[i][0] + " - " + scoreboardArr[i][1]);
+    }
+  }
 
+  public static String getScoreboardDisplayStr(String scoreboardStr) {
+    StringBuilder retStr = new StringBuilder();
+    int[][] scoreboardArr = Util.scoreboardStrToArr(scoreboardStr);
+    int p1Total = 0, p2Total = 0;
+    for (int i = 0; i < scoreboardArr.length; i++) {
+      retStr.append(" Round " + (i + 1) + ": \t \t" + scoreboardArr[i][0] + "  \t \t   " + scoreboardArr[i][1] + "\n");
+      p1Total += scoreboardArr[i][0];
+      p2Total += scoreboardArr[i][1];
+    }
+    retStr.append("\n Total: \t \t \t" + p1Total + "  \t \t   " + p2Total + "\n");
+    return retStr.toString();
+  }
+  
 }

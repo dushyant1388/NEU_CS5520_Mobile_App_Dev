@@ -99,6 +99,7 @@ public class RequestFromOpponent extends Activity implements OnClickListener {
       i.putExtra(Constants.EXTRA_MSG, "Game started with opponent '" + oppName + "'.\n" 
           + "You go first!");
       i.putExtra(Constants.EXTRA_ROUND, 0);
+      i.putExtra(Constants.EXTRA_IS_PLAYER_ONE, true);
 //      i.putExtra(Constants.EXTRA_SCOREBOARD, Util.getInitialScoreboard());
       startActivity(i);
       

@@ -22,9 +22,24 @@ public class MsgFromOpponent extends Activity implements OnClickListener {
   protected static final String TAG = "MSG FROM OPPONENT ACTIVITY";
   private Intent i;
   Context context;
-  BroadcastReceiver receiver;
+  BroadcastReceiver receiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      Log.d(TAG, "Inside onReceive of Broadcast receiver");
+      String action = intent.getAction();
+      if (action.equals("MSG_FOR_OPPONENT")) {
+        Log.d(TAG, "Action matches 'MSG_FOR_OPPONENT'");
+        String data = intent.getStringExtra("data");
+        Log.d(TAG, "data = " + data);
+        handleOpponentResponse(data);
+      }
+    }
+  };
+  
   int roundNo = 0;
   int oppScore = 0;
+  boolean isPlayerOne = false;
+  String opponentName;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +57,31 @@ public class MsgFromOpponent extends Activity implements OnClickListener {
 
     // this.scoreboard = i.getStringExtra(Constants.EXTRA_SCOREBOARD);
     this.roundNo = intent.getIntExtra(Constants.EXTRA_ROUND, 0);
+    this.isPlayerOne = intent.getBooleanExtra(Constants.EXTRA_IS_PLAYER_ONE, false);
+    
+    Toast.makeText(getApplicationContext(), "fetched roundNo = " + roundNo 
+        + "\n isPlayerOne = " + isPlayerOne, 2000).show();
+    
+    Log.d(TAG, "\nroundNo = " + roundNo 
+        + "\n isPlayerOne = " + isPlayerOne);
+    
     if (this.roundNo > 0) {
       String oppName = intent.getStringExtra(Constants.EXTRA_OPPONENT_NAME);
       this.oppScore = intent.getIntExtra(Constants.EXTRA_OPP_CURR_SCORE, 0);
       msgTextView.setText("'" + oppName + "' made " + oppScore
           + " points in round " + roundNo + ".\nYour turn!");
+      Log.d(TAG, "\n oppName = " + oppName 
+          + "\n oppScore = " + oppScore);
     } else {
       String msgTxt = intent.getStringExtra(Constants.EXTRA_MSG);
       msgTextView.setText(msgTxt);
+      Log.d(TAG, "msgTxt = " + msgTxt);
     }
 
+    context = getApplicationContext();
+
+    // This will handle the broadcast
+    
     // // This will handle the broadcast
     // receiver = new BroadcastReceiver() {
     // // @Override
@@ -73,7 +103,7 @@ public class MsgFromOpponent extends Activity implements OnClickListener {
     super.onResume();
     // // This needs to be in the activity that will end up receiving the
     // broadcast
-    // registerReceiver(receiver, new IntentFilter("INTENT_ACTION"));
+     registerReceiver(receiver, new IntentFilter("MSG_FOR_OPPONENT"));
 
     handleNotification(getSharedPreferences(Constants.SHARED_PREF_CONST,
         Context.MODE_PRIVATE));
@@ -83,7 +113,7 @@ public class MsgFromOpponent extends Activity implements OnClickListener {
   protected void onPause() {
     // TODO Auto-generated method stub
     super.onPause();
-    // unregisterReceiver(receiver);
+     unregisterReceiver(receiver);
   }
 
   @Override
@@ -98,9 +128,13 @@ public class MsgFromOpponent extends Activity implements OnClickListener {
       Intent i = new Intent(this, Game.class);
       // i.putExtra(Constants.EXTRA_SCOREBOARD, this.scoreboard);
       i.putExtra(Constants.EXTRA_ROUND, this.roundNo);
+      i.putExtra(Constants.EXTRA_IS_PLAYER_ONE, this.isPlayerOne);
+      i.putExtra(Constants.EXTRA_INITIATE_GAME, true);
       if (this.roundNo > 0) {
         i.putExtra(Constants.EXTRA_OPP_CURR_SCORE, this.oppScore);
       }
+      Toast.makeText(getApplicationContext(), "onClick(), setting roundNo = " + roundNo 
+          + "\n isPlayerOne = " + isPlayerOne, 3000).show();
       startActivity(i);
     }
   }
@@ -113,8 +147,8 @@ public class MsgFromOpponent extends Activity implements OnClickListener {
       Log.d(TAG, Constants.KEY_MSG_TYPE + ": " + msgType);
       if (msgType.equals(Constants.MSG_TYPE_2P_ACK_ACCEPT)) {
         // Start Game - Go to MsgFromOpponent activity dialog
-        // opponentName = dataMap.get(Constants.KEY_USERNAME);
-        // opponentRegId = dataMap.get(Constants.KEY_REG_ID);
+         opponentName = dataMap.get(Constants.KEY_USERNAME);
+//         opponentRegId = dataMap.get(Constants.KEY_REG_ID);
         //
         // // Store opponent name and regId in SP
         // Util.storeOppnentInSharedpref(getSharedPreferences(Constants.SHARED_PREF_CONST,
@@ -129,11 +163,32 @@ public class MsgFromOpponent extends Activity implements OnClickListener {
         // // + opponentName + " (" + opponentRegId + ")");
         //
         // // Go to MsgFromOpponent activity dialog
-        // i = new Intent(this, MsgFromOpponent.class);
-        // i.putExtra(Constants.EXTRA_MSG, "Connected to '" + opponentName +
-        // "'.");
+//         i = new Intent(this, MsgFromOpponent.class);
+//         i.putExtra(Constants.EXTRA_MSG, "Connected to '" + opponentName +
+//         "'.");
         // startActivity(i);
+         this.roundNo = 0;
+         this.isPlayerOne = false;
+         TextView msgTextView = (TextView) findViewById(R.id.two_player_wordgame_msg_from_opponent_textview);
+         msgTextView.setText("Game started with opponent '" + opponentName + "'.\n"
+            + "Your opponent goes first!");
 
+      } else if (msgType.equals(Constants.MSG_TYPE_2P_MOVE)) {
+        int roundNo = Integer.parseInt(dataMap.get(Constants.KEY_ROUND));
+        int oppScore = Integer.parseInt(dataMap.get(Constants.KEY_OPP_SCORE));
+        String oppName = dataMap.get(Constants.KEY_OPP_NAME);
+        boolean isPlayerOne = Boolean.parseBoolean(dataMap.get(Constants.KEY_IS_PLAYER_ONE));
+        
+        TextView msgTextView = (TextView) findViewById(R.id.two_player_wordgame_msg_from_opponent_textview);
+        msgTextView.setText("'" + oppName + "' made " + oppScore
+            + " points in round " + roundNo + ".\nYour turn!");
+        
+        Toast.makeText(getApplicationContext(), "fetched roundNo = " + roundNo 
+            + "\n isPlayerOne = " + isPlayerOne, 2000).show();
+        
+        Log.d(TAG, "\nroundNo = " + roundNo 
+            + "\n isPlayerOne = " + isPlayerOne);
+    
       }
     }
   }
