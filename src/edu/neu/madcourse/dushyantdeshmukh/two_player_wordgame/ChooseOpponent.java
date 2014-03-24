@@ -3,6 +3,7 @@ package edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame;
 import java.util.HashMap;
 
 import edu.neu.madcourse.dushyantdeshmukh.R;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.InternetConnUtil;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 import edu.neu.mhealth.api.KeyValueAPI;
 import android.app.Activity;
@@ -124,6 +125,16 @@ public class ChooseOpponent extends Activity implements OnClickListener {
     switch (v.getId()) {
     case R.id.two_player_wordgame_find_opponent_button:
       EditText opponentEditText = (EditText) findViewById(R.id.two_player_wordgame_opponent_name_edittext);
+      String oppUsername = opponentEditText.getText().toString();
+
+      if (oppUsername.equals("")) {
+        displayMsg("Please enter a valid opponent username value.");
+      } else {
+//        displayMsg("Starting game...");
+        opponentEditText.setText("");
+        
+        findOpponent(oppUsername);
+      }
       break;
     case R.id.two_player_wordgame_random_opponent_button:
       connectToRandomOpponent(this.username, this.regId);
@@ -133,6 +144,100 @@ public class ChooseOpponent extends Activity implements OnClickListener {
       break;
     }
   }
+
+  private void findOpponent(String oppUsername) {
+    if (!InternetConnUtil.isNetworkAvailable(context)) {
+      displayMsg(Constants.NETWORK_UNAVAILABLE_MSG);
+      return;
+    }
+    // check if user is waiting
+    // If user waiting, pair with that user
+    // Else, add yourself to waiting user list and start a service polling
+    // for
+    // another user
+    new AsyncTask<String, Integer, String>() {
+      @Override
+      protected String doInBackground(String... params) {
+        String oppUsername = params[0];
+        String retVal = "";
+        String result = "";
+        boolean foundOpponent = false;
+        if (KeyValueAPI.isServerAvailable()) {
+          String availableUsersList = KeyValueAPI.get(Constants.TEAM_NAME,
+              Constants.PASSWORD, Constants.AVAILABLE_USERS_LIST);
+
+          if (availableUsersList.contains("Error: No Such Key")) {
+            // No player waiting... put your own regId
+            retVal = "Error while putting your regId on server: " + result;
+          } else {
+            if (availableUsersList.trim() != "") {
+              String usersArr[] = availableUsersList.split(",");
+              // Iterate over list of entries in key 'keyname'and check for val1
+              for (int i = 0; i < usersArr.length; i++) {
+                String tempArr[] = usersArr[i].split("::");
+                String oppName = tempArr[0];
+                String oppRegId = tempArr[1];
+
+                if (oppUsername.equalsIgnoreCase(oppName)) {
+                  Log.d(TAG, "\noppRegId= " + oppRegId + "\n");
+                  Log.d(TAG, "\nregId= " + regId + "\n");
+
+                  // Get opponents regId and connect
+                  Log.d(TAG, "Sending connect request to opponent'"
+                      + "opponentName= " + oppName + ", opponentRegId= "
+                      + oppRegId);
+
+                  try {
+                    result = Util.sendPost("data." + Constants.KEY_MSG_TYPE
+                        + "=" + Constants.MSG_TYPE_2P_CONNECT + "&data."
+                        + Constants.KEY_REG_ID + "=" + regId + "&data."
+                        + Constants.KEY_USERNAME + "=" + username, oppRegId);
+                    Log.d(TAG, "Result of HTTP POST: " + result);
+                    // displayMsg("Connected to user:" + oppName + " (" +
+                    // oppRegId + ")");
+                    retVal = "Sent connect request to opponent:" + oppName
+                        + " (" + oppRegId + ")";
+                    // sendPost("data=" + myRegId);
+                  } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    // displayMsg("Error occurred while making an HTTP post call.");
+                    retVal = "Error occured while making an HTTP post call.";
+                    e.printStackTrace();
+                  }
+                  foundOpponent = true;
+                  break;
+                }
+              }
+            }
+          }
+        }
+        if (!foundOpponent) {
+          retVal = Constants.OPPONENT_NOT_FOUND;
+        }
+        Log.d(TAG, "retVal: " + retVal);
+        return retVal;
+      }
+
+      @Override
+      protected void onPostExecute(String result) {
+        // mDisplay.append(msg + "\n");
+//        Toast t = Toast.makeText(getApplicationContext(), result, 2000);
+//        t.show();
+        Log.d(TAG, "\n===================================================\n");
+        Log.d(TAG, "result: " + result);
+        displayMsg(result);
+        if (!result.equals(Constants.OPPONENT_NOT_FOUND)) {
+//           go to WaitingForOpponent activity dialog
+//          Intent i = new Intent(getApplicationContext(),
+//              WaitingForOpponent.class);
+//          startActivity(i);
+          //  show msg waiting for user
+          TextView msgTextView = (TextView) findViewById(R.id.two_player_wordgame_msg);
+          msgTextView.setText("Waiting for opponent's response... ");
+        }
+      }
+    }.execute(oppUsername, null, null);
+    }
 
   private void connectToRandomOpponent(String uname, String rId) {
     // check if user is waiting

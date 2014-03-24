@@ -64,6 +64,8 @@ public class Constants {
   public static final String KEY_NOTIFICATION_DATA = "NOTIFICATION_DATA";
   public static final String NETWORK_UNAVAILABLE_MSG = "Network unavailable. Please make sure you are connected to the internet.";
   protected static final String NO_PLAYER_ONLINE = "No player is available online. Please try again later.";
+  protected static final String OPPONENT_NOT_FOUND = "Unable to find specified opponent."
+      + "Please search for another user or connect to a random opponent.";
   
   //  Game constants
   public static final int NO_OF_ROUNDS = 3;
