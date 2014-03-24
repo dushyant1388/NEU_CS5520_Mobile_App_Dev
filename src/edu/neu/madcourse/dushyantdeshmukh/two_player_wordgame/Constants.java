@@ -60,6 +60,7 @@ public class Constants {
   public static final String EXTRA_OPP_CURR_SCORE = "OPP_CURR_SCORE";
   public static final String EXTRA_IS_PLAYER_ONE = "IS_PLAYER_ONE";
   public static final String EXTRA_OVERRIDE_AND_CONTINUE_GAME = "OVERRIDE_AND_CONTINUE_GAME";
+  public static final String EXTRA_TOP_SCORERS_LIST = "TOP_SCORERS_LIST";
   
   public static final String KEY_NOTIFICATION_DATA = "NOTIFICATION_DATA";
   public static final String NETWORK_UNAVAILABLE_MSG = "Network unavailable. Please make sure you are connected to the internet.";
@@ -68,11 +69,12 @@ public class Constants {
       + "Please search for another user or connect to a random opponent.";
   
   //  Game constants
-  public static final int NO_OF_ROUNDS = 3;
-  public static final int TIME_PER_ROUND_IN_SECS = 15;
+  public static final int NO_OF_ROUNDS = 5;
+  public static final int TIME_PER_ROUND_IN_SECS = 25;
   
   public static final String INTENT_ACTION_2P_WORD_GAME = "INTENT_ACTION_2P_WORD_GAME";
   public static final String INTENT_ACTION_CHOOSE_OPPONENT = "INTENT_ACTION_CHOOSE_OPPONEN";
+  
   
   
 }

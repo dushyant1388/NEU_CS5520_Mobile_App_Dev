@@ -15,8 +15,10 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -35,6 +37,7 @@ import android.widget.Toast;
 import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.InternetConnUtil;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
+import edu.neu.mhealth.api.KeyValueAPI;
 
 public class TwoPlayerWordGame extends Activity implements OnClickListener {
 
@@ -65,6 +68,9 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
 
     View continueButton = findViewById(R.id.two_player_wordgame_continue_button);
     continueButton.setOnClickListener(this);
+    
+    View topScorersButton = findViewById(R.id.two_player_wordgame_top_scorers_button);
+    topScorersButton.setOnClickListener(this);
 
     View ackButton = findViewById(R.id.two_player_wordgame_ack_button);
     ackButton.setOnClickListener(this);
@@ -233,6 +239,12 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
       i = new Intent(this, Game.class);
       i.putExtra(Game.CONTINUE_GAME, true);
       startActivity(i);
+      break;
+    case R.id.two_player_wordgame_top_scorers_button:
+//      FetchAndDisplayTopScorersList();
+      Intent i = new Intent(this, TopScorers.class);
+      startActivity(i);
+//      showTopScorersDialog();
       break;
     case R.id.two_player_wordgame_settings_button:
       startActivity(new Intent(this, Prefs.class));
@@ -486,5 +498,26 @@ public class TwoPlayerWordGame extends Activity implements OnClickListener {
     // findViewById(R.id.communication_interphone_comm_msg_textview);
     // msgTxtView.setText(msg);
   }
+  
+  
+  
+//  public static void showTopScorersDialog(String formattedStr) {
+//    AlertDialog.Builder builder = new AlertDialog.Builder(new TwoPlayerWordGame());
+//    builder.setCancelable(true);
+//    builder.setTitle("Top Scorers List");
+//    builder.setMessage("\t Score \t \t Name \t \t \t Date-Time \n \n" 
+//        + formattedStr);
+////    builder.setInverseBackgroundForced(true);
+//    builder.setPositiveButton("Back to Menu", new DialogInterface.OnClickListener() {
+//      @Override
+//      public void onClick(DialogInterface dialog, int which) {
+//        dialog.dismiss();
+//      }
+//    });
+//    
+//    AlertDialog alert = builder.create();
+//    alert.show();
+//  
+//  }
 
 }

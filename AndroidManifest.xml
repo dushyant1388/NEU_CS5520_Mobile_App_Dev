@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.neu.madcourse.dushyantdeshmukh"
-    android:versionCode="4"
-    android:versionName="4" >
+    android:versionCode="5"
+    android:versionName="5" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -79,6 +79,7 @@
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.WaitingForOpponent" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_waiting_for_opponent" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.MsgFromOpponent" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_msg_from_opponent" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.RequestFromOpponent" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_request_from_opponent" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TopScorers" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_top_scorers" android:theme="@android:style/Theme.Dialog" />
     </application>
 
     

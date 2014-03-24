@@ -102,6 +102,8 @@ public class Game extends Activity implements OnClickListener {
   private MediaPlayer mpCountDown;
   private int countDownResId = R.raw.count_down;
 
+  public static String topScorersFormatedStr = "";
+  
   private String username, regId, opponentName, oppRegId;
   private boolean gameOver = false;
   private boolean isPlayerOne = false;
@@ -295,7 +297,7 @@ public class Game extends Activity implements OnClickListener {
         this.roundNo = Integer.parseInt(dataMap.get(Constants.KEY_ROUND));
         this.oppScore = Integer.parseInt(dataMap.get(Constants.KEY_OPP_SCORE));
 
-        if (isPlayerOne && roundNo == 5) {
+        if (isPlayerOne && roundNo == Constants.NO_OF_ROUNDS) {
           //  Game end
           updateScoreboard(1, roundNo, this.oppScore);
           showDebugToast("'" + this.opponentName + "' made " + oppScore + " points in round " + roundNo+ ".");
@@ -729,7 +731,7 @@ public class Game extends Activity implements OnClickListener {
     }
     // showDebugToast("Inside endRound" + "\nroundNo= " + roundNo
     // + "\nisPlayerOne = " + isPlayerOne);
-    if (this.roundNo == 5 && !isPlayerOne) {
+    if (this.roundNo == Constants.NO_OF_ROUNDS && !isPlayerOne) {
       // Game ended
       // endGame();
       // notifyEndOfGame();
@@ -774,6 +776,8 @@ public class Game extends Activity implements OnClickListener {
       AlertDialog alert = builder.create();
       alert.show();
     
+      //  update Top Scorer's List on server
+      Util.updateTopScorersList(username, Util.getTotalScore(this.scoreboardStr), Util.getCurrentDateTime());
   }
 
   private void showWaitingForUser() {

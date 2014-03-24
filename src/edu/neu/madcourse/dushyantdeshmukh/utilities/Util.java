@@ -8,12 +8,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
+import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TwoPlayerWordGame;
 import edu.neu.mhealth.api.KeyValueAPI;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -291,8 +298,8 @@ public class Util {
   }
   
   public static int[][] getInitialScoreboard() {
-    int[][] scoreboardArr = new int[5][2];
-    for (int i = 0; i < 5; i++) {
+    int[][] scoreboardArr = new int[Constants.NO_OF_ROUNDS][2];
+    for (int i = 0; i < Constants.NO_OF_ROUNDS; i++) {
       scoreboardArr[i][0] = 0;
       scoreboardArr[i][0] = 0;
     }
@@ -302,7 +309,7 @@ public class Util {
   public static int[][] scoreboardStrToArr(String scoreboardStr){
 //    Log.d(TAG, "Converting scoreboard str to array");
 //    Log.d(TAG, "Input scoreboardStr = " + scoreboardStr);
-    int[][] scoreboardArr = new int[5][2];
+    int[][] scoreboardArr = new int[Constants.NO_OF_ROUNDS][2];
     String[] roundArr = scoreboardStr.split(",");
     for (int i = 0; i < roundArr.length; i++) {
       String[] scoreArr = roundArr[i].split("-");
@@ -350,5 +357,138 @@ public class Util {
     retStr.append("\n Total: \t \t \t" + p1Total + "  \t \t   " + p2Total + "\n");
     return retStr.toString();
   }
+
+  public static String getCurrentDateTime() {
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    Date date = new Date();
+    return dateFormat.format(date);
+  }
+
+  public static String getTotalScore(String scoreboardStr) {
+    int[][] scoreboardArr = Util.scoreboardStrToArr(scoreboardStr);
+    int total = 0;
+    for (int i = 0; i < scoreboardArr.length; i++) {
+      total += scoreboardArr[i][0];
+    }
+    return String.valueOf(total);
+  }
+
+  public static void updateTopScorersList(String username, String totalScore,
+      String currentDateTime) {
+    Log.d(TAG, "\n\n\n Adding (" + totalScore + "-" + username + "-" + currentDateTime + ") on server.\n\n\n");
+    new AsyncTask<String, Integer, String>() {
+      @Override
+      protected String doInBackground(String... params) {
+        Log.d(TAG, "inside addValuesToKeyOnServer():doInBackground()");
+        String totalScore = params[0];
+        String username = params[1];
+        String currentDateTime = params[2];
+        String retVal = "";
+        String result = "";
+        if (KeyValueAPI.isServerAvailable()) {
+          String topScorersVal = KeyValueAPI.get(Constants.TEAM_NAME,
+              Constants.PASSWORD, Constants.TOP_SCORERS_LIST);
+
+          if (topScorersVal.contains("Error: No Such Key")) {
+            Log.d(TAG, "no such key: " + Constants.TOP_SCORERS_LIST);
+            // No player waiting... put your own regId
+            result = KeyValueAPI.put(Constants.TEAM_NAME, Constants.PASSWORD,
+                Constants.TOP_SCORERS_LIST, totalScore + "-" + username + "-" + currentDateTime);
+            if (!result.contains("Error")) {
+              // displayMsg("No player waiting... putting your regId "
+              // + myRegId + " in WAITING_PLAYER.");
+              retVal = "Top scorers list empty... storing your entry: '"
+                  + totalScore + "-" + username + "-" + currentDateTime + "' on server.";
+            } else {
+              // displayMsg("Error while putting your regId on server: "
+              // + result);
+              retVal = "Error while putting 'totalScore-username-currentDateTime' on server: "
+                  + result;
+            }
+          } else {
+            Log.d(TAG, "key exists: " + Constants.TOP_SCORERS_LIST);
+            Log.d(TAG, "\n topScorersVal: " + topScorersVal);
+            
+            String sortedTopScorersVal = getSortedTopScorersVal(topScorersVal, totalScore, username, currentDateTime);
+            
+            Log.d(TAG, "\n Sorted topScorersVal: " + sortedTopScorersVal);
+            
+         // store on server
+            result = KeyValueAPI.put(Constants.TEAM_NAME, Constants.PASSWORD,
+                Constants.TOP_SCORERS_LIST, sortedTopScorersVal);
+
+            if (!result.contains("Error")) {
+              // displayMsg("Stored 'totalScore-username-currentDateTime' : '" +  totalScore 
+//              + "-" + username + "-" + currentDateTime + "' on server.");
+              retVal = "Stored 'totalScore-username-currentDateTime' : '" +  totalScore 
+                  + "-" + username + "-" + currentDateTime + "' on server.";
+            } else {
+              // displayMsg("Error while putting your username-regId on server: "
+              // + result);
+              retVal = "Error while putting 'totalScore-username-currentDateTime' on server: "
+                  + result;
+            }
+           
+          }
+        }
+        return retVal;
+      }
+
+      @Override
+      protected void onPostExecute(String result) {
+        // mDisplay.append(msg + "\n");
+        Log.d(TAG, "updateTopScorersList" + result);
+      }
+    }.execute(totalScore, username, currentDateTime);
+  }
+
+  @SuppressWarnings("unchecked")
+  protected static String getSortedTopScorersVal(String topScorersVal, String totalScore, String username, String currentDateTime) {
+    StringBuilder sortedTopScorersVal = new StringBuilder();
+    Map<Integer, String> topScorersMap =  getTopScorersMap(topScorersVal);
+    topScorersMap.put(Integer.parseInt(totalScore), username + "-" + currentDateTime);
+    
+    List<Integer> sortedKeys=new ArrayList<Integer>(topScorersMap.keySet());
+    Collections.sort(sortedKeys, Collections.reverseOrder());
+    
+    for (int score : sortedKeys) {
+      sortedTopScorersVal.append(",");
+      String tempStr = score + "-" + topScorersMap.get(score);
+      sortedTopScorersVal.append(tempStr);
+    }
+    return sortedTopScorersVal.substring(1);
+  }
+
+  private static Map<Integer, String> getTopScorersMap(String topScorersVal) {
+    Map<Integer, String> retmap = new HashMap<Integer, String>();
+    String[] itemsArr = topScorersVal.split(",");
+    for (int i = 0; i < itemsArr.length; i++) {
+      String currItem = itemsArr[i];
+      String[] tempStrArr = currItem.split("-");
+      int currtotaScore = Integer.parseInt(tempStrArr[0]);
+      String currUsername = tempStrArr[1];
+      String currDate = tempStrArr[2];
+      retmap.put(currtotaScore, currUsername + "-" + currDate);
+    }
+    return retmap;
+  }
+
+  public static String getFormatedTopScorersStr(String topScorersVal) {
+    StringBuilder formattedTopScorersVal = new StringBuilder();
+    Map<Integer, String> topScorersMap =  getTopScorersMap(topScorersVal);
+    
+    List<Integer> sortedKeys=new ArrayList<Integer>(topScorersMap.keySet());
+    Collections.sort(sortedKeys, Collections.reverseOrder());
+    
+    formattedTopScorersVal.append(" Score \t Name \t \t Date-Time \n \n");
+    for (int score : sortedKeys) {
+      String tempStr =  topScorersMap.get(score);
+      String[] tempStrArr = tempStr.split("-");
+      formattedTopScorersVal.append("\t " + score + "  \t \t " + tempStrArr[0] + "  " + tempStrArr[1] + "\n\n");
+    }
+    return formattedTopScorersVal.toString();
+  }
+
+  
   
 }

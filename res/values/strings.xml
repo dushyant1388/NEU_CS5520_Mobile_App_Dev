@@ -153,6 +153,21 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="two_player_wordgame_ack">Acknowledgements</string>
     <string name="two_player_wordgame_ack_ok_label">OK</string>
     <string name="two_player_wordgame_instructions_title">How to Play</string>
+    <string name="two_player_wordgame_instructions">Every game will have 5 rounds (turn by turn), where in every turn each player gets 30 secs to make as many words as possible. 
+                                            \r\nEach word will fetch user points depending on length of that word.
+                                            \r\nAt the end of 5 rounds, the scores of all rounds will be added and the player having greater score will be the winner.\r\n\r\n
+                                        1. The game starts with the bottom row pre-populated with letters.\r\n\r\n
+                                        2. A new letter appears on the screen at regular time intervals depending on the difficulty level.\r\n\r\n
+                                        3. User has to click/tap on individual letters to form a word in that sequence, which is shown below the board of letters.\r\n\r\n
+                                        4. If the word formed by the user is valid, the word turns green. User should click/tap this word to confirm it.\r\n
+                                            This will increase the score by that words length and the corresponding letters will disappear from the board.\r\n\r\n
+                                        5.If the word formed by the user is invalid, the word turns red. User should click/tap the \'Clear\' button to clear the selection of letters.\r\n\r\n
+                                        6. User needs to complete as many valid words as possible before the timer runs out or the board is completely filled with letters.\r\n\r\n
+                                        7. The number of points earned for each valid word is equal to the length of that word. \r\n
+                                            At the end of each round, users can see their total score for that round.\r\n\r\n
+                                        8. User can pause or resume the game at any moment using the \'Pause\'/\'Resume\' button.\r\n\r\n
+                                        9. When the board is close to getting completely filled, users can hear a count down sound to notify them about the last few seconds remaining.\r\n
+                                        </string>
     <string name="two_player_wordgame_instructions_ok_label">OK</string>
     
     <string name="two_player_wordgame_clear">Clear</string>
@@ -208,6 +223,24 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="two_player_wordgame_player2">Player 2: </string>
     <string name="two_player_wordgame_p1_score">P1 score</string>
     <string name="two_player_wordgame_p2_score">P2 score</string>
+    
+    <string name="two_player_wordgame_top_scorers_ok_label">Back to Menu</string>
+    
+    <string name="two_player_wordgame_acks">Following is the list of online resources referred:\r\n \r\n
+        1. Google Cloud Messaging (GCM) \r\n
+        http://developer.android.com/google/gcm/index.html \r\n \r\n
+        1. Making HTTP post call: \r\n
+        http://www.mkyong.com/java/how-to-send-http-request-getpost-in-java/ \r\n \r\n
+        2. Setting up a broadcast receiver: \r\n
+        http://www.androidsnippets.com/how-to-set-up-a-broadcastreceiver-intent \r\n \r\n
+        3. Checking if activity is currently active: \r\n
+        http://androidblog.reindustries.com/check-if-an-android-activity-is-currently-running/ \r\n \r\n
+        4. Intent flags while launching activity: \r\n
+        http://blog.akquinet.de/2010/04/15/android-activites-and-tasks-series-intent-flags/ \r\n \r\n
+        5. Checking if internet is available: \r\n
+        http://stackoverflow.com/questions/8573176/internet-connection-error \r\n
+        </string>
+        
     
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>

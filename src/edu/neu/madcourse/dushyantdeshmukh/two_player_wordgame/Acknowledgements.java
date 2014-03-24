@@ -15,7 +15,7 @@ public class Acknowledgements extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.wordgame_acknowledgements);
+		setContentView(R.layout.two_player_wordgame_acknowledgements);
 
 		// Set up click listeners for all the buttons
 		View okButton = findViewById(R.id.ok_button);
