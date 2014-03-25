@@ -54,8 +54,7 @@ Sample about text. Needs to be updated&#8230;</string>
         						2. Sudoku game in \'Hello Android\' book has been used as a reference for 2D graphics, storing state and other game settings.\r\n\r\n
         						3. The sounds \'button_press\', \'wordgame_bg_music\' and \'wordgame_menu_music\' used in the game are referenced from \'www.SoundJay.com\'.\r\n\r\n
         						4. The sounds \'count_down\', \'game_over_gong\', \'valid_word_beep\' and \'invalid_word_beep\' used in the gme are referenced from \'www.SoundBible.com\'.\r\n\r\n
-        						5. Android tutorials from \'www.lynda.com\' were also very helpful for this assignment.\r\n
-        						 </string>
+        						5. Android tutorials from \'www.lynda.com\' were also very helpful for this assignment.\r\n</string>
     <string name="wordgame_instructions_title">How to Play</string>
     <string name="wordgame_instructions_ok_label">OK</string>
     <string name="wordgame_instructions">1. The game starts with the bottom row pre-populated with letters.\r\n\r\n
@@ -69,8 +68,7 @@ Sample about text. Needs to be updated&#8230;</string>
         								    At the end of game, users can see their total score, longest word\'s length and accuracy.\r\n\r\n
         								8. User can change the difficulty level, no. of rows and no. of columns from the settings button shown on the menu screen.\r\n\r\n
         								9. User can pause or resume the game at any moment using the \'Pause\'/\'Resume\' button.\r\n\r\n
-        								10. When the board is close to getting completely filled, users can hear a count down sound to notify them about the last few seconds remaining.\r\n
-        								</string>
+        								10. When the board is close to getting completely filled, users can hear a count down sound to notify them about the last few seconds remaining.\r\n</string>
     <string name="wordgame_hints_title">Hints</string>
     <string name="wordgame_hints_ok_label">OK</string>
     <string name="wordgame_hints">1. Never settle for one word. Almost every word on your game board can be added to. For example, the word AGE can be turned into AGED by adding a D. \r\n\r\n
@@ -82,7 +80,7 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="wordgame_hint">Hint</string>
     <string name="wordgame_quit">Quit</string>
     <string name="wordgame_currscore">Score: 0</string>
-    
+
     <!-- Word Game - Game Over screen strings -->
     <string name="wordgame_gameover_title">Game Over</string>
     <string name="wordgame_gameover_msg">You can do better ;-)</string>
@@ -91,15 +89,15 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="wordgame_gameover_longestword">Longest word: </string>
     <string name="wordgame_gameover_restart_label">RESTART</string>
     <string name="wordgame_gameover_quit_label">QUIT</string>
-    
+
     <!-- Word Game - Preference screen strings -->
     <string name="pref_wordgame_rows_summary">No of rows on the board</string>
     <string name="pref_wordgame_rows">Rows</string>
     <string name="pref_wordgame_cols_summary">No of cols on the board</string>
     <string name="pref_wordgame_cols">Cols</string>
-	<string name="pref_wordgame_difficulty_summary">Difficulty level of the game</string>
+    <string name="pref_wordgame_difficulty_summary">Difficulty level of the game</string>
     <string name="pref_wordgame_difficulty">Difficulty</string>
-    
+
     <!-- Communications screen strings -->
     <string name="communication_title_label">Communication</string>
     <string name="communication_heading_label">Communication Tests</string>
@@ -107,7 +105,6 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="communication_interphone_comm">Inter Phone Communication</string>
     <string name="communication_ack_label">Acknowledgements</string>
     <string name="communication_quit">Quit</string>
-    
     <string name="communication_storing_data_title_label">Test Storing Data</string>
     <string name="communication_storing_data_msg">Enter key and value to store on cloud</string>
     <string name="communication_storing_data_key_hint">Enter key here&#8230;</string>
@@ -116,14 +113,12 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="communication_storing_data_fetch">Fetch</string>
     <string name="communication_storing_data_clear">Clear</string>
     <string name="communication_storing_data_quit">Return to menu</string>
-    
     <string name="communication_interphone_comm_title_label">Test Inter-phone Communication</string>
     <string name="communication_interphone_comm_username_hint">Enter username here&#8230;</string>
     <string name="communication_interphone_comm_startgame">Start Game</string>
     <string name="communication_interphone_comm_sendmsg_hint">Enter your message here&#8230;</string>
     <string name="communication_interphone_comm_sendmsg">Send Message</string>
     <string name="communication_interphone_comm_quit">Return to menu</string>
-    
     <string name="communication_ack_ok_label">OK</string>
     <string name="communication_acks">Following is the list of online resources referred:\r\n \r\n
         1. Google Cloud Messaging (GCM) \r\n
@@ -137,9 +132,8 @@ Sample about text. Needs to be updated&#8230;</string>
         4. Intent flags while launching activity: \r\n
         http://blog.akquinet.de/2010/04/15/android-activites-and-tasks-series-intent-flags/ \r\n \r\n
         5. Checking if internet is available: \r\n
-        http://stackoverflow.com/questions/8573176/internet-connection-error \r\n
-        </string>
-        
+        http://stackoverflow.com/questions/8573176/internet-connection-error \r\n</string>
+
     <!-- 2P Word Game screen strings -->
     <string name="two_player_wordgame_title_label">Two Player Word Game</string>
     <string name="two_player_wordgame_welcome_msg">Hello </string>
@@ -156,26 +150,26 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="two_player_wordgame_instructions">Every game will have 5 rounds (turn by turn), where in every turn each player gets 30 secs to make as many words as possible. 
                                             \r\nEach word will fetch user points depending on length of that word.
                                             \r\nAt the end of 5 rounds, the scores of all rounds will be added and the player having greater score will be the winner.\r\n\r\n
-                                        1. The game starts with the bottom row pre-populated with letters.\r\n\r\n
-                                        2. A new letter appears on the screen at regular time intervals depending on the difficulty level.\r\n\r\n
-                                        3. User has to click/tap on individual letters to form a word in that sequence, which is shown below the board of letters.\r\n\r\n
-                                        4. If the word formed by the user is valid, the word turns green. User should click/tap this word to confirm it.\r\n
+                                            1. User can find the opponent using the specific username or connect to a random opponent. \r\n\r\n
+                                            2. Connecting to a random opponent can also be done by shaking the phone. \r\n\r\n
+                                        3. The game starts with the bottom row pre-populated with letters.\r\n\r\n
+                                        4. A new letter appears on the screen at regular time intervals depending on the difficulty level.\r\n\r\n
+                                        5. User has to click/tap on individual letters to form a word in that sequence, which is shown below the board of letters.\r\n\r\n
+                                        6. If the word formed by the user is valid, the word turns green. User should click/tap this word to confirm it.\r\n
                                             This will increase the score by that words length and the corresponding letters will disappear from the board.\r\n\r\n
-                                        5.If the word formed by the user is invalid, the word turns red. User should click/tap the \'Clear\' button to clear the selection of letters.\r\n\r\n
-                                        6. User needs to complete as many valid words as possible before the timer runs out or the board is completely filled with letters.\r\n\r\n
-                                        7. The number of points earned for each valid word is equal to the length of that word. \r\n
+                                        7.If the word formed by the user is invalid, the word turns red. User should click/tap the \'Clear\' button to clear the selection of letters.\r\n\r\n
+                                        8. User needs to complete as many valid words as possible before the timer runs out or the board is completely filled with letters.\r\n\r\n
+                                        9. The number of points earned for each valid word is equal to the length of that word. \r\n
                                             At the end of each round, users can see their total score for that round.\r\n\r\n
-                                        8. User can pause or resume the game at any moment using the \'Pause\'/\'Resume\' button.\r\n\r\n
-                                        9. When the board is close to getting completely filled, users can hear a count down sound to notify them about the last few seconds remaining.\r\n
-                                        </string>
+                                        10. User can pause or resume the game at any moment using the \'Pause\'/\'Resume\' button.\r\n\r\n
+                                        11. When the board is close to getting completely filled, users can hear a count down sound to notify them about the last few seconds remaining.\r\n</string>
     <string name="two_player_wordgame_instructions_ok_label">OK</string>
-    
     <string name="two_player_wordgame_clear">Clear</string>
     <string name="two_player_wordgame_pause">Pause</string>
     <string name="two_player_wordgame_resume">Resume Game</string>
     <string name="two_player_wordgame_quit">Quit</string>
     <string name="two_player_wordgame_currscore">Score: 0</string>
-    
+
     <!-- 2P Word Game - Game Over screen strings -->
     <string name="two_player_wordgame_gameover_title">Game Over</string>
     <string name="two_player_wordgame_gameover_msg">You can do better ;-)</string>
@@ -184,36 +178,36 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="two_player_wordgame_gameover_longestword">Longest word: </string>
     <string name="two_player_wordgame_gameover_restart_label">RESTART</string>
     <string name="two_player_wordgame_gameover_quit_label">QUIT</string>
-    
+
     <!-- 2P Word Game - Preference screen strings -->
     <string name="pref_two_player_wordgame_rows_summary">No of rows on the board</string>
     <string name="pref_two_player_wordgame_rows">Rows</string>
     <string name="pref_two_player_wordgame_cols_summary">No of cols on the board</string>
     <string name="pref_two_player_wordgame_cols">Cols</string>
-    
+
     <!-- 2P Word Game Choose Opponent strings -->
     <string name="two_player_wordgame_choose_opponent_title">Choose Opponent</string>
     <string name="two_player_wordgame_opponent_name_hint">Enter opponent username here&#8230;</string>
     <string name="two_player_wordgame_find_opponent">Find Opponent</string>
-    <string name="two_player_wordgame_random_opponent">Random Opponent</string>
+    <string name="two_player_wordgame_random_opponent">Random Opponent \n (Shake to connect)</string>
     <string name="two_player_wordgame_back">Back</string>
-    
+
     <!-- 2P Word Game Waiting for Opponent strings -->
     <string name="two_player_wordgame_waiting_for_opponent">Waiting for opponent</string>
     <string name="two_player_wordgame_waiting_for_opponent_text">Waiting for opponent to accept 
         your game request&#8230;</string>
-        
+
     <!-- 2P Word Game Message from Opponent strings -->
     <string name="two_player_wordgame_msg_from_opponent">Message from opponent</string>
     <string name="two_player_wordgame_msg_from_opponent_text">Message from opponent.</string>
     <string name="two_player_wordgame_play">Play</string>
-    
+
     <!-- 2P Word Game Request from Opponent strings -->
     <string name="two_player_wordgame_request_from_opponent">Request from opponent</string>
     <string name="two_player_wordgame_request_from_opponent_text">Request from opponent</string>
     <string name="two_player_wordgame_accept">Accept</string>
     <string name="two_player_wordgame_reject">Reject</string>
-    
+
     <!-- 2P Word Game Request from Opponent strings -->
     <string name="two_player_wordgame_currround">Round #</string>
     <string name="two_player_wordgame_time">Time: 0 sec(s)</string>
@@ -223,9 +217,7 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="two_player_wordgame_player2">Player 2: </string>
     <string name="two_player_wordgame_p1_score">P1 score</string>
     <string name="two_player_wordgame_p2_score">P2 score</string>
-    
     <string name="two_player_wordgame_top_scorers_ok_label">Back to Menu</string>
-    
     <string name="two_player_wordgame_acks">Following is the list of online resources referred:\r\n \r\n
         1. Google Cloud Messaging (GCM) \r\n
         http://developer.android.com/google/gcm/index.html \r\n \r\n
@@ -238,10 +230,8 @@ Sample about text. Needs to be updated&#8230;</string>
         4. Intent flags while launching activity: \r\n
         http://blog.akquinet.de/2010/04/15/android-activites-and-tasks-series-intent-flags/ \r\n \r\n
         5. Checking if internet is available: \r\n
-        http://stackoverflow.com/questions/8573176/internet-connection-error \r\n
-        </string>
-        
-    
+        http://stackoverflow.com/questions/8573176/internet-connection-error \r\n</string>
+
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>
     <string name="sudoku_main_title">Android Sudoku</string>

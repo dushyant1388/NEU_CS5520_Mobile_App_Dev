@@ -3,6 +3,8 @@ package edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame;
 import java.util.HashMap;
 
 import edu.neu.madcourse.dushyantdeshmukh.R;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.AccelerometerListener;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.AccelerometerManager;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.InternetConnUtil;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 import edu.neu.mhealth.api.KeyValueAPI;
@@ -24,7 +26,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChooseOpponent extends Activity implements OnClickListener {
+public class ChooseOpponent extends Activity implements OnClickListener, AccelerometerListener {
 
   protected static final String TAG = "CHOOSE OPPONENT ACTIVITY";
   private Intent i;
@@ -99,8 +101,33 @@ public class ChooseOpponent extends Activity implements OnClickListener {
     // Remove username from AVAILABLE_USERS_LIST
     Util.removeValuesFromKeyOnServer(Constants.AVAILABLE_USERS_LIST,
         this.username, this.regId);
+    
+  //Check device supported Accelerometer senssor or not
+    if (AccelerometerManager.isListening()) {
+         
+        //Start Accelerometer Listening
+        AccelerometerManager.stopListening();
+         
+//        Toast.makeText(getBaseContext(), "onStop Accelerometer Stoped", 
+//                 Toast.LENGTH_SHORT).show();
+    }
   }
 
+  @Override
+  public void onDestroy() {
+      super.onDestroy();
+      //Check device supported Accelerometer senssor or not
+      if (AccelerometerManager.isListening()) {
+           
+          //Start Accelerometer Listening
+          AccelerometerManager.stopListening();
+           
+//          Toast.makeText(getBaseContext(), "onDestroy Accelerometer Stoped", 
+//                 Toast.LENGTH_SHORT).show();
+      }
+           
+  }
+  
   @Override
   protected void onResume() {
     // TODO Auto-generated method stub
@@ -109,6 +136,13 @@ public class ChooseOpponent extends Activity implements OnClickListener {
     registerReceiver(receiver, new IntentFilter(
         Constants.INTENT_ACTION_CHOOSE_OPPONENT));
 
+  //Check device supported Accelerometer senssor or not
+    if (AccelerometerManager.isSupported(this)) {
+         displayMsg("Starting accelerometer listening...");
+        //Start Accelerometer Listening
+        AccelerometerManager.startListening(this);
+    }
+    
     handleNotification(getSharedPreferences(Constants.SHARED_PREF_CONST,
         Context.MODE_PRIVATE));
   }
@@ -481,6 +515,21 @@ public class ChooseOpponent extends Activity implements OnClickListener {
     // TextView msgTxtView = (TextView)
     // findViewById(R.id.communication_interphone_comm_msg_textview);
     // msgTxtView.setText(msg);
+  }
+
+  @Override
+  public void onAccelerationChanged(float x, float y, float z) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void onShake(float force) {
+ // Called when Motion Detected
+//    displayMsg("Inside onShake(");
+    displayMsg(" Shake detected. \n Connecting to random opponent...");
+    connectToRandomOpponent(this.username, this.regId);
+    
   }
 
 }
