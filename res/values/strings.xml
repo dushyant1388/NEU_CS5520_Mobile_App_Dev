@@ -189,7 +189,7 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="two_player_wordgame_choose_opponent_title">Choose Opponent</string>
     <string name="two_player_wordgame_opponent_name_hint">Enter opponent username here&#8230;</string>
     <string name="two_player_wordgame_find_opponent">Find Opponent</string>
-    <string name="two_player_wordgame_random_opponent">Random Opponent \n (Shake to connect)</string>
+    <string name="two_player_wordgame_random_opponent"> Random Opponent \n(Shake to connect)</string>
     <string name="two_player_wordgame_back">Back</string>
 
     <!-- 2P Word Game Waiting for Opponent strings -->
@@ -230,8 +230,16 @@ Sample about text. Needs to be updated&#8230;</string>
         4. Intent flags while launching activity: \r\n
         http://blog.akquinet.de/2010/04/15/android-activites-and-tasks-series-intent-flags/ \r\n \r\n
         5. Checking if internet is available: \r\n
-        http://stackoverflow.com/questions/8573176/internet-connection-error \r\n</string>
+        http://stackoverflow.com/questions/8573176/internet-connection-error \r\n \r\n
+        6. Detecting shake using an accelerometer: \r\n 
+        http://androidexample.com/Accelerometer_Basic_Example_-_Detect_Phone_Shake_Motion/index.php?view=article_discriptionaid=109&amp;aaid=131 \r\n
+        </string>
 
+    <!-- Trickiest Part strings -->
+    <string name="trickiest_part_title_label">Trickiest Part</string>
+    <string name="trickiest_part_test">Test</string>
+    <string name="trickiest_part_quit">Quit</string>
+    
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>
     <string name="sudoku_main_title">Android Sudoku</string>
