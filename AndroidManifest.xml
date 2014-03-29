@@ -17,6 +17,11 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    
     <permission android:name="edu.neu.madcourse.dushyantdeshmukh.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <uses-permission android:name="edu.neu.madcourse.dushyantdeshmukh.permission.C2D_MESSAGE" />
@@ -81,10 +86,21 @@
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.RequestFromOpponent" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_request_from_opponent" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TopScorers" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_top_scorers" android:theme="@android:style/Theme.Dialog" />
         
-        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.TrickiestPart" android:screenOrientation="portrait" />
-        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Test" android:screenOrientation="landscape" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.TrickiestPart" android:screenOrientation="portrait" />        
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Acknowledgements" android:screenOrientation="portrait" android:label="@string/trickiest_part_ack" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Instructions" android:screenOrientation="portrait" android:label="@string/trickiest_part_instructions" android:theme="@android:style/Theme.Dialog" />
+        
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Test"
+          android:label="@string/trickiest_part_title_label"
+
+          android:screenOrientation="landscape">
+          <!-- configure this activity to use landscape orientation -->
+
+          <intent-filter>
+		        <action android:name="android.intent.action.MAIN" />
+		        <category android:name="android.intent.category.LAUNCHER" />
+		    </intent-filter>
+	   </activity>
         
     </application>
 
