@@ -238,7 +238,15 @@ Sample about text. Needs to be updated&#8230;</string>
     <!-- Trickiest Part strings -->
     <string name="trickiest_part_title_label">Trickiest Part</string>
     <string name="trickiest_part_test">Test</string>
+    <string name="trickiest_part_ack">Acknowledgements</string>
+    <string name="trickiest_part_acks">Thank you all! ;-)</string>
+    <string name="trickiest_part_instructions">Instructions</string>
+    <string name="trickiest_part_instructions_detailed">Enjoy life! ;-)</string>
+    <string name="trickiest_part_ok_label">OK</string>
     <string name="trickiest_part_quit">Quit</string>
+    <string name="trickiest_part_capture_img">Capture</string>
+    <string name="trickiest_part_match_img">Match</string>
+    <string name="trickiest_part_clear_img">Clear</string>
     
     <!-- Sudoku strings -->
     <string name="sudoku_app_name">Sudoku</string>

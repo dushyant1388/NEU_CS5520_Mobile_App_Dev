@@ -82,6 +82,10 @@
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TopScorers" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_top_scorers" android:theme="@android:style/Theme.Dialog" />
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.TrickiestPart" android:screenOrientation="portrait" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Test" android:screenOrientation="landscape" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Acknowledgements" android:screenOrientation="portrait" android:label="@string/trickiest_part_ack" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Instructions" android:screenOrientation="portrait" android:label="@string/trickiest_part_instructions" android:theme="@android:style/Theme.Dialog" />
+        
     </application>
 
     

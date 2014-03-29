@@ -42,4 +42,7 @@
     <color name="two_player_wordgame_title">#aa1122ff</color>
     <color name="two_player_wordgame_welcome_msg">#aa1199ff</color>
     
+    <!-- Trickiest Part colors -->
+    <color name="trickiest_part_background">#223344dd</color>
+    
 </resources>
