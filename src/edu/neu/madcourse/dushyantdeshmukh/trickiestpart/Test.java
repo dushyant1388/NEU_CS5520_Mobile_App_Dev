@@ -35,6 +35,7 @@ public class Test extends Activity implements OnClickListener {
     try {
       c = Camera.open(); // attempt to get a Camera instance
     } catch (Exception e) {
+      Log.e(TAG, "Camera is not available (in use or does not exist)");
       // Camera is not available (in use or does not exist)
     }
     return c; // returns null if camera is unavailable
@@ -70,12 +71,27 @@ public class Test extends Activity implements OnClickListener {
     FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
     preview.addView(mPreview);
 
+    try {
+      mCamera.setPreviewDisplay(mPreview.getHolder());
+    } catch (IOException ex) {
+      Log.e(TAG, "Error setting preview display");
+      ex.printStackTrace();
+    }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    mCamera.startPreview();
   }
 
   private PictureCallback mPicture = new PictureCallback() {
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
+      Log.d(TAG, "Inside onPictureTaken()");
+
+      mCamera.startPreview();
 
       File pictureFile = getOutputMediaFile();
       if (pictureFile == null) {
@@ -101,7 +117,13 @@ public class Test extends Activity implements OnClickListener {
     switch (v.getId()) {
     case R.id.trickiest_part_capture_img_button:
       // get an image from the camera
-      mCamera.takePicture(null, null, mPicture);
+      Log.d(TAG, "Clicked on Capture button... taking picture...");
+      try {
+        mCamera.takePicture(null, null, mPicture);
+      } catch (Exception ex) {
+        Log.e(TAG, ex.getMessage());
+        ex.printStackTrace();
+      }
       break;
     case R.id.trickiest_part_match_img_button:
 
@@ -139,7 +161,8 @@ public class Test extends Activity implements OnClickListener {
     // using Environment.getExternalStorageState() before doing this.
 
     File mediaStorageDir = new File(
-        context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "MyCameraApp");
+        context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+        "MyCameraApp");
     // This location works best if you want the created images to be shared
     // between applications and persist after your app has been uninstalled.
 
@@ -154,9 +177,9 @@ public class Test extends Activity implements OnClickListener {
     // Create a media file name
     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
         .format(new Date());
-    File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_"
-          + timeStamp + ".jpg");
-   
+    File mediaFile = new File(mediaStorageDir.getPath() + File.separator
+        + "IMG_" + timeStamp + ".jpg");
+
     return mediaFile;
   }
 
