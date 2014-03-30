@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.neu.madcourse.dushyantdeshmukh"
-    android:versionCode="6"
-    android:versionName="6" >
+    android:versionCode="7"
+    android:versionName="7" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -86,20 +86,15 @@
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.RequestFromOpponent" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_request_from_opponent" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TopScorers" android:screenOrientation="portrait" android:label="@string/two_player_wordgame_top_scorers" android:theme="@android:style/Theme.Dialog" />
         
-        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.TrickiestPart" android:screenOrientation="portrait" />        
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.TrickiestPart" android:screenOrientation="portrait" android:label="@string/trickiest_part_title_label" > 
+            <intent-filter>
+                <action android:name="edu.neu.madcourse.dushyantdeshmukh.TRICKIEST_PART" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter> 
+            </activity>        
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Acknowledgements" android:screenOrientation="portrait" android:label="@string/trickiest_part_ack" android:theme="@android:style/Theme.Dialog" />
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Instructions" android:screenOrientation="portrait" android:label="@string/trickiest_part_instructions" android:theme="@android:style/Theme.Dialog" />
-        
-        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Test"
-          android:label="@string/trickiest_part_title_label"
-
-          android:screenOrientation="landscape">
-          <!-- configure this activity to use landscape orientation -->
-
-          <intent-filter>
-		        <action android:name="android.intent.action.MAIN" />
-		        <category android:name="android.intent.category.LAUNCHER" />
-		    </intent-filter>
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Test" android:screenOrientation="landscape" android:label="@string/trickiest_part_title_label" >
 	   </activity>
         
     </application>
