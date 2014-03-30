@@ -239,9 +239,28 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="trickiest_part_title_label">Trickiest Part</string>
     <string name="trickiest_part_test">Test</string>
     <string name="trickiest_part_ack">Acknowledgements</string>
-    <string name="trickiest_part_acks">Thank you all! ;-)</string>
+    <string name="trickiest_part_acks">Following is the list of online resources referred:\r\n \r\n
+        1. Computing regression line equation to get the threshold value to decide matching \r\n
+		http://www.mathportal.org/calculators/statistics-calculator/correlation-and-regression-calculator.php \r\n \r\n
+		2. Android Camera \r\n
+		http://developer.android.com/guide/topics/media/camera.html#custom-camera \r\n \r\n
+		3. Converting an image file into bitmap \r\n
+		http://stackoverflow.com/questions/8710515/reading-an-image-file-into-bitmap-from-sdcard \r\n \r\n
+		4. Decoding a scaled image \r\n
+		http://developer.android.com/training/camera/photobasics.html \r\n \r\n
+		5. pHash algorithm to detect similarity \r\n
+		http://phash.org/ \r\n \r\n
+		6. Using OpenCV for similarity measurement \r\n
+		http://docs.opencv.org/doc/tutorials/highgui/video-input-psnr-ssim/video-input-psnr-ssim.html#videoinputpsnrmssim \r\n
+    </string>
     <string name="trickiest_part_instructions">Instructions</string>
-    <string name="trickiest_part_instructions_detailed">Enjoy life! ;-)</string>
+    <string name="trickiest_part_instructions_detailed">1. Once you click on the “test” button, you will see a camera screen, a blank Imageview and three buttons.\r\n \r\n 
+			2. On clicking on the “capture” button, you can click an image. The image captured will be seen on the ImageView and “match” button appears in place of “capture” button.\r\n \r\n
+			3. Capture another image and test it with the earlier captured one by clicking the “match” button.\r\n \r\n
+			4. Clicking on “Clear” button would clear the image on ImageView.\r\n \r\n
+            5. Clicking on “Exit” would go to the previous screen.\r\n \r\n
+            NOTE: For detecting similar images, we are computing the Peak Signal to noise Ratio (PSNR) between the two images and comparing it against a threshold value of 14.
+    </string>
     <string name="trickiest_part_ok_label">OK</string>
     <string name="trickiest_part_quit">Quit</string>
     <string name="trickiest_part_capture_img">Capture</string>
