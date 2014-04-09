@@ -489,6 +489,12 @@ public class Util {
     return formattedTopScorersVal.toString();
   }
 
-  
+  public static void showToast(Context ctx, String msg, int duration) {
+    Toast t = Toast.makeText(ctx, msg, duration);
+    t.show();
+    Log.d(TAG, "\n===================================================\n");
+    Log.d(TAG, "Toast msg: " + msg);
+    Log.d(TAG, "\n===================================================\n");
+  }
   
 }

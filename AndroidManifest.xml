@@ -105,5 +105,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.CaptureImage" 
+            android:screenOrientation="landscape" 
+            android:label="@string/final_proj_capture_label" >
+        </activity>
     </application>
 </manifest>
