@@ -97,8 +97,13 @@
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.trickiestpart.Test" android:screenOrientation="landscape" android:label="@string/trickiest_part_title_label" >
 	   </activity>
         
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Home" 
+            	  android:label="@string/final_proj_name"
+            	  android:icon="@drawable/final_proj_app_icon">
+            <intent-filter android:label="@string/final_proj_icon_name">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
-
-    
-
 </manifest>

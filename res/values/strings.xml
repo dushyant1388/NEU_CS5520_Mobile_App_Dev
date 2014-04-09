@@ -297,4 +297,8 @@ row, each column, and each of the 3x3 boxes
 (also called <i>blocks</i>) contains the digits
 1 to 9 exactly once.</string>
 
+    <!-- Final Project -->
+    <string name="final_proj_name">Match Me If You Can</string>
+    <string name="final_proj_icon_name">MAD14S-Match Me If You Can</string>
+
 </resources>
