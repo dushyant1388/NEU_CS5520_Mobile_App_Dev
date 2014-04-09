@@ -300,5 +300,8 @@ row, each column, and each of the 3x3 boxes
     <!-- Final Project -->
     <string name="final_proj_name">Match Me If You Can</string>
     <string name="final_proj_icon_name">MAD14S-Match Me If You Can</string>
+    <string name="final_proj_single_phone_mode">Single Phone Mode</string>
+    <string name="final_proj_dual_phone_mode">Dual Phone Mode</string>
+    <string name="final_proj_exit_game">Exit Game</string>
 
 </resources>
