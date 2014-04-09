@@ -300,5 +300,12 @@ row, each column, and each of the 3x3 boxes
     <!-- Final Project -->
     <string name="final_proj_name">Match Me If You Can</string>
     <string name="final_proj_icon_name">MAD14S-Match Me If You Can</string>
+    <string name="final_proj_capture_label">Capture</string>
+    <string name="final_proj_capture_btn">Capture</string>
+    <string name="final_proj_accept_btn">Accept</string>
+    <string name="final_proj_reject_btn">Reject</string>
+    <string name="final_proj_match_btn">Match</string>
+    <string name="final_proj_Skip_btn">Skip</string>
+    <string name="final_proj_img_count_textview">Img Count: </string>
 
 </resources>
