@@ -307,5 +307,8 @@ row, each column, and each of the 3x3 boxes
     <string name="final_proj_match_btn">Match</string>
     <string name="final_proj_Skip_btn">Skip</string>
     <string name="final_proj_img_count_textview">Img Count: </string>
+	<string name="final_proj_single_phone_mode">Single Phone Mode</string>
+    <string name="final_proj_dual_phone_mode">Dual Phone Mode</string>
+    <string name="final_proj_exit_game">Exit Game</string>
 
 </resources>
