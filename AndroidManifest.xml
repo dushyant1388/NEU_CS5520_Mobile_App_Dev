@@ -110,5 +110,10 @@
             android:screenOrientation="landscape" 
             android:label="@string/final_proj_capture_label" >
         </activity>
+        
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.MatchImage" 
+            android:screenOrientation="landscape" 
+            android:label="@string/final_proj_match_label" >
+        </activity>
     </application>
 </manifest>

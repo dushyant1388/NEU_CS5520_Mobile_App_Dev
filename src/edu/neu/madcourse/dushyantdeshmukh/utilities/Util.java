@@ -3,7 +3,9 @@ package edu.neu.madcourse.dushyantdeshmukh.utilities;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,6 +21,14 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.opencv.android.Utils;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.opencv.highgui.Highgui;
+
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.ProjectConstants;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TwoPlayerWordGame;
 import edu.neu.mhealth.api.KeyValueAPI;
@@ -26,8 +36,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -210,26 +224,27 @@ public class Util {
                 }
               }
               String newStrVal = "";
-//            String newStrVal = newVal.substring(0, newVal.length() - 1);
-            if (newVal.length() > 0 && newVal.charAt(0) == ',') {
-              newStrVal = newVal.substring(1);
-            }
+              // String newStrVal = newVal.substring(0, newVal.length() - 1);
+              if (newVal.length() > 0 && newVal.charAt(0) == ',') {
+                newStrVal = newVal.substring(1);
+              }
 
-            // store new val on server
-            result = KeyValueAPI.put(Constants.TEAM_NAME, Constants.PASSWORD,
-                keyname, newStrVal);
+              // store new val on server
+              result = KeyValueAPI.put(Constants.TEAM_NAME, Constants.PASSWORD,
+                  keyname, newStrVal);
 
-            if (!result.contains("Error")) {
-              // displayMsg("Removed your val1-val2 from  "
-              // + val1 + "-" + val2 + " on server.");
-              retVal = "Removed your val1::val2 from " + val1 + "::" + val2
-                  + " on server.";
-            } else {
-              // displayMsg("Error while removing val1-val2 from server: "
-              // + result);
-              retVal = "Error while removing val1::val2 from server: " + result;
+              if (!result.contains("Error")) {
+                // displayMsg("Removed your val1-val2 from  "
+                // + val1 + "-" + val2 + " on server.");
+                retVal = "Removed your val1::val2 from " + val1 + "::" + val2
+                    + " on server.";
+              } else {
+                // displayMsg("Error while removing val1-val2 from server: "
+                // + result);
+                retVal = "Error while removing val1::val2 from server: "
+                    + result;
+              }
             }
-          }
           }
         }
         return retVal;
@@ -296,7 +311,7 @@ public class Util {
     Log.d(TAG, "Message sent to displayMsg() => Connected to opponent:"
         + opponentName + " (" + opponentRegId + ")");
   }
-  
+
   public static int[][] getInitialScoreboard() {
     int[][] scoreboardArr = new int[Constants.NO_OF_ROUNDS][2];
     for (int i = 0; i < Constants.NO_OF_ROUNDS; i++) {
@@ -305,27 +320,29 @@ public class Util {
     }
     return scoreboardArr;
   }
-  
-  public static int[][] scoreboardStrToArr(String scoreboardStr){
-//    Log.d(TAG, "Converting scoreboard str to array");
-//    Log.d(TAG, "Input scoreboardStr = " + scoreboardStr);
+
+  public static int[][] scoreboardStrToArr(String scoreboardStr) {
+    // Log.d(TAG, "Converting scoreboard str to array");
+    // Log.d(TAG, "Input scoreboardStr = " + scoreboardStr);
     int[][] scoreboardArr = new int[Constants.NO_OF_ROUNDS][2];
     String[] roundArr = scoreboardStr.split(",");
     for (int i = 0; i < roundArr.length; i++) {
       String[] scoreArr = roundArr[i].split("-");
-//      Log.d(TAG, "i = " + i);
-//      Log.d(TAG, "scoreArr[0] = " + scoreArr[0]);
-//      Log.d(TAG, "Integer.parseInt(scoreArr[0]) = " + Integer.parseInt(scoreArr[0]));
-//      Log.d(TAG, "scoreArr[1] = " + scoreArr[1]);
-//      Log.d(TAG, "Integer.parseInt(scoreArr[1]) = " + Integer.parseInt(scoreArr[1]));
-      
+      // Log.d(TAG, "i = " + i);
+      // Log.d(TAG, "scoreArr[0] = " + scoreArr[0]);
+      // Log.d(TAG, "Integer.parseInt(scoreArr[0]) = " +
+      // Integer.parseInt(scoreArr[0]));
+      // Log.d(TAG, "scoreArr[1] = " + scoreArr[1]);
+      // Log.d(TAG, "Integer.parseInt(scoreArr[1]) = " +
+      // Integer.parseInt(scoreArr[1]));
+
       scoreboardArr[i][0] = Integer.parseInt(scoreArr[0]);
       scoreboardArr[i][1] = Integer.parseInt(scoreArr[1]);
     }
     return scoreboardArr;
   }
-  
-  public static String scoreboardArrToStr(int[][] scoreboardArr){
+
+  public static String scoreboardArrToStr(int[][] scoreboardArr) {
     StringBuilder scoreboardStr = new StringBuilder();
     for (int i = 0; i < scoreboardArr.length; i++) {
       int[] scoreArr = scoreboardArr[i];
@@ -337,11 +354,12 @@ public class Util {
     scoreboardStr.substring(0, scoreboardStr.length() - 1);
     return scoreboardStr.toString();
   }
-  
-  public static void printScoreboard(int[][] scoreboardArr){
+
+  public static void printScoreboard(int[][] scoreboardArr) {
     Log.d(TAG, "\n Scoreboard:");
     for (int i = 0; i < scoreboardArr.length; i++) {
-      Log.d(TAG, "Round " + (i + 1) + ": " + scoreboardArr[i][0] + " - " + scoreboardArr[i][1]);
+      Log.d(TAG, "Round " + (i + 1) + ": " + scoreboardArr[i][0] + " - "
+          + scoreboardArr[i][1]);
     }
   }
 
@@ -350,11 +368,13 @@ public class Util {
     int[][] scoreboardArr = Util.scoreboardStrToArr(scoreboardStr);
     int p1Total = 0, p2Total = 0;
     for (int i = 0; i < scoreboardArr.length; i++) {
-      retStr.append(" Round " + (i + 1) + ": \t \t" + scoreboardArr[i][0] + "  \t \t   " + scoreboardArr[i][1] + "\n");
+      retStr.append(" Round " + (i + 1) + ": \t \t" + scoreboardArr[i][0]
+          + "  \t \t   " + scoreboardArr[i][1] + "\n");
       p1Total += scoreboardArr[i][0];
       p2Total += scoreboardArr[i][1];
     }
-    retStr.append("\n Total: \t \t \t" + p1Total + "  \t \t   " + p2Total + "\n");
+    retStr.append("\n Total: \t \t \t" + p1Total + "  \t \t   " + p2Total
+        + "\n");
     return retStr.toString();
   }
 
@@ -375,7 +395,8 @@ public class Util {
 
   public static void updateTopScorersList(String username, String totalScore,
       String currentDateTime) {
-    Log.d(TAG, "\n\n\n Adding (" + totalScore + "-" + username + "-" + currentDateTime + ") on server.\n\n\n");
+    Log.d(TAG, "\n\n\n Adding (" + totalScore + "-" + username + "-"
+        + currentDateTime + ") on server.\n\n\n");
     new AsyncTask<String, Integer, String>() {
       @Override
       protected String doInBackground(String... params) {
@@ -393,12 +414,14 @@ public class Util {
             Log.d(TAG, "no such key: " + Constants.TOP_SCORERS_LIST);
             // No player waiting... put your own regId
             result = KeyValueAPI.put(Constants.TEAM_NAME, Constants.PASSWORD,
-                Constants.TOP_SCORERS_LIST, totalScore + "-" + username + "-" + currentDateTime);
+                Constants.TOP_SCORERS_LIST, totalScore + "-" + username + "-"
+                    + currentDateTime);
             if (!result.contains("Error")) {
               // displayMsg("No player waiting... putting your regId "
               // + myRegId + " in WAITING_PLAYER.");
               retVal = "Top scorers list empty... storing your entry: '"
-                  + totalScore + "-" + username + "-" + currentDateTime + "' on server.";
+                  + totalScore + "-" + username + "-" + currentDateTime
+                  + "' on server.";
             } else {
               // displayMsg("Error while putting your regId on server: "
               // + result);
@@ -408,27 +431,30 @@ public class Util {
           } else {
             Log.d(TAG, "key exists: " + Constants.TOP_SCORERS_LIST);
             Log.d(TAG, "\n topScorersVal: " + topScorersVal);
-            
-            String sortedTopScorersVal = getSortedTopScorersVal(topScorersVal, totalScore, username, currentDateTime);
-            
+
+            String sortedTopScorersVal = getSortedTopScorersVal(topScorersVal,
+                totalScore, username, currentDateTime);
+
             Log.d(TAG, "\n Sorted topScorersVal: " + sortedTopScorersVal);
-            
-         // store on server
+
+            // store on server
             result = KeyValueAPI.put(Constants.TEAM_NAME, Constants.PASSWORD,
                 Constants.TOP_SCORERS_LIST, sortedTopScorersVal);
 
             if (!result.contains("Error")) {
-              // displayMsg("Stored 'totalScore-username-currentDateTime' : '" +  totalScore 
-//              + "-" + username + "-" + currentDateTime + "' on server.");
-              retVal = "Stored 'totalScore-username-currentDateTime' : '" +  totalScore 
-                  + "-" + username + "-" + currentDateTime + "' on server.";
+              // displayMsg("Stored 'totalScore-username-currentDateTime' : '" +
+              // totalScore
+              // + "-" + username + "-" + currentDateTime + "' on server.");
+              retVal = "Stored 'totalScore-username-currentDateTime' : '"
+                  + totalScore + "-" + username + "-" + currentDateTime
+                  + "' on server.";
             } else {
               // displayMsg("Error while putting your username-regId on server: "
               // + result);
               retVal = "Error while putting 'totalScore-username-currentDateTime' on server: "
                   + result;
             }
-           
+
           }
         }
         return retVal;
@@ -443,14 +469,16 @@ public class Util {
   }
 
   @SuppressWarnings("unchecked")
-  protected static String getSortedTopScorersVal(String topScorersVal, String totalScore, String username, String currentDateTime) {
+  protected static String getSortedTopScorersVal(String topScorersVal,
+      String totalScore, String username, String currentDateTime) {
     StringBuilder sortedTopScorersVal = new StringBuilder();
-    Map<Integer, String> topScorersMap =  getTopScorersMap(topScorersVal);
-    topScorersMap.put(Integer.parseInt(totalScore), username + "-" + currentDateTime);
-    
-    List<Integer> sortedKeys=new ArrayList<Integer>(topScorersMap.keySet());
+    Map<Integer, String> topScorersMap = getTopScorersMap(topScorersVal);
+    topScorersMap.put(Integer.parseInt(totalScore), username + "-"
+        + currentDateTime);
+
+    List<Integer> sortedKeys = new ArrayList<Integer>(topScorersMap.keySet());
     Collections.sort(sortedKeys, Collections.reverseOrder());
-    
+
     for (int score : sortedKeys) {
       sortedTopScorersVal.append(",");
       String tempStr = score + "-" + topScorersMap.get(score);
@@ -475,16 +503,17 @@ public class Util {
 
   public static String getFormatedTopScorersStr(String topScorersVal) {
     StringBuilder formattedTopScorersVal = new StringBuilder();
-    Map<Integer, String> topScorersMap =  getTopScorersMap(topScorersVal);
-    
-    List<Integer> sortedKeys=new ArrayList<Integer>(topScorersMap.keySet());
+    Map<Integer, String> topScorersMap = getTopScorersMap(topScorersVal);
+
+    List<Integer> sortedKeys = new ArrayList<Integer>(topScorersMap.keySet());
     Collections.sort(sortedKeys, Collections.reverseOrder());
-    
+
     formattedTopScorersVal.append(" Score \t Name \t \t Date-Time \n \n");
     for (int score : sortedKeys) {
-      String tempStr =  topScorersMap.get(score);
+      String tempStr = topScorersMap.get(score);
       String[] tempStrArr = tempStr.split("-");
-      formattedTopScorersVal.append("\t " + score + "  \t \t " + tempStrArr[0] + "  " + tempStrArr[1] + "\n\n");
+      formattedTopScorersVal.append("\t " + score + "  \t \t " + tempStrArr[0]
+          + "  " + tempStrArr[1] + "\n\n");
     }
     return formattedTopScorersVal.toString();
   }
@@ -496,5 +525,174 @@ public class Util {
     Log.d(TAG, "Toast msg: " + msg);
     Log.d(TAG, "\n===================================================\n");
   }
-  
+
+  /**
+   * Converts given time in seconds to a string format 'mm:ss'
+   * 
+   * @param time
+   * @return
+   */
+  public static String getTimeStr(int time) {
+    int min, sec;
+    min = time / 60;
+    sec = time % 60;
+    return (min + ":" + sec);
+  }
+
+  /**
+   * Reads the specified no of images from file system (internal memory default
+   * location)
+   * 
+   * @param totalNoOfImgs
+   * @return
+   */
+  public static Bitmap[] getImgsToMatch(int totalNoOfImgs, Context context) {
+    Bitmap[] bitmapImgArr = new Bitmap[totalNoOfImgs];
+    File mediaStorageDir = new File(
+        context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+        ProjectConstants.IMG_DIR_NAME);
+    BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inSampleSize = ProjectConstants.SCALE;
+
+    for (int i = 0; i < totalNoOfImgs; i++) {
+      Bitmap currBitmap = BitmapFactory.decodeFile(mediaStorageDir.getPath()
+          + File.separator + ProjectConstants.IMG_NAME_PREFIX + (i + 1),
+          options);
+      bitmapImgArr[i] = currBitmap;
+    }
+    return bitmapImgArr;
+  }
+
+  /**
+   * Store the given image on file system (internal memory default location)
+   * suffixed with given image no
+   * 
+   * @param currImgData
+   * @param currImgNo
+   */
+  public static void storeImg(byte[] imgData, int imgNo, Context context) {
+    File pictureFile = getOutputMediaFile(ProjectConstants.IMG_NAME_PREFIX
+        + imgNo, context);
+    if (pictureFile == null) {
+      Log.d(TAG, "Error creating media file, check storage permissions!");
+      return;
+    }
+    try {
+      FileOutputStream fos = new FileOutputStream(pictureFile);
+      fos.write(imgData);
+      fos.close();
+    } catch (FileNotFoundException e) {
+      Log.d(TAG, "File not found: " + e.getMessage());
+    } catch (IOException e) {
+      Log.d(TAG, "Error accessing file: " + e.getMessage());
+    }
+  }
+
+  /**
+   * Create a File for saving an image
+   * 
+   * @param imgName
+   * @param context
+   * @return
+   */
+  public static File getOutputMediaFile(String imgName, Context context) {
+    // To be safe, you should check that the SDCard is mounted
+    // using Environment.getExternalStorageState() before doing this.
+
+    File mediaStorageDir = new File(
+        context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+        ProjectConstants.IMG_DIR_NAME);
+    // This location works best if you want the created images to be shared
+    // between applications and persist after your app has been uninstalled.
+
+    // Create the storage directory if it does not exist
+    if (!mediaStorageDir.exists()) {
+      if (!mediaStorageDir.mkdirs()) {
+        Log.d(TAG, "failed to create directory: "
+            + ProjectConstants.IMG_DIR_NAME);
+        return null;
+      }
+    }
+
+    // Create a media file name
+    // String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+    // .format(new Date());
+    File mediaFile = new File(mediaStorageDir.getPath() + File.separator
+        + imgName);
+    Log.d(TAG, "Storing img at path: " + mediaStorageDir.getPath()
+        + File.separator + imgName);
+    return mediaFile;
+  }
+
+  /**
+   * Calculates the PSNR between the matrices for given two images
+   * 
+   * @param i1
+   *          - matrix for 1st image
+   * @param i2
+   *          - matrix for 2nd image
+   * @return
+   */
+  public static double getPSNR(Mat i1, Mat i2) {
+    Log.d(TAG, "Inside getPSNR()");
+    Log.d(TAG, "Rows i1: " + i1.rows() + " Cols i1: " + i1.cols());
+    Log.d(TAG, "Rows i2: " + i2.rows() + " Cols i2: " + i2.cols());
+    Mat s1 = new Mat();
+    Core.absdiff(i1, i2, s1); // |I1 - I2|
+    s1.convertTo(s1, CvType.CV_32F); // cannot make a square on 8 bits
+    s1 = s1.mul(s1); // |I1 - I2|^2
+
+    Scalar s = Core.sumElems(s1); // sum elements per channel
+
+    double sse = s.val[0] + s.val[1] + s.val[2]; // sum channels
+
+    Log.d(TAG, "sse: " + sse);
+
+    if (sse <= 1e-10) // for small values return zero
+      return 0;
+    else {
+      double mse = sse / (double) (i1.channels() * i1.total());
+      double psnr = 10.0 * Math.log10((255 * 255) / mse);
+      Log.d(TAG, "psnr: " + psnr);
+      return psnr;
+    }
+  }
+
+  /**
+   * Converts the given byte[] into a Bitmap for the corresponding image
+   * 
+   * @param imgData
+   * @return
+   */
+  public static Bitmap convertByteArrToBitmap(byte[] imgData) {
+    BitmapFactory.Options op = new BitmapFactory.Options();
+    op.inSampleSize = ProjectConstants.SCALE;
+    Bitmap bmpImg = BitmapFactory.decodeByteArray(imgData, 0, imgData.length,
+        op);
+    return bmpImg;
+  }
+
+  /**
+   * Convert given Bitmap to Mat
+   * 
+   * @param bmpImg
+   * @return
+   */
+  public static Mat convertBmpToMat(Bitmap bmpImg) {
+    Mat mat = new Mat(bmpImg.getWidth(), bmpImg.getHeight(), CvType.CV_8UC1);
+    Utils.bitmapToMat(bmpImg, mat);
+    return mat;
+  }
+
+  public static boolean imagesMatch(Mat imgMat1, Mat imgMat2) {
+    boolean isMatching = false;
+    double psnr = getPSNR(imgMat1, imgMat2);
+
+    if (psnr >= ProjectConstants.PSNR_THRESHOLD) {
+      isMatching = true;
+    } else {
+      isMatching = false;
+    }
+    return isMatching;
+  }
 }

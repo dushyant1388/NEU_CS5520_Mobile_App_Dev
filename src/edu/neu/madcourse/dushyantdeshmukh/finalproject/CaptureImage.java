@@ -39,13 +39,12 @@ public class CaptureImage extends Activity implements OnClickListener {
   TextView imgCountView;
   ProgressDialog progress;
   ImageView capturedImgView;
-  Bitmap currImg;
+  byte[] currImgData;
   Bitmap imgArr[];
   private Bitmap bmpImg;
-  private int scale = 8;  //  lesser the value clearer the img
-
+  
   int currImgNo = 1;
-  int noOfImgs = 5;
+  int totalNoOfImgs = ProjectConstants.TOTAL_NO_OF_IMAGES;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +97,7 @@ public class CaptureImage extends Activity implements OnClickListener {
     // Show camera preview and hide the captured img imageView
     showCapturedImg(false);
 
-    imgArr = new Bitmap[noOfImgs];
+    imgArr = new Bitmap[totalNoOfImgs];
     // Initialize ProgressDialog
     progress = new ProgressDialog(this);
     progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -152,16 +151,17 @@ public class CaptureImage extends Activity implements OnClickListener {
   }
 
   private void storeCurrImg() {
-    imgCountView.setText("Img Count: " + currImgNo);
+    imgCountView.setText("Img Count: " + currImgNo + "/" + totalNoOfImgs);
     if (imgArr == null) {
-      imgArr = new Bitmap[noOfImgs];
+      imgArr = new Bitmap[totalNoOfImgs];
     }
-    imgArr[currImgNo - 1] = currImg;
+    imgArr[currImgNo - 1] = Util.convertByteArrToBitmap(currImgData);
+    Util.storeImg(currImgData, currImgNo, context);
     currImgNo++;
     
-    if (currImgNo > noOfImgs) {
-      // fnished capturing images
-      Util.showToast(context, "Finished capturing " + noOfImgs + " images",
+    if (currImgNo > totalNoOfImgs) {
+      // finished capturing images
+      Util.showToast(context, "Finished capturing " + totalNoOfImgs + " images",
           3000);
     }
   }
@@ -171,7 +171,7 @@ public class CaptureImage extends Activity implements OnClickListener {
       @Override
       protected void onPreExecute() {
         super.onPreExecute();
-        progress.setMessage("Processing captured image...");
+        progress.setMessage(ProjectConstants.CAPTURE_WAIT_MSG);
         progress.show();
       }
 
@@ -215,13 +215,13 @@ public class CaptureImage extends Activity implements OnClickListener {
       // Replace Capture btn with Accept and reject btns
       // showCaptureBtn(false);
 
-      BitmapFactory.Options o2 = new BitmapFactory.Options();
-      o2.inSampleSize = scale;
-
+      currImgData = data;
+      
       if (bmpImg != null) {
         bmpImg.recycle();
       }
-      bmpImg = BitmapFactory.decodeByteArray(data, 0, data.length, o2);
+      bmpImg = Util.convertByteArrToBitmap(data);
+      
       // show captured image in image view
       capturedImgView.setImageBitmap(bmpImg);
       showCapturedImg(true);
