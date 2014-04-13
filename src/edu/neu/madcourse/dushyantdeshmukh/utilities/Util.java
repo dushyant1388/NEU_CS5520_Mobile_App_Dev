@@ -699,41 +699,31 @@ public class Util {
     }
     return isMatching;
   }
-  
-  public static void showSwapPhonesAlertDialog(Context context, boolean isCaptureEventTrue){
-	  
-	  currentContext = context;
-	  AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-				context);
-	  
-	// set title
-	  alertDialogBuilder.setTitle("Swap Phones");
 
-	  if(isCaptureEventTrue){
-		// set dialog message
-		alertDialogBuilder
-			.setMessage("Swap Phone and ask opponent to press start to capture images")
-			.setCancelable(false)
-			.setPositiveButton("Start",new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog,int id) {
-					dialog.cancel();
-					Connection connection = new Connection();
-					connection.startCaptureActivity();					
-				}
-		});
-	  }else{
-		// set dialog message
-			alertDialogBuilder
-				.setMessage("Swap Phone and ask opponent to start matching challenge")
-				.setCancelable(false)
-				.setNegativeButton("Start",new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,int id) {
-						dialog.cancel();
-						// start matching activity				
-					}
-		    });
-	  }
-	  alertDialogBuilder.create();
-	
+  public static void showSwapPhonesAlertDialog(Context context,
+      boolean isCaptureEventTrue) {
+
+    currentContext = context;
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+    // set title
+    alertDialogBuilder.setTitle(ProjectConstants.SWAP_TITLE);
+
+    // set dialog message
+    alertDialogBuilder
+        .setMessage(
+            isCaptureEventTrue ? ProjectConstants.CAPTURE_SWAP_MSG
+                : ProjectConstants.MATCH_SWAP_MSG).setCancelable(false)
+        .setPositiveButton(ProjectConstants.START, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int id) {
+            dialog.cancel();
+            Connection connection = new Connection();
+            connection.startCaptureActivity();
+          }
+        });
+
+    AlertDialog alertDialog = alertDialogBuilder.create();
+    alertDialog.show();
+
   }
 }
