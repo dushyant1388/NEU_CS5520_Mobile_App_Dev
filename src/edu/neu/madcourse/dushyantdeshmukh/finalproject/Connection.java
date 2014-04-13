@@ -39,7 +39,7 @@ import android.widget.Toast;
 public class Connection extends Activity implements OnClickListener{
 
 
-	  protected static final String TAG = "CHOOSE OPPONENT ACTIVITY";
+	  protected static final String TAG = "CONNECTION ACTIVITY";
 	  private Intent i;
 	  private Button findOpponentButton, submitUserNameButton,backButton;
 	  private EditText userNameEditText, opponentNameEditText;
@@ -143,7 +143,7 @@ public class Connection extends Activity implements OnClickListener{
 	    registerReceiver(receiver, new IntentFilter(ProjectConstants.INTENT_ACTION_CONNECTION));
 	    handleNotification(projPreferences);
 	  }
-
+ 
 	  @Override
 	  protected void onPause() {
 	    super.onPause();
@@ -337,7 +337,7 @@ public class Connection extends Activity implements OnClickListener{
 //	        String opponentName = dataMap.get(Constants.KEY_USERNAME);
 	        initiateGame(false);
 	        
-	      } else if (msgType.equals(Constants.MSG_TYPE_2P_ACK_REJECT)) {
+	      } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_ACK_REJECT)) {
 	    	  Log.d(TAG, "Inside MSG_TYPE_FP_ACK_REJECT = " + ProjectConstants.MSG_TYPE_FP_ACK_REJECT);
 	        // Show 'Request reject' toast and stay on Choose Opponent activity
 //	        String opponentName = dataMap.get(Constants.KEY_USERNAME);
