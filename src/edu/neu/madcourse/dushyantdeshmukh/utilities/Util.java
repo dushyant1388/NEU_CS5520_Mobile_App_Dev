@@ -28,11 +28,14 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.highgui.Highgui;
 
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.ProjectConstants;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TwoPlayerWordGame;
 import edu.neu.mhealth.api.KeyValueAPI;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
@@ -48,6 +51,7 @@ import android.widget.Toast;
 public class Util {
 
   private static final String TAG = "Utility class";
+  private static Context currentContext;
 
   public static HashMap<String, String> getDataMap(String bundlesStr, String tag) {
     HashMap<String, String> dataMap = new HashMap<String, String>();
@@ -694,5 +698,42 @@ public class Util {
       isMatching = false;
     }
     return isMatching;
+  }
+  
+  public static void showSwapPhonesAlertDialog(Context context, boolean isCaptureEventTrue){
+	  
+	  currentContext = context;
+	  AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				context);
+	  
+	// set title
+	  alertDialogBuilder.setTitle("Swap Phones");
+
+	  if(isCaptureEventTrue){
+		// set dialog message
+		alertDialogBuilder
+			.setMessage("Swap Phone and ask opponent to press start to capture images")
+			.setCancelable(false)
+			.setPositiveButton("Start",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					dialog.cancel();
+					Connection connection = new Connection();
+					connection.startCaptureActivity();					
+				}
+		});
+	  }else{
+		// set dialog message
+			alertDialogBuilder
+				.setMessage("Swap Phone and ask opponent to start matching challenge")
+				.setCancelable(false)
+				.setNegativeButton("Start",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						dialog.cancel();
+						// start matching activity				
+					}
+		    });
+	  }
+	  alertDialogBuilder.create();
+	
   }
 }

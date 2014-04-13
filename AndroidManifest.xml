@@ -99,7 +99,8 @@
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Home" 
             	  android:label="@string/final_proj_name"
-            	  android:icon="@drawable/final_proj_app_icon">
+            	  android:icon="@drawable/final_proj_app_icon"
+            	  android:screenOrientation="landscape">
             <intent-filter android:label="@string/final_proj_icon_name">
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -115,5 +116,10 @@
             android:screenOrientation="landscape" 
             android:label="@string/final_proj_match_label" >
         </activity>
+        
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection"
+            android:screenOrientation="landscape"
+            android:label="@string/final_proj_connection_label">
+        </activity>e
     </application>
 </manifest>

@@ -290,12 +290,12 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="sudoku_keypad_title">Keypad</string>
     <string name="sudoku_about_title">About Android Sudoku</string>
     <string name="sudoku_about_text">\
-Sudoku is a logic-based number placement puzzle.
-Starting with a partially completed 9x9 grid, the
-objective is to fill the grid so that each
-row, each column, and each of the 3x3 boxes
-(also called <i>blocks</i>) contains the digits
-1 to 9 exactly once.</string>
+				Sudoku is a logic-based number placement puzzle.
+				Starting with a partially completed 9x9 grid, the
+				objective is to fill the grid so that each
+				row, each column, and each of the 3x3 boxes
+				(also called <i>blocks</i>) contains the digits
+				1 to 9 exactly once.</string>
 
     <!-- Final Project -->
     <string name="final_proj_name">Match Me If You Can</string>
@@ -306,9 +306,22 @@ row, each column, and each of the 3x3 boxes
     <string name="final_proj_reject_btn">Reject</string>
     <string name="final_proj_match_btn">Match</string>
     <string name="final_proj_Skip_btn">Skip</string>
-    <string name="final_proj_img_count_textview">Img Count: </string>
 	<string name="final_proj_single_phone_mode">Single Phone Mode</string>
     <string name="final_proj_dual_phone_mode">Dual Phone Mode</string>
     <string name="final_proj_exit_game">Exit Game</string>
+    
+    <string name="final_proj_choose_opponent_title">Select Opponent</string>
+    <string name="final_proj_opponent_name_hint">Enter opponent username here&#8230;</string>
+    <string name="final_proj_user_name_hint">Enter user username here&#8230;</string>
+    <string name="final_proj_submit_user_name">Submit User Name</string>
+    <string name="final_proj_find_opponent">Find Opponent</string>
+    <string name="final_proj_back">Back</string>
+    <string name="final_proj_connection_label">Find Opponent</string>
+    
+    <string name="final_proj_skip_btn">Skip</string>
+    <string name="final_proj_end_btn">End</string>
+    <string name="final_proj_img_count_textview">Img Count: 0</string>
+    <string name="final_proj_time_elapsed_textview"> 0 sec</string>
+    <string name="final_proj_match_label">Match</string>
 
 </resources>

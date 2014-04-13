@@ -7,6 +7,8 @@ import java.util.Map;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import edu.neu.madcourse.dushyantdeshmukh.communication.TestInterphoneComm;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.ProjectConstants;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.ChooseOpponent;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Game;
@@ -64,15 +66,6 @@ public class GcmIntentService extends IntentService {
       } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
         String bundleVal = extras.toString();
         Log.d(TAG, "bundleVal = " + bundleVal);
-        // This loop represents the service doing some work.
-        // for (int i=0; i<5; i++) {
-        // Log.i(TAG, "Working... " + (i+1)
-        // + "/5 @ " + SystemClock.elapsedRealtime());
-        // try {
-        // Thread.sleep(5000);
-        // } catch (InterruptedException e) {
-        // }
-        // }
         Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
         Log.i(TAG, "Received: " + extras.toString());
 
@@ -105,7 +98,48 @@ public class GcmIntentService extends IntentService {
     if (dataMap.containsKey(Constants.KEY_MSG_TYPE)) {
       String msgType = dataMap.get(Constants.KEY_MSG_TYPE);
       Log.d(TAG, Constants.KEY_MSG_TYPE + ": " + msgType);
-      if (msgType.equals(Constants.MSG_TYPE_2P_CONNECT)) {
+      if (msgType.equals(ProjectConstants.MSG_TYPE_FP_CONNECT)) {
+          Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + ProjectConstants.MSG_TYPE_FP_CONNECT);
+        /* opponentName = dataMap.get(ProjectConstants.KEY_USERNAME);
+         opponentRegId = dataMap.get(ProjectConstants.KEY_REG_ID);*/
+         i = new Intent(this, Connection.class);
+         
+         /*i.putExtra(Constants.EXTRA_OPPONENT_NAME, opponentName);
+         i.putExtra(Constants.EXTRA_OPPONENT_REDID, opponentRegId);*/
+        
+         process2PMsgBroadcast(data, i, ProjectConstants.INTENT_ACTION_CONNECTION);
+         
+       } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_ACK_ACCEPT)) {
+       Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + ProjectConstants.MSG_TYPE_FP_ACK_ACCEPT);
+      /*   opponentName = dataMap.get(Constants.KEY_USERNAME);
+         opponentRegId = dataMap.get(Constants.KEY_REG_ID);*/
+         i = new Intent(this, Connection.class);
+        /* i.putExtra(Constants.EXTRA_MSG, "Game started with opponent '" + opponentName + "'.\n"
+             + "Your opponent goes first!");
+         i.putExtra(Constants.EXTRA_ROUND, 0);
+         i.putExtra(Constants.EXTRA_IS_PLAYER_ONE, false);*/
+
+         process2PMsgBroadcast(data, i, ProjectConstants.INTENT_ACTION_CONNECTION);
+         
+       } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_ACK_REJECT)) {
+       Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + ProjectConstants.MSG_TYPE_FP_ACK_REJECT);
+       /*  opponentName = dataMap.get(Constants.KEY_USERNAME);
+         Log.d(TAG, "Game request denied by user '" + opponentName + "'.");*/
+         i = new Intent(this, Connection.class);
+
+         process2PMsgBroadcast(data, i, ProjectConstants.INTENT_ACTION_CONNECTION);
+         
+       } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_MOVE)) {
+         /* Log.d(TAG, "Inside MSG_TYPE_MOVE = " + Constants.MSG_TYPE_2P_MOVE);
+         i = new Intent(this, Game.class);
+         process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_2P_WORD_GAME);*/
+
+       } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_GAME_OVER)) {
+        /* Log.d(TAG, "Inside MSG_TYPE_MOVE = " + Constants.MSG_TYPE_2P_QUIT);
+         i = new Intent(this, Game.class);
+         process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_2P_WORD_GAME);*/
+         
+       }else if (msgType.equals(Constants.MSG_TYPE_2P_CONNECT)) {
          Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + Constants.MSG_TYPE_2P_CONNECT);
         opponentName = dataMap.get(Constants.KEY_USERNAME);
         opponentRegId = dataMap.get(Constants.KEY_REG_ID);
@@ -125,9 +159,7 @@ public class GcmIntentService extends IntentService {
             + "Your opponent goes first!");
         i.putExtra(Constants.EXTRA_ROUND, 0);
         i.putExtra(Constants.EXTRA_IS_PLAYER_ONE, false);
-//        i.putExtra(Constants.EXTRA_SCOREBOARD, Util.getInitialScoreboard());
-//        process2PMsg(data, i);
-//        process2PMsgBroadcast(data, i, "MSG_FOR_OPPONENT");
+
         process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_CHOOSE_OPPONENT);
         
       } else if (msgType.equals(Constants.MSG_TYPE_2P_ACK_REJECT)) {
@@ -135,33 +167,11 @@ public class GcmIntentService extends IntentService {
         opponentName = dataMap.get(Constants.KEY_USERNAME);
         Log.d(TAG, "Game request denied by user '" + opponentName + "'.");
         i = new Intent(this, ChooseOpponent.class);
-  
-//        process2PMsg(data, i);
-//        process2PMsgBroadcast(data, i, "MSG_FOR_OPPONENT");
+
         process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_CHOOSE_OPPONENT);
         
       } else if (msgType.equals(Constants.MSG_TYPE_2P_MOVE)) {
          Log.d(TAG, "Inside MSG_TYPE_MOVE = " + Constants.MSG_TYPE_2P_MOVE);
-//        String msgFromOpponent = dataMap.get(Constants.KEY_MESSAGE);
-        /*
-        int roundNo = Integer.parseInt(dataMap.get(Constants.KEY_ROUND));
-        int oppScore = Integer.parseInt(dataMap.get(Constants.KEY_OPP_SCORE));
-        String oppName = dataMap.get(Constants.KEY_OPP_NAME);
-        boolean isPlayerOne = Boolean.parseBoolean(dataMap.get(Constants.KEY_IS_PLAYER_ONE));
-//        Log.d(TAG, "Message from opponent: "
-//            + msgFromOpponent);
-        i = new Intent(this, MsgFromOpponent.class);
-        i.putExtra(Constants.EXTRA_IS_PLAYER_ONE, isPlayerOne);
-        i.putExtra(Constants.EXTRA_ROUND, roundNo);
-        i.putExtra(Constants.EXTRA_OPPONENT_NAME, oppName);
-        i.putExtra(Constants.EXTRA_OPP_CURR_SCORE, oppScore);
-        
-        showDebugToast("starting MsgFromOpponent intent"
-            + "\n isPlayerOne - " + isPlayerOne
-            + "\n roundNo - " + roundNo
-            + "\n oppName - " + oppName
-            + "\n oppScore - " + oppScore);
-        */
         i = new Intent(this, Game.class);
         process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_2P_WORD_GAME);
 
@@ -276,44 +286,4 @@ public class GcmIntentService extends IntentService {
     // msgTxtView.setText(msg);
   }
   
-  ////////////////////////////////
-  /*
-  protected Intent getTargetIntent(String data) {
-    Log.d(TAG, "Inside getTargetIntent()");
-    Intent i = null ;
-    String opponentName, opponentRegId;
-    HashMap<String, String> dataMap = Util.getDataMap(data, TAG);
-    if (dataMap.containsKey(Constants.KEY_MSG_TYPE)) {
-      String msgType = dataMap.get(Constants.KEY_MSG_TYPE);
-      Log.d(TAG, Constants.KEY_MSG_TYPE + ": " + msgType);
-      if (msgType.equals(Constants.MSG_TYPE_2P_CONNECT)) {
-        // Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + MSG_TYPE_CONNECT);
-        opponentName = dataMap.get(Constants.KEY_USERNAME);
-        opponentRegId = dataMap.get(Constants.KEY_REG_ID);
-        i = new Intent(this, RequestFromOpponent.class);
-        i.putExtra(Constants.EXTRA_OPPONENT_NAME, opponentName);
-        i.putExtra(Constants.EXTRA_OPPONENT_REDID, opponentRegId);
-        
-      } else if (msgType.equals(Constants.MSG_TYPE_2P_ACK_ACCEPT)) {
-        opponentName = dataMap.get(Constants.KEY_USERNAME);
-        opponentRegId = dataMap.get(Constants.KEY_REG_ID);
-        i = new Intent(this, MsgFromOpponent.class);
-        i.putExtra(Constants.EXTRA_MSG, "Connected to '" + opponentName + "'.");
-        
-      } else if (msgType.equals(Constants.MSG_TYPE_2P_ACK_REJECT)) {
-        opponentName = dataMap.get(Constants.KEY_USERNAME);
-        Log.d(TAG, "Game request denied by user '" + opponentName + "'.");
-        i = new Intent(this, ChooseOpponent.class);
-        
-      } else if (msgType.equals(Constants.MSG_TYPE_2P_MOVE)) {
-        // Log.d(TAG, "Inside MSG_TYPE_MOVE = " + MSG_TYPE_MOVE);
-        String msgFromOpponent = dataMap.get(Constants.KEY_MESSAGE);
-        Log.d(TAG, "Message from opponent: "
-            + msgFromOpponent);
-        i = new Intent(this, Game.class);
-      }
-    }
-    return i;
-  }
-  */
 }
