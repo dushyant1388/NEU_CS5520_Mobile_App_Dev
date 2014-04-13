@@ -9,11 +9,11 @@ public class ProjectConstants {
 	  
 	 //   Connection ProjectConstants
 //	  public static final String KEY_MSG_TYPE = "MSG_TYPE";
-	  public static final String MSG_TYPE_FP_MOVE = "2P_MOVE";
-	  public static final String MSG_TYPE_FP_CONNECT = "2P_CONNECT";
-	  public static final String MSG_TYPE_FP_ACK_ACCEPT = "ACK_ACC";
-	  public static final String MSG_TYPE_FP_ACK_REJECT = "ACK_REJ";
-	  public static final String MSG_TYPE_FP_GAME_OVER = "GAME_OVER";
+	  public static final String MSG_TYPE_FP_MOVE = "FP_MOVE";
+	  public static final String MSG_TYPE_FP_CONNECT = "FP_CONNECT";
+	  public static final String MSG_TYPE_FP_ACK_ACCEPT = "FP_ACK_ACC";
+	  public static final String MSG_TYPE_FP_ACK_REJECT = "FP_ACK_REJ";
+	  public static final String MSG_TYPE_FP_GAME_OVER = "FP_GAME_OVER";
 	  public static final String FINAL_PROJECT = "FINAL_PROJ";
 	  
 	//  mHealth server constants

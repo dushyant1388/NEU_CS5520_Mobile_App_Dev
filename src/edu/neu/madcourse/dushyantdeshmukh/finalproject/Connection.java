@@ -160,6 +160,7 @@ public class Connection extends Activity implements OnClickListener{
 	    	 if(userName.equals("")){
 	    		 Util.showToast(context,"Please enter a non empty userName",Toast.LENGTH_LONG);
 	    	 }else {
+	    		this.username = userName;
 	    		userNameEditText.setText("");
 	    		updateUserDetailsInSharedPreferences(userName);
 	    		displayUserName(userName);
