@@ -51,7 +51,6 @@ import android.widget.Toast;
 public class Util {
 
   private static final String TAG = "Utility class";
-  private static Context currentContext;
 
   public static HashMap<String, String> getDataMap(String bundlesStr, String tag) {
     HashMap<String, String> dataMap = new HashMap<String, String>();
@@ -703,7 +702,6 @@ public class Util {
   public static void showSwapPhonesAlertDialog(Context context,
       boolean isCaptureEventTrue) {
 
-    currentContext = context;
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
     // set title

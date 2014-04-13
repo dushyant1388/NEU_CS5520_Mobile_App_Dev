@@ -60,7 +60,8 @@ public class Connection extends Activity implements OnClickListener{
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.final_proj_connection);
 
-	    context = getApplicationContext();
+//	    context = getApplicationContext();
+	    context = this;
 
 	    // Set up click listeners for all the buttons
 	    opponentNameEditText = (EditText) findViewById(R.id.final_proj_opponent_name_edittext);
@@ -385,7 +386,7 @@ public class Connection extends Activity implements OnClickListener{
 	    */
 		  
 		// Util method to show dialog  
-		Util.showSwapPhonesAlertDialog(context,true);
+		Util.showSwapPhonesAlertDialog(context, true);
 	    Util.storeOppnentInSharedpref(projPreferences, oppName, oppRegId);
 	    
 	   /* startActivity(i);*/
