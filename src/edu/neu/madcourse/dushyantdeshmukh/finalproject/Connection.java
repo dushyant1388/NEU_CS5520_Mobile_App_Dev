@@ -60,7 +60,6 @@ public class Connection extends Activity implements OnClickListener{
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.final_proj_connection);
 
-//	    context = getApplicationContext();
 	    context = this;
 
 	    // Set up click listeners for all the buttons
@@ -373,20 +372,8 @@ public class Connection extends Activity implements OnClickListener{
 	  }
 
 	  private void initiateGame(boolean asPLayerOne) {
-	    /*Intent i = new Intent(ChooseOpponent.this, Game.class);
-	    // i.putExtra(Constants.EXTRA_SCOREBOARD, this.scoreboard);
-	    i.putExtra(Constants.EXTRA_ROUND, 0);
-	    i.putExtra(Constants.EXTRA_IS_PLAYER_ONE, asPLayerOne);
-	    i.putExtra(Constants.EXTRA_INITIATE_GAME, false);
-	    i.putExtra(Constants.EXTRA_OPPONENT_NAME, oppName);
-	    
-//	    Toast.makeText(ChooseOpponent.this, "on Accept, setting roundNo = " + roundNo 
-//	        + "\n isPlayerOne = " + isPlayerOne, 3000).show();
-	 // Store opponent name and regId in SP
-	    */
-		  
 		// Util method to show dialog  
-		Util.showSwapPhonesAlertDialog(context, true);
+		Util.showSwapPhonesAlertDialog(context,this, true);
 	    Util.storeOppnentInSharedpref(projPreferences, oppName, oppRegId);
 	    
 	   /* startActivity(i);*/
@@ -447,17 +434,9 @@ public class Connection extends Activity implements OnClickListener{
 	  
 	  
 	  public void startCaptureActivity() {
-			Intent captureIntent = new Intent(context,MatchImage.class);
+			Intent captureIntent = new Intent(context,CaptureImage.class);
 			startActivity(captureIntent);	
 		}
-	  
-	  private void displayMsg(String msg) {
-	    Toast t = Toast.makeText(getApplicationContext(), msg, 2000);
-	    t.show();
-	    Log.d(TAG, "\n===================================================\n");
-	    Log.d(TAG, msg);
-	    Log.d(TAG, "\n===================================================\n");
-	  }
 	  
 	  private void registerInBackground() {
 	    	if(InternetConnUtil.isNetworkAvailable(context)){

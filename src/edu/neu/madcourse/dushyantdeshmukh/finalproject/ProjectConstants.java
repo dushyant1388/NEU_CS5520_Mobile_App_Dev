@@ -47,10 +47,10 @@ public class ProjectConstants {
 		  public static String IMG_DIR_NAME = "images_to_match";
 		  public static String IMG_NAME_PREFIX = "IMAGE_NO_";
 		  public static final int IMG_ALPHA = 85; // larger value indicates more focus on img to match
-      public static final CharSequence CAPTURE_SWAP_MSG = "Swap Phone and ask opponent to press start to capture images";
-      public static final CharSequence MATCH_SWAP_MSG = "Swap Phone and ask opponent to start matching challenge";
-      public static final CharSequence START = "Start";
-      public static final CharSequence SWAP_TITLE = "Swap Phones";
+      public static final String CAPTURE_SWAP_MSG = "Swap Phone and ask opponent to press start to capture images";
+      public static final String MATCH_SWAP_MSG = "Swap Phone and ask opponent to start matching challenge";
+      public static final String START = "Start";
+      public static final String SWAP_TITLE = "Swap Phones";
 		  
 		  //  Messages
 		  public static String MATCH_WAIT_MSG = "Matching image...";

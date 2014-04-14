@@ -12,6 +12,7 @@ import edu.neu.mhealth.api.KeyValueAPI;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -22,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewDebug.FlagToString;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,7 +52,7 @@ public class CaptureImage extends Activity implements OnClickListener {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    context = getApplicationContext();
+    context = this;
 
     // set camera preview as main layout for this activity
     setContentView(R.layout.final_proj_cam_preview);
@@ -163,6 +165,7 @@ public class CaptureImage extends Activity implements OnClickListener {
       // finished capturing images
       Util.showToast(context, "Finished capturing " + totalNoOfImgs + " images",
           3000);
+      Util.showSwapPhonesAlertDialog(context,this,false);
     }
   }
 
@@ -261,6 +264,12 @@ public class CaptureImage extends Activity implements OnClickListener {
 
     // Log.d(TAG, "\n Cancelling progress dialog... \n");
     // progress.cancel();
+  }
+
+  public void startMatchActivity() {
+	  Intent captureIntent = new Intent(context,MatchImage.class);
+	  captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+	  startActivity(captureIntent);		
   }
 
   /*

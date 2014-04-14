@@ -28,6 +28,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.highgui.Highgui;
 
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.CaptureImage;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.ProjectConstants;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
@@ -51,6 +52,8 @@ import android.widget.Toast;
 public class Util {
 
   private static final String TAG = "Utility class";
+  static Object staticObjectInstance;
+  static boolean isCaptureEvent;
 
   public static HashMap<String, String> getDataMap(String bundlesStr, String tag) {
     HashMap<String, String> dataMap = new HashMap<String, String>();
@@ -699,9 +702,10 @@ public class Util {
     return isMatching;
   }
 
-  public static void showSwapPhonesAlertDialog(Context context,
+  public static void showSwapPhonesAlertDialog(Context context,Object obj,
       boolean isCaptureEventTrue) {
-
+	  staticObjectInstance = obj;
+	  isCaptureEvent = isCaptureEventTrue;
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
     // set title
@@ -715,8 +719,11 @@ public class Util {
         .setPositiveButton(ProjectConstants.START, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
             dialog.cancel();
-            Connection connection = new Connection();
-            connection.startCaptureActivity();
+            if(isCaptureEvent){
+            	((Connection)staticObjectInstance).startCaptureActivity();
+            }else{
+            	((CaptureImage)staticObjectInstance).startMatchActivity();
+            }
           }
         });
 
