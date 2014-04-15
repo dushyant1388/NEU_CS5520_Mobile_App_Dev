@@ -34,6 +34,8 @@ public class ProjectConstants {
 		public static final String SENDER_ID = "94466405712";
 
 		public static final String INTENT_ACTION_CONNECTION = "INTENT_ACTION_CONNECTION";
+		public static final String INTENT_ACTION_GAME_MOVE_AND_FINISH = "INTENT_ACTION_GAME_MOVE_AND_FINISH";
+		
 		public static final String OPPONENT_NOT_FOUND = "Unable to find specified opponent."
 			      + "Please search for another user or connect to a random opponent.";
 	 
@@ -47,10 +49,15 @@ public class ProjectConstants {
 		  public static String IMG_DIR_NAME = "images_to_match";
 		  public static String IMG_NAME_PREFIX = "IMAGE_NO_";
 		  public static final int IMG_ALPHA = 85; // larger value indicates more focus on img to match
-      public static final String CAPTURE_SWAP_MSG = "Swap Phone and ask opponent to press start to capture images";
-      public static final String MATCH_SWAP_MSG = "Swap Phone and ask opponent to start matching challenge";
-      public static final String START = "Start";
-      public static final String SWAP_TITLE = "Swap Phones";
+		  public static final String CAPTURE_SWAP_MSG = "Swap Phone and ask opponent to press start to capture images";
+		  public static final String MATCH_SWAP_MSG = "Swap Phone and ask opponent to start matching challenge";
+		  public static final String START = "Start";
+		  public static final String SWAP_TITLE = "Swap Phones";
+		  
+		  
+		  public static final String TOTAL_MATCHING_TIME = "TOTAL_MATCHING_TIME";
+		  public static final String NUMBER_OF_IMAGES = "NUMBER_OF_IMAGES";
+		  
 		  
 		  //  Messages
 		  public static String MATCH_WAIT_MSG = "Matching image...";
@@ -61,4 +68,6 @@ public class ProjectConstants {
 		  
 		  public static int TOTAL_NO_OF_IMAGES = 2;
 	  
+		  
+		  public static String IS_OPPONENT_GAME_OVER = "IS_OPPONENT_GAME_OVER";
 }

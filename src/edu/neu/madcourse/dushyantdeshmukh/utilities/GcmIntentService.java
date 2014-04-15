@@ -8,6 +8,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import edu.neu.madcourse.dushyantdeshmukh.communication.TestInterphoneComm;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.MatchImage;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.ProjectConstants;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.ChooseOpponent;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
@@ -99,45 +100,28 @@ public class GcmIntentService extends IntentService {
       String msgType = dataMap.get(Constants.KEY_MSG_TYPE);
       Log.d(TAG, Constants.KEY_MSG_TYPE + ": " + msgType);
       if (msgType.equals(ProjectConstants.MSG_TYPE_FP_CONNECT)) {
-          Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + ProjectConstants.MSG_TYPE_FP_CONNECT);
-        /* opponentName = dataMap.get(ProjectConstants.KEY_USERNAME);
-         opponentRegId = dataMap.get(ProjectConstants.KEY_REG_ID);*/
+         Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + ProjectConstants.MSG_TYPE_FP_CONNECT);
          i = new Intent(this, Connection.class);
-         
-         /*i.putExtra(Constants.EXTRA_OPPONENT_NAME, opponentName);
-         i.putExtra(Constants.EXTRA_OPPONENT_REDID, opponentRegId);*/
-        
          process2PMsgBroadcast(data, i, ProjectConstants.INTENT_ACTION_CONNECTION);
          
        } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_ACK_ACCEPT)) {
-       Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + ProjectConstants.MSG_TYPE_FP_ACK_ACCEPT);
-      /*   opponentName = dataMap.get(Constants.KEY_USERNAME);
-         opponentRegId = dataMap.get(Constants.KEY_REG_ID);*/
-         i = new Intent(this, Connection.class);
-        /* i.putExtra(Constants.EXTRA_MSG, "Game started with opponent '" + opponentName + "'.\n"
-             + "Your opponent goes first!");
-         i.putExtra(Constants.EXTRA_ROUND, 0);
-         i.putExtra(Constants.EXTRA_IS_PLAYER_ONE, false);*/
-
+    	 Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + ProjectConstants.MSG_TYPE_FP_ACK_ACCEPT);
          process2PMsgBroadcast(data, i, ProjectConstants.INTENT_ACTION_CONNECTION);
          
        } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_ACK_REJECT)) {
-       Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + ProjectConstants.MSG_TYPE_FP_ACK_REJECT);
-       /*  opponentName = dataMap.get(Constants.KEY_USERNAME);
-         Log.d(TAG, "Game request denied by user '" + opponentName + "'.");*/
+         Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + ProjectConstants.MSG_TYPE_FP_ACK_REJECT);
          i = new Intent(this, Connection.class);
-
          process2PMsgBroadcast(data, i, ProjectConstants.INTENT_ACTION_CONNECTION);
          
        } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_MOVE)) {
-         /* Log.d(TAG, "Inside MSG_TYPE_MOVE = " + Constants.MSG_TYPE_2P_MOVE);
-         i = new Intent(this, Game.class);
-         process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_2P_WORD_GAME);*/
-
+         Log.d(TAG, "Inside MSG_TYPE_FP_MOVE = " + ProjectConstants.MSG_TYPE_FP_MOVE);
+         i = new Intent(this, MatchImage.class);
+         process2PMsgBroadcast(data, i, ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH);
+         
        } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_GAME_OVER)) {
-        /* Log.d(TAG, "Inside MSG_TYPE_MOVE = " + Constants.MSG_TYPE_2P_QUIT);
-         i = new Intent(this, Game.class);
-         process2PMsgBroadcast(data, i, Constants.INTENT_ACTION_2P_WORD_GAME);*/
+    	   Log.d(TAG, "Inside MSG_TYPE_FP_GAME_OVER = " + ProjectConstants.MSG_TYPE_FP_GAME_OVER);
+           i = new Intent(this, MatchImage.class);
+           process2PMsgBroadcast(data, i, ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH);
          
        }else if (msgType.equals(Constants.MSG_TYPE_2P_CONNECT)) {
          Log.d(TAG, "Inside MSG_TYPE_CONNECT = " + Constants.MSG_TYPE_2P_CONNECT);

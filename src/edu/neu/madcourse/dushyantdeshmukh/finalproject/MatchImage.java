@@ -1,6 +1,7 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,9 +12,15 @@ import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -30,7 +37,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 import edu.neu.madcourse.dushyantdeshmukh.R;
+import edu.neu.madcourse.dushyantdeshmukh.R.id;
 import edu.neu.madcourse.dushyantdeshmukh.trickiestpart.CameraPreview;
+import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 
 public class MatchImage extends Activity implements OnClickListener {
@@ -50,6 +59,9 @@ public class MatchImage extends Activity implements OnClickListener {
   boolean isImgMatchedArr[];
   private Bitmap bmpImg;
   private int scale = 8; // lesser the value clearer the img
+  
+  private BroadcastReceiver receiver;
+  private SharedPreferences projPreferences;
 
   int timeElapsed = 0; // in secs
   int imagesMatched = 0, currImgIndex = 0;
@@ -99,7 +111,8 @@ public class MatchImage extends Activity implements OnClickListener {
     Log.d(TAG, "Inside onCreate()");
     super.onCreate(savedInstanceState);
 
-    context = getApplicationContext();
+    context = this;
+    projPreferences = getSharedPreferences();
 
     // set camera preview as main layout for this activity
     setContentView(R.layout.final_proj_cam_preview);
@@ -154,6 +167,22 @@ public class MatchImage extends Activity implements OnClickListener {
         + "\n\n totalNoOfImgs = " + totalNoOfImgs);
     isImgMatchedArr = new boolean[totalNoOfImgs];
 
+
+    // This will handle the broadcast
+    receiver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        Log.d(TAG,"Inside onReceive of Broadcast receiver of ChooseOpponent.class");
+        String action = intent.getAction();
+        if (action.equals(ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH)) {
+          String data = intent.getStringExtra("data");
+          Log.d(TAG, "data = " + data);
+          handleOpponentResponse(data);
+        }
+      }
+    };
+    
+    
     // render first image to match
     renderImgToMatch(0);
 
@@ -185,7 +214,11 @@ public class MatchImage extends Activity implements OnClickListener {
       preview.addView(mPreview);
     }
     mCamera.startPreview();
-
+    
+ // This needs to be in the activity that will end up receiving the broadcast
+    registerReceiver(receiver, new IntentFilter(ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH));
+    handleNotification(projPreferences);
+    
   }
 
   @Override
@@ -293,7 +326,13 @@ public class MatchImage extends Activity implements OnClickListener {
 
         progress.cancel();
         Util.showToast(context, ProjectConstants.MATCH_SUCCESS_MSG, 1500);
-
+        
+        // Send game move message to opponent.
+        String oppRegId = projPreferences.getString(ProjectConstants.PREF_OPPONENT_REG_ID, null);
+        if(oppRegId != null){
+        	sendGameMoveOrFinishToOpponent(true,oppRegId,imagesMatched,0);
+        }
+        
         imagesMatched++;
         isImgMatchedArr[currImgIndex] = true;
         imgCountView.setText("Img Count: " + (imagesMatched) + "/"
@@ -303,6 +342,8 @@ public class MatchImage extends Activity implements OnClickListener {
           // finished matching images
           Util.showToast(context, "Finished matching " + totalNoOfImgs
               + " images", 3000);
+          
+          //TODO: Check flag and call the activity
         } else {
           // Show next image to match
           currImgIndex = getNextImgIndex(currImgIndex);
@@ -332,5 +373,85 @@ public class MatchImage extends Activity implements OnClickListener {
         + currMatchedImgIndex + ", nextImgIndex = " + nextImgIndex);
     return nextImgIndex;
   }
+  
+  private void handleNotification(SharedPreferences sp) {
+	    String data = sp.getString(ProjectConstants.KEY_NOTIFICATION_DATA, "");
+	    if (!data.equals("")) {
+	      handleOpponentResponse(data);
+	      sp.edit().putString(ProjectConstants.KEY_NOTIFICATION_DATA, "").commit();
+	    }
+	  }
+	  
+  protected void handleOpponentResponse(String data) {
+	Log.d(TAG, "Inside handleOpponentResponse()");
+    HashMap<String, String> dataMap = Util.getDataMap(data, TAG);
+    if (dataMap.containsKey(Constants.KEY_MSG_TYPE)) {
+      String msgType = dataMap.get(Constants.KEY_MSG_TYPE);
+      Log.d(TAG, Constants.KEY_MSG_TYPE + ": " + msgType);
+      if (msgType.equals(ProjectConstants.MSG_TYPE_FP_GAME_OVER)) {
+        Log.d(TAG, "Inside MSG_TYPE_FP_GAME_OVER = " + ProjectConstants.MSG_TYPE_FP_GAME_OVER);
+        
+        
+        //TODO: Check if your game is over and show game finish activity.
+        // Also update opponent score by splitting over the data.
+        
+      }else if(msgType.equals(ProjectConstants.MSG_TYPE_FP_MOVE)) {
+    	  Log.d(TAG, "Inside MSG_TYPE_FP_MOVE = " + ProjectConstants.MSG_TYPE_FP_MOVE);
+    	  // Show toast that opponent found out new Image
+    	  
+      }
+    }
+  }
+  
+  
+  private void sendGameMoveOrFinishToOpponent(boolean isGameMoveEvent, String oppRegId, int imagesMatched, int timeForMatching) {
+	    Log.d(TAG, "Sending request ack: " 
+	  + (isGameMoveEvent? ProjectConstants.MSG_TYPE_FP_MOVE : ProjectConstants.MSG_TYPE_FP_GAME_OVER));
+	    new AsyncTask<String, Integer, String>() {
+	      @Override
+	      protected String doInBackground(String... params) {
+	        String retVal;
+	        boolean isGameMove = Boolean.parseBoolean(params[0]);
+	        int imagesMatched = Integer.parseInt(params[1]);
+	        int matchingTime = Integer.parseInt(params[2]);
+	        String oppRegId = params[3];
+	        try {
+	          retVal = Util.sendPost("data." + Constants.KEY_MSG_TYPE
+	              + "=" + (isGameMove? ProjectConstants.MSG_TYPE_FP_MOVE : ProjectConstants.MSG_TYPE_FP_GAME_OVER) 
+	              + "&data." + ProjectConstants.NUMBER_OF_IMAGES + "=" + imagesMatched 
+	              + (isGameMove?"":"&data."+ ProjectConstants.TOTAL_MATCHING_TIME + "=" +matchingTime),
+	              oppRegId);
+	          Log.d(TAG, "Result of HTTP POST: " + retVal);
+	          // displayMsg("Connected to user:" + oppName + " (" +
+	          // oppRegId + ")");
+	          retVal = "Sent game message to opponent:"
+	              + " (" + oppRegId + ")";
+	          // sendPost("data=" + myRegId);
+	        } catch (Exception e) {
+	          retVal = "Error occured while making an HTTP post call.";
+	          e.printStackTrace();
+	        }
+	        return retVal;
+	      }
+	      
+	      @Override
+	      protected void onPostExecute(String result) {
+//	        Toast t = Toast.makeText(getApplicationContext(), result, 2000);
+//	        t.show();
+	        Log.d(TAG, "\n===================================================\n");
+	        Log.d(TAG, "result: " + result);
+	      }
+	    }.execute(String.valueOf(isGameMoveEvent),String.valueOf(imagesMatched),String.valueOf(timeForMatching),oppRegId, null);
+	  }
+  
+  
+  /*Editor editor = projPreferences.edit();
+  editor.putBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, true);
+  editor.commit();*/
+  
+  
+  private SharedPreferences getSharedPreferences() {
+      return getSharedPreferences(ProjectConstants.FINAL_PROJECT,Context.MODE_PRIVATE);
+}
 
 }

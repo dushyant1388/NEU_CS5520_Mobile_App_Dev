@@ -323,5 +323,9 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_img_count_textview">Img Count: 0</string>
     <string name="final_proj_time_elapsed_textview"> 0 sec</string>
     <string name="final_proj_match_label">Match</string>
+    
+    <string name="final_proj_main_menu_label">Main Menu</string>
+    <string name="final_proj_game_finish_text">Final Game Timings</string>
+    <string name="final_proj_game_finish_label">Game Over</string>
 
 </resources>

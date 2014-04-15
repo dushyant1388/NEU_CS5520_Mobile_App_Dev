@@ -120,6 +120,12 @@
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection"
             android:screenOrientation="landscape"
             android:label="@string/final_proj_connection_label">
-        </activity>e
+        </activity>
+        
+         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.GameFinish"
+            android:screenOrientation="landscape"
+            android:label="@string/final_proj_game_finish_label">
+        </activity>
+        
     </application>
 </manifest>
