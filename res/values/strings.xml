@@ -328,4 +328,9 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_game_finish_text">Final Game Timings</string>
     <string name="final_proj_game_finish_label">Game Over</string>
 
+    <string name="final_proj_tutorial_label">Tutorial</string>
+    <string name="final_proj_practice_label">Practice</string>
+    <string name="final_proj_practice_btn">Practice</string>
+    <string name="final_proj_clear_btn">Clear</string>
+    <string name="final_proj_quit_btn">Quit</string>
 </resources>
