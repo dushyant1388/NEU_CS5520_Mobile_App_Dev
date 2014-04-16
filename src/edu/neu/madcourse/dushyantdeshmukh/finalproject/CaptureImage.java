@@ -165,7 +165,7 @@ public class CaptureImage extends Activity implements OnClickListener {
       // finished capturing images
       Util.showToast(context, "Finished capturing " + totalNoOfImgs + " images",
           3000);
-      Util.showSwapPhonesAlertDialog(context,this,false);
+      Util.showSwapPhonesAlertDialog(context,this,false, false);
     }
   }
 

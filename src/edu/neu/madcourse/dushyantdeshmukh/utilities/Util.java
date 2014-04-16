@@ -54,6 +54,7 @@ public class Util {
   private static final String TAG = "Utility class";
   static Object staticObjectInstance;
   static boolean isCaptureEvent;
+  static boolean skipTutorial;
 
   public static HashMap<String, String> getDataMap(String bundlesStr, String tag) {
     HashMap<String, String> dataMap = new HashMap<String, String>();
@@ -703,9 +704,10 @@ public class Util {
   }
 
   public static void showSwapPhonesAlertDialog(Context context,Object obj,
-      boolean isCaptureEventTrue) {
+      boolean isCaptureEventTrue, boolean skipTutorialFlag) {
 	  staticObjectInstance = obj;
 	  isCaptureEvent = isCaptureEventTrue;
+	  skipTutorial = skipTutorialFlag;
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
     // set title
@@ -719,9 +721,15 @@ public class Util {
         .setPositiveButton(ProjectConstants.START, new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
             dialog.cancel();
-            if(isCaptureEvent){
-            	((Connection)staticObjectInstance).startCaptureActivity();
-            }else{
+                if (isCaptureEvent) {
+                  // check if tutorial is to be shown
+                  if (skipTutorial) {
+                    ((Connection) staticObjectInstance).startCaptureActivity();
+                  } else {
+                    // start tutorial
+                    ((Connection) staticObjectInstance).startTutorialActivity();
+                  }
+                } else {
             	((CaptureImage)staticObjectInstance).startMatchActivity();
             }
           }
@@ -731,4 +739,5 @@ public class Util {
     alertDialog.show();
 
   }
+ 
 }
