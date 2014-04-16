@@ -57,8 +57,7 @@ public class ProjectConstants {
 		  
 		  public static final String TOTAL_MATCHING_TIME = "TOTAL_MATCHING_TIME";
 		  public static final String NUMBER_OF_IMAGES = "NUMBER_OF_IMAGES";
-		  
-		  
+
 		  //  Messages
 		  public static String MATCH_WAIT_MSG = "Matching image...";
 		  public static String CAPTURE_WAIT_MSG = "Processing captured image...";
@@ -67,7 +66,13 @@ public class ProjectConstants {
 		  public static String SKIP_FAIL_MSG = "Cannot skip. Only one image is left to match.";
 		  
 		  public static int TOTAL_NO_OF_IMAGES = 2;
+		  
+		  public static final String PREF_SKIP_TUTORIAL = "SKIP_TUTORIAL";
 	  
 		  
 		  public static String IS_OPPONENT_GAME_OVER = "IS_OPPONENT_GAME_OVER";
+		  public static String OPPONENT_TIME = "OPPONENT_TIME";
+		  public static String OPPONENT_IMAGE_COUNT = "OPPONENT_IMAGE_COUNT";
+		  public static String PLAYER_TIME = "PLAYER_TIME";
+		  public static String PLAYER_IMAGE_COUNT = "PLAYER_IMAGE_COUNT";
 }

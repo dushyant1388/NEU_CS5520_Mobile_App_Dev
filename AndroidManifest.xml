@@ -124,7 +124,8 @@
         
          <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.GameFinish"
             android:screenOrientation="landscape"
-            android:label="@string/final_proj_game_finish_label">
+            android:label="@string/final_proj_game_finish_label"
+            android:theme="@android:style/Theme.Dialog">
         </activity>
         
          <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Tutorial"
