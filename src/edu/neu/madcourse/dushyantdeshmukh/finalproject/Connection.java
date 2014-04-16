@@ -372,10 +372,8 @@ public class Connection extends Activity implements OnClickListener{
 	  }
 
 	  private void initiateGame(boolean asPLayerOne) {
-		// Util method to show dialog
-	    // read skipTutorial value from shared references
-	    boolean skipTutorial = false;
-		Util.showSwapPhonesAlertDialog(context,this, true, skipTutorial);
+	    // Util method to show dialog  
+	    Util.showSwapPhonesAlertDialog(context,this, true);
 	    Util.storeOppnentInSharedpref(projPreferences, oppName, oppRegId);
 	    
 	   /* startActivity(i);*/
@@ -436,15 +434,10 @@ public class Connection extends Activity implements OnClickListener{
 	  
 	  
 	  public void startCaptureActivity() {
-			Intent captureIntent = new Intent(context,CaptureImage.class);
+			Intent captureIntent = new Intent(context, CaptureImage.class);
 			startActivity(captureIntent);	
 		}
-	  
-	  public void startTutorialActivity() {
-      Intent captureIntent = new Intent(context,CaptureImage.class);
-      startActivity(captureIntent); 
-    }
-	  
+	 
 	  private void registerInBackground() {
 	    	if(InternetConnUtil.isNetworkAvailable(context)){
 	    		Log.d("NOINTERNET", "hey inside registerInBackground");

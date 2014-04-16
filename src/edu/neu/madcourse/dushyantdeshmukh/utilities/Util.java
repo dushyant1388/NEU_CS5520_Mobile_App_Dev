@@ -703,11 +703,11 @@ public class Util {
     return isMatching;
   }
 
-  public static void showSwapPhonesAlertDialog(Context context,Object obj,
-      boolean isCaptureEventTrue, boolean skipTutorialFlag) {
-	  staticObjectInstance = obj;
-	  isCaptureEvent = isCaptureEventTrue;
-	  skipTutorial = skipTutorialFlag;
+  public static void showSwapPhonesAlertDialog(Context context, Object obj,
+      boolean isCaptureEventTrue) {
+
+    staticObjectInstance = obj;
+    isCaptureEvent = isCaptureEventTrue;
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
     // set title
@@ -717,27 +717,22 @@ public class Util {
     alertDialogBuilder
         .setMessage(
             isCaptureEventTrue ? ProjectConstants.CAPTURE_SWAP_MSG
-                : ProjectConstants.MATCH_SWAP_MSG).setCancelable(false)
-        .setPositiveButton(ProjectConstants.START, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int id) {
-            dialog.cancel();
+                : ProjectConstants.MATCH_SWAP_MSG)
+        .setCancelable(false)
+        .setPositiveButton(ProjectConstants.START,
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
                 if (isCaptureEvent) {
-                  // check if tutorial is to be shown
-                  if (skipTutorial) {
-                    ((Connection) staticObjectInstance).startCaptureActivity();
-                  } else {
-                    // start tutorial
-                    ((Connection) staticObjectInstance).startTutorialActivity();
-                  }
+                  ((Connection) staticObjectInstance).startCaptureActivity();
                 } else {
-            	((CaptureImage)staticObjectInstance).startMatchActivity();
-            }
-          }
-        });
+                  ((CaptureImage) staticObjectInstance).startMatchActivity();
+                }
+              }
+            });
 
     AlertDialog alertDialog = alertDialogBuilder.create();
     alertDialog.show();
-
   }
- 
+
 }

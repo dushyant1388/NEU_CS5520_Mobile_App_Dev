@@ -127,5 +127,15 @@
             android:label="@string/final_proj_game_finish_label">
         </activity>
         
+         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Tutorial"
+            android:screenOrientation="landscape"
+            android:label="@string/final_proj_tutorial_label">
+        </activity>
+        
+         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Practice"
+            android:screenOrientation="landscape"
+            android:label="@string/final_proj_practice_label">
+        </activity>
+        
     </application>
 </manifest>

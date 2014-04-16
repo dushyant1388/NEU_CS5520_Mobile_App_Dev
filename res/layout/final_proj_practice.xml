@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ ! Excerpted from "Hello, Android",
+ ! published by The Pragmatic Bookshelf.
+ ! Copyrights apply to this code. It may not be used to create training material, 
+ ! courses, books, articles, and the like. Contact us if you are in doubt.
+ ! We make no guarantees that this code is fit for any purpose. 
+ ! Visit http://www.pragmaticprogrammer.com/titles/eband3 for more book information.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="7dip"
+    android:orientation="vertical" >
+
+    <RelativeLayout android:id="@+id/top_row"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+       
+        
+    </RelativeLayout>
+     
+    <LinearLayout android:id="@+id/buttons"
+	    android:orientation="horizontal"
+	    android:layout_alignParentBottom="true"
+	    android:gravity="center"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content">
+    
+       <Button
+            android:id="@+id/final_proj_capture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/final_proj_capture_btn" />
+       
+       <Button
+            android:id="@+id/final_proj_match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/final_proj_match_btn" />
+       
+       <Button
+            android:id="@+id/final_proj_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/final_proj_clear_btn" />
+       
+       <Button
+            android:id="@+id/final_proj_quit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/final_proj_quit_btn" />
+       
+    </LinearLayout>
+  
+    <RelativeLayout android:id="@+id/center_layout"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_below="@id/top_row"
+	    android:layout_above="@id/buttons"/>
+        
+</RelativeLayout>
