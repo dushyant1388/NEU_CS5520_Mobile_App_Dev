@@ -165,7 +165,7 @@ public class CaptureImage extends Activity implements OnClickListener {
       // finished capturing images
       Util.showToast(context, "Finished capturing " + totalNoOfImgs + " images",
           3000);
-      Util.showSwapPhonesAlertDialog(context,this,false, false);
+      Util.showSwapPhonesAlertDialog(context,this,false);
     }
   }
 
@@ -268,7 +268,7 @@ public class CaptureImage extends Activity implements OnClickListener {
 
   public void startMatchActivity() {
 	  Intent captureIntent = new Intent(context,MatchImage.class);
-	  captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+	  captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 	  startActivity(captureIntent);		
   }
 

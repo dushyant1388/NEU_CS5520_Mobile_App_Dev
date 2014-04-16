@@ -1,6 +1,7 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import java.io.IOException;
+import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,6 +36,7 @@ import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.R.id;
@@ -226,6 +228,7 @@ public class MatchImage extends Activity implements OnClickListener {
     super.onPause();
     releaseCamera();
     preview.removeView(mPreview);
+    unregisterReceiver(receiver);
   }
 
   private void releaseCamera() {
@@ -339,11 +342,29 @@ public class MatchImage extends Activity implements OnClickListener {
             + totalNoOfImgs);
 
         if (imagesMatched == totalNoOfImgs) {
+        	// stop timer and save time.
+        	myTimer.cancel();
           // finished matching images
           Util.showToast(context, "Finished matching " + totalNoOfImgs
               + " images", 3000);
           
+          Editor editor = projPreferences.edit();
+          //TODO: change time
+          editor.putString(ProjectConstants.PLAYER_TIME, Integer.toString(timeElapsed));
+          editor.putString(ProjectConstants.PLAYER_IMAGE_COUNT, Integer.toString(imagesMatched));
+          editor.commit();
+          
+          Log.d(TAG, "PLAYER TIME: " + timeElapsed + "PLAYER_IMAGE_COUNT: " + imagesMatched);
+          
+          sendGameMoveOrFinishToOpponent(false, oppRegId, imagesMatched, timeElapsed);
+          
           //TODO: Check flag and call the activity
+          boolean isOppGameOver = projPreferences.getBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, false);
+          if(isOppGameOver){
+        	  startGameFinishActivity();
+          }else{
+        	  //TODO: Dialog...
+          }
         } else {
           // Show next image to match
           currImgIndex = getNextImgIndex(currImgIndex);
@@ -390,18 +411,33 @@ public class MatchImage extends Activity implements OnClickListener {
       Log.d(TAG, Constants.KEY_MSG_TYPE + ": " + msgType);
       if (msgType.equals(ProjectConstants.MSG_TYPE_FP_GAME_OVER)) {
         Log.d(TAG, "Inside MSG_TYPE_FP_GAME_OVER = " + ProjectConstants.MSG_TYPE_FP_GAME_OVER);
+        String opponent_num_of_images = dataMap.get(ProjectConstants.NUMBER_OF_IMAGES);
+        String opponent_matchingTime = dataMap.get(ProjectConstants.TOTAL_MATCHING_TIME);
         
+        Editor editor = projPreferences.edit();
+        editor.putBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, true);
+        editor.putString(ProjectConstants.OPPONENT_TIME, opponent_matchingTime);
+        editor.putString(ProjectConstants.OPPONENT_IMAGE_COUNT, opponent_num_of_images);
+        editor.commit();
         
-        //TODO: Check if your game is over and show game finish activity.
-        // Also update opponent score by splitting over the data.
-        
+        if(imagesMatched == totalNoOfImgs){
+        	startGameFinishActivity();
+        }
       }else if(msgType.equals(ProjectConstants.MSG_TYPE_FP_MOVE)) {
     	  Log.d(TAG, "Inside MSG_TYPE_FP_MOVE = " + ProjectConstants.MSG_TYPE_FP_MOVE);
     	  // Show toast that opponent found out new Image
+    	  Util.showToast(this, "Opponent matched new Image!", Toast.LENGTH_LONG);
     	  
       }
     }
+    
   }
+  
+  public void startGameFinishActivity(){
+      Intent gameFinishIntent = new Intent(context,GameFinish.class);
+  	  gameFinishIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+  	  startActivity(gameFinishIntent);
+    }
   
   
   private void sendGameMoveOrFinishToOpponent(boolean isGameMoveEvent, String oppRegId, int imagesMatched, int timeForMatching) {
@@ -445,9 +481,7 @@ public class MatchImage extends Activity implements OnClickListener {
 	  }
   
   
-  /*Editor editor = projPreferences.edit();
-  editor.putBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, true);
-  editor.commit();*/
+  
   
   
   private SharedPreferences getSharedPreferences() {

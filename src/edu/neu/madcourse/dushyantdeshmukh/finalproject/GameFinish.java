@@ -31,7 +31,6 @@ public class GameFinish extends Activity implements OnClickListener{
 	private TextView finalScoreText;
 	private Button mainMenuButton;
 	private SharedPreferences projPreferences;
-	private BroadcastReceiver receiver;
 	Context context;
 	
 	boolean isOpponentGameOver;
@@ -46,57 +45,62 @@ public class GameFinish extends Activity implements OnClickListener{
 	    // Set up click listeners for all the buttons
 	    mainMenuButton = (Button) findViewById(R.id.final_proj_main_menu_button);
 	    mainMenuButton.setOnClickListener(this);
-	    
-	    
 	    finalScoreText = (TextView) findViewById(R.id.final_proj_show_result);
 	    
 	    projPreferences = getSharedPreferences();
-
-	    // This will handle the broadcast
-	    receiver = new BroadcastReceiver() {
-	      @Override
-	      public void onReceive(Context context, Intent intent) {
-	        Log.d(TAG,"Inside onReceive of Broadcast receiver of ChooseOpponent.class");
-	        String action = intent.getAction();
-	        if (action.equals(ProjectConstants.INTENT_ACTION_CONNECTION)) {
-	          String data = intent.getStringExtra("data");
-	          Log.d(TAG, "data = " + data);
-	          handleOpponentResponse(data);
-	        }
-	      }
-	    };
 	  }
 	  
 	  @Override
 	  protected void onResume() {
 	    super.onResume();
-	    
-	    // This needs to be in the activity that will end up receiving the broadcast
-	    registerReceiver(receiver, new IntentFilter(ProjectConstants.INTENT_ACTION_CONNECTION));
-	    handleNotification(projPreferences);
-	    
-	    isOpponentGameOver = projPreferences.getBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, false);
-	    if(isOpponentGameOver){
-	    	showFinalResultToPlayer();
-	    }else{
-	    	showPendingResultToPlayer();
-	    }
-	  }
-	  	  
-	  private void showPendingResultToPlayer() {
-		  
-		  finalScoreText.setText("Waiting for the opponent to finish game to show final result");
+	    showFinalResultToPlayer();
 	  }
 
 	  private void showFinalResultToPlayer() {
-		
-		finalScoreText.setText("Final Score is ready!!!");
+		String playerTime = projPreferences.getString(ProjectConstants.PLAYER_TIME, null);
+		String oppTime = projPreferences.getString(ProjectConstants.OPPONENT_TIME, null);
+		String playerImageCount = projPreferences.getString(ProjectConstants.PLAYER_IMAGE_COUNT, null);
+		String oppImageCount = projPreferences.getString(ProjectConstants.PLAYER_IMAGE_COUNT, null);
+		if(playerTime != null || oppTime != null || playerImageCount != null || oppImageCount != null){
+			if(Integer.parseInt(playerTime) > Integer.parseInt(oppTime)){
+				finalScoreText.setText("You lost!!! \n You captured " + playerImageCount + " out of " 
+						+ ProjectConstants.TOTAL_NO_OF_IMAGES + " in " + playerTime + "\n" +
+						"Your opponent captured " + oppImageCount +  " out of " 
+						+ ProjectConstants.TOTAL_NO_OF_IMAGES + " in " + oppTime);
+			}else if(Integer.parseInt(playerTime) < Integer.parseInt(oppTime)){
+				finalScoreText.setText("You won!!! \n You captured " + playerImageCount + " out of " 
+						+ ProjectConstants.TOTAL_NO_OF_IMAGES + " in " + playerTime + "\n" +
+						"Your opponent captured " + oppImageCount +  " out of " 
+						+ ProjectConstants.TOTAL_NO_OF_IMAGES + " in " + oppTime);
+			}else{
+				if(Integer.parseInt(playerImageCount) > Integer.parseInt(oppImageCount)){
+					finalScoreText.setText("You lost!!! \n You captured " + playerImageCount + " out of " 
+							+ ProjectConstants.TOTAL_NO_OF_IMAGES + " in " + playerTime + "\n" +
+							"Your opponent captured " + oppImageCount +  " out of " 
+							+ ProjectConstants.TOTAL_NO_OF_IMAGES + " in " + oppTime);
+				}else if(Integer.parseInt(playerImageCount) < Integer.parseInt(oppImageCount)){
+					finalScoreText.setText("You won!!! \n You captured " + playerImageCount + " out of " 
+							+ ProjectConstants.TOTAL_NO_OF_IMAGES + " in " + playerTime + "\n" +
+							"Your opponent captured " + oppImageCount +  " out of " 
+							+ ProjectConstants.TOTAL_NO_OF_IMAGES + " in " + oppTime);
+				}else{
+					finalScoreText.setText("Scores Tied!!! You captured " + playerImageCount + " out of " 
+							+ ProjectConstants.TOTAL_NO_OF_IMAGES + " in " + playerTime + "\n" +
+							"Your opponent captured " + oppImageCount +  " out of " 
+							+ ProjectConstants.TOTAL_NO_OF_IMAGES + " in " + oppTime);
+				}
+			}
+		}else{
+			finalScoreText.setText("Problem in calculating scores!");
+		}
+		Editor editor = projPreferences.edit();
+		editor.putBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, false);
+		editor.commit();
 	  }
 
 	@Override
 	  protected void onPause() {
 	    super.onPause();
-	    unregisterReceiver(receiver);
 	  }
 
 	  @Override
@@ -104,38 +108,12 @@ public class GameFinish extends Activity implements OnClickListener{
 	    switch (v.getId()) {
 	    case R.id.final_proj_main_menu_button:
 	    	 Intent mainMenuIntent = new Intent(context,Home.class);
-	    	 mainMenuIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+	    	 mainMenuIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 	    	 startActivity(mainMenuIntent);
 	    	 break;
 	    }
 	  }
 	  
-	  
-	  private void handleNotification(SharedPreferences sp) {
-	    String data = sp.getString(ProjectConstants.KEY_NOTIFICATION_DATA, "");
-	    if (!data.equals("")) {
-	      handleOpponentResponse(data);
-	      sp.edit().putString(ProjectConstants.KEY_NOTIFICATION_DATA, "").commit();
-	    }
-	  }
-	  
-	  protected void handleOpponentResponse(String data) {
-		    Log.d(TAG, "Inside handleOpponentResponse()");
-		    HashMap<String, String> dataMap = Util.getDataMap(data, TAG);
-		    if (dataMap.containsKey(Constants.KEY_MSG_TYPE)) {
-		      String msgType = dataMap.get(Constants.KEY_MSG_TYPE);
-		      Log.d(TAG, Constants.KEY_MSG_TYPE + ": " + msgType);
-		      if (msgType.equals(ProjectConstants.MSG_TYPE_FP_GAME_OVER)) {
-		        Log.d(TAG, "Inside MSG_TYPE_FP_GAME_OVER = " + ProjectConstants.MSG_TYPE_FP_GAME_OVER);
-		        Editor editor = projPreferences.edit();
-		        editor.putBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, true);
-		        editor.commit();
-		        showFinalResultToPlayer();
-		      }
-		    }
-		  }
-	
-	
 	 private SharedPreferences getSharedPreferences() {
 	        return getSharedPreferences(ProjectConstants.FINAL_PROJECT,Context.MODE_PRIVATE);
 	  }
