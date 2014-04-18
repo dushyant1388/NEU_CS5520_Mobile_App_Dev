@@ -75,6 +75,12 @@
         android:text="@string/trickiest_part_title_label" />
     
     <Button
+        android:id="@+id/final_proj_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/final_proj_title_label" />
+    
+    <Button
         android:id="@+id/quit_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

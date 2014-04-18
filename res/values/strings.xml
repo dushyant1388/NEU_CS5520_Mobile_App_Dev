@@ -298,6 +298,7 @@ Sample about text. Needs to be updated&#8230;</string>
 				1 to 9 exactly once.</string>
 
     <!-- Final Project -->
+    <string name="final_proj_title_label">Final Project</string>
     <string name="final_proj_name">Match Me If You Can</string>
     <string name="final_proj_icon_name">MAD14S-Match Me If You Can</string>
     <string name="final_proj_capture_label">Capture</string>

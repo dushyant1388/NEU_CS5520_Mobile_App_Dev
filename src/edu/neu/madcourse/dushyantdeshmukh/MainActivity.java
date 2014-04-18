@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import edu.neu.madcourse.dushyantdeshmukh.communication.Communication;
 import edu.neu.madcourse.dushyantdeshmukh.dictionary.Dictionary;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.Home;
 import edu.neu.madcourse.dushyantdeshmukh.sudoku.*;
 import edu.neu.madcourse.dushyantdeshmukh.trickiestpart.TrickiestPart;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TwoPlayerWordGame;
@@ -19,6 +20,8 @@ import edu.neu.madcourse.dushyantdeshmukh.wordgame.WordGame;
 
 public class MainActivity extends Activity implements OnClickListener {
 
+  Intent i;
+  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,6 +53,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		View trickiestButton = findViewById(R.id.trickiest_part_button);
 		trickiestButton.setOnClickListener(this);
 		
+		View finalProjButton = findViewById(R.id.final_proj_button);
+		finalProjButton.setOnClickListener(this);
+		
 		View quitButton = findViewById(R.id.quit_button);
 		quitButton.setOnClickListener(this);
 	}
@@ -64,34 +70,38 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.about_button:
-			Intent i = new Intent(this, About.class);
+			i = new Intent(this, About.class);
 			startActivity(i);
 			break;
 		case R.id.gen_error_button:
 			throw new RuntimeException("Test runtime exception thrown by the 'Generate Error' button.");
 		case R.id.sudoku_button:
-			Intent i2 = new Intent(this, Sudoku.class);
-			startActivity(i2);
+			i = new Intent(this, Sudoku.class);
+			startActivity(i);
 			break;
 		case R.id.dictionary_button:
-			Intent i3 = new Intent(this, Dictionary.class);
-			startActivity(i3);
+			i = new Intent(this, Dictionary.class);
+			startActivity(i);
 			break;
 		case R.id.wordgame_button:
-      Intent i4 = new Intent(this, WordGame.class);
-      startActivity(i4);
+      i = new Intent(this, WordGame.class);
+      startActivity(i);
       break;
 		case R.id.communication_button:
-      Intent i5 = new Intent(this, Communication.class);
-      startActivity(i5);
+      i = new Intent(this, Communication.class);
+      startActivity(i);
       break;
 		case R.id.two_player_wordgame_button:
-      Intent i6 = new Intent(this, TwoPlayerWordGame.class);
-      startActivity(i6);
+      i = new Intent(this, TwoPlayerWordGame.class);
+      startActivity(i);
       break;
 		case R.id.trickiest_part_button:
-      Intent i7 = new Intent(this, TrickiestPart.class);
-      startActivity(i7);
+      i = new Intent(this, TrickiestPart.class);
+      startActivity(i);
+      break;
+		case R.id.final_proj_button:
+      i = new Intent(this, Home.class);
+      startActivity(i);
       break;
 		case R.id.quit_button:
 			finish();

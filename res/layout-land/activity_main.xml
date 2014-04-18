@@ -74,8 +74,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/communication_title_label" />
             </TableRow>
-
+            
             <TableRow>
+
                 <Button
 			        android:id="@+id/two_player_wordgame_button"
 			        android:layout_width="fill_parent"
@@ -83,19 +84,26 @@
 			        android:text="@string/two_player_wordgame_title_label" />
                 
                 <Button
-                    android:id="@+id/quit_button"
+                    android:id="@+id/trickiest_part_button"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/quit_label" />
+                    android:text="@string/trickiest_part_title_label" />
             
                 </TableRow>
 
             <TableRow>
                 <Button
-                    android:id="@+id/trickiest_part_button"
+                    android:id="@+id/final_proj_button"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/trickiest_part_title_label" />
+                    android:text="@string/final_proj_title_label" />
+
+                <Button
+                    android:id="@+id/quit_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quit_label" />
+                
             </TableRow>
         </TableLayout>
     </LinearLayout>

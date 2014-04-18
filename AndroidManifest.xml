@@ -26,7 +26,10 @@
         android:protectionLevel="signature" />
     <uses-permission android:name="edu.neu.madcourse.dushyantdeshmukh.permission.C2D_MESSAGE" />
     
-    <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
+    <application android:allowBackup="true" 
+        android:icon="@drawable/ic_launcher" 
+        android:label="@string/app_name" 
+        android:theme="@style/AppTheme">
         <meta-data android:name="com.google.android.gms.version"
            android:value="@integer/google_play_services_version" />
         
@@ -100,6 +103,7 @@
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Home" 
             	  android:label="@string/final_proj_name"
             	  android:icon="@drawable/final_proj_app_icon"
+            	  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             	  android:screenOrientation="landscape">
             <intent-filter android:label="@string/final_proj_icon_name">
                 <action android:name="android.intent.action.MAIN" />
@@ -109,16 +113,19 @@
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.CaptureImage" 
             android:screenOrientation="landscape" 
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/final_proj_capture_label" >
         </activity>
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.MatchImage" 
             android:screenOrientation="landscape" 
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/final_proj_match_label" >
         </activity>
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection"
             android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/final_proj_connection_label">
         </activity>
         
@@ -130,11 +137,13 @@
         
          <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Tutorial"
             android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/final_proj_tutorial_label">
         </activity>
         
          <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Practice"
             android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/final_proj_practice_label">
         </activity>
         
