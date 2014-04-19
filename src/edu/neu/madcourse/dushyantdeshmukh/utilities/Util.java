@@ -561,7 +561,6 @@ public class Util {
         context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
         ProjectConstants.IMG_DIR_NAME);
     BitmapFactory.Options options = new BitmapFactory.Options();
-//    options.inSampleSize = ProjectConstants.SCALE;
 
     for (int i = 0; i < totalNoOfImgs; i++) {
       Bitmap currBitmap = BitmapFactory.decodeFile(mediaStorageDir.getPath()
@@ -733,5 +732,21 @@ public class Util {
     AlertDialog alertDialog = alertDialogBuilder.create();
     alertDialog.show();
   }
+  
+  /*
+   * new AsyncTask<String, Integer, String>() {
+   * 
+   * @Override protected void onPreExecute() { super.onPreExecute();
+   * progress.setMessage("Processing captured image..."); progress.show(); }
+   * 
+   * @Override protected String doInBackground(String... params) { String retVal
+   * = "";
+   * 
+   * Log.d(TAG, "retVal: " + retVal); return retVal; }
+   * 
+   * @Override protected void onPostExecute(String result) {
+   * super.onPostExecute(result); progress.cancel(); } }.execute(null, null,
+   * null);
+   */
 
 }
