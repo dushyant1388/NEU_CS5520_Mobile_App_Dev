@@ -56,6 +56,8 @@ public class ProjectConstants {
 		  
 		  public static final String TOTAL_MATCHING_TIME = "TOTAL_MATCHING_TIME";
 		  public static final String NUMBER_OF_IMAGES = "NUMBER_OF_IMAGES";
+		  public static final String NUMBER_OF_IMAGES_CAPTURED = "NUMBER_OF_IMAGES_CAPTURED";
+		  public static final String NUMBER_OF_IMAGES_MATCHED = "NUMBER_OF_IMAGES_MATCHED";
 
 		  //  Messages
 		  public static String MATCH_WAIT_MSG = "Matching image...";

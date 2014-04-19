@@ -21,7 +21,7 @@ public class CaptureImage extends BaseCameraActivity {
   ImageView capturedImgView;
   byte[] currImgData;
   Bitmap imgArr[];
-  int currImgNo = 1;
+  int currImgNo = 0;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +53,13 @@ public class CaptureImage extends BaseCameraActivity {
     // Show camera preview and hide the captured img imageView
     showCapturedImg(false);
 
-    imgArr = new Bitmap[totalNoOfImgs];
+    initializeClassVars();
     
+  }
+
+  private void initializeClassVars() {
+    Log.d(TAG, "Inside initializeClassVars()");
+    imgArr = new Bitmap[totalNoOfImgs];
   }
 
   @Override
@@ -62,11 +67,36 @@ public class CaptureImage extends BaseCameraActivity {
     super.onResume();
   }
 
+  private void restoreState() {
+    //  restore images captured so far
+    currImgNo = projPreferences.getInt(ProjectConstants.NUMBER_OF_IMAGES, 0);
+    imgCountView.setText("Img Count: " + currImgNo + "/" + totalNoOfImgs);
+    Log.d(TAG, "Reading Img Count: " + currImgNo);
+  }
+
   @Override
   protected void onPause() {
     super.onPause();
   }
 
+  private void storeState() {
+    //  store no of images captured so far
+    projPreferences.edit().putInt(ProjectConstants.NUMBER_OF_IMAGES, currImgNo).commit();
+    Log.d(TAG, "Setting currImgNo: " + currImgNo);
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    storeState();
+  }
+  
+  @Override
+  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    super.onRestoreInstanceState(savedInstanceState);
+    restoreState();
+  }
+  
   @Override
   public void onClick(View v) {
     Log.d(TAG, "Inside onClick()");
@@ -86,15 +116,15 @@ public class CaptureImage extends BaseCameraActivity {
   }
 
   private void storeCurrImg() {
+    currImgNo++;
     imgCountView.setText("Img Count: " + currImgNo + "/" + totalNoOfImgs);
     if (imgArr == null) {
       imgArr = new Bitmap[totalNoOfImgs];
     }
     imgArr[currImgNo - 1] = currBmpImg;
     Util.storeImg(currImgData, currImgNo, context);
-    currImgNo++;
     
-    if (currImgNo > totalNoOfImgs) {
+    if (currImgNo >= totalNoOfImgs) {
       // finished capturing images
       Util.showToast(context, "Finished capturing " + totalNoOfImgs + " images",
           3000);

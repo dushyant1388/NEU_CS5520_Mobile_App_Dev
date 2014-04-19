@@ -161,6 +161,30 @@ public class MatchImage extends BaseCameraActivity {
     super.onPause();
     unregisterReceiver(receiver);
   }
+  private void restoreState() {
+    //  restore images matched so far
+    imagesMatched = projPreferences.getInt(ProjectConstants.NUMBER_OF_IMAGES_MATCHED, 0);
+    imgCountView.setText("Img Count: " + imagesMatched + "/" + totalNoOfImgs);
+    Log.d(TAG, "Reading Img Count: " + imagesMatched);
+  }
+
+  private void storeState() {
+    //  store no of images captured so far
+    projPreferences.edit().putInt(ProjectConstants.NUMBER_OF_IMAGES_MATCHED, imagesMatched).commit();
+    Log.d(TAG, "Setting imagesMatched: " + imagesMatched);
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    storeState();
+  }
+  
+  @Override
+  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    super.onRestoreInstanceState(savedInstanceState);
+    restoreState();
+  }
 
   @Override
   public void onClick(View v) {
