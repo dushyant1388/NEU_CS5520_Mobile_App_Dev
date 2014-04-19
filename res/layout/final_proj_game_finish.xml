@@ -11,7 +11,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:padding="15dip"
-    android:background="@color/two_player_wordgame_background" >
+    android:background="@drawable/final_proj_bg" >
 
     <LinearLayout
         android:layout_width="fill_parent"

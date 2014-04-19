@@ -6,49 +6,65 @@
  ! courses, books, articles, and the like. Contact us if you are in doubt.
  ! We make no guarantees that this code is fit for any purpose. 
  ! Visit http://www.pragmaticprogrammer.com/titles/eband3 for more book information.
+
 -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="30dip"
-    android:background="@color/wordgame_background" >
+    android:background="@drawable/final_proj_bg"
+    android:padding="30dip" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        android:orientation="vertical" >
 
-        <TextView
-          android:text="@string/final_proj_name"
-          android:layout_height="wrap_content"
-          android:layout_width="wrap_content"
-          android:layout_marginBottom="25dip"
-          android:textSize="24.5sp"
-          android:typeface="serif"
-          android:layout_gravity="center"
-          android:textColor="@color/wordgame_title" />
-        
-        <Button
-            android:id="@+id/final_proj_single_phone_mode_button"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/final_proj_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/final_proj_single_phone_mode" />
+            android:layout_margin="13dp"
+            android:contentDescription="@string/final_proj_name"
+            android:src="@drawable/final_proj_logo" />
 
-        <Button
-            android:id="@+id/final_proj_dual_phone_mode_button"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/final_proj_dual_phone_mode" />
+            android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/final_proj_exit_game_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/final_proj_exit_game" />
-      
+            <ImageButton
+                android:id="@+id/final_proj_single_phone_mode_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="13dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/final_proj_single_phone_mode"
+                android:src="@drawable/final_proj_single_phone_mode" />
+
+            <ImageButton
+                android:id="@+id/final_proj_dual_phone_mode_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="13dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/final_proj_dual_phone_mode"
+                android:src="@drawable/final_proj_dual_phone_mode" />
+
+            <ImageButton
+                android:id="@+id/final_proj_exit_game_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="13dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/final_proj_exit_game"
+                android:src="@drawable/final_proj_exit" />
+        </LinearLayout>
     </LinearLayout>
-    
+
 </ScrollView>
