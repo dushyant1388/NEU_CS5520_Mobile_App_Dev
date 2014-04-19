@@ -831,30 +831,6 @@ public class Game extends Activity implements OnClickListener {
         String.valueOf(this.currScore), this.username, this.oppRegId);
   }
 
-  private void endGame() {
-    this.gameOver = true;
-    // getSharedPreferences("WORD_GAME",
-    // MODE_PRIVATE).edit().putBoolean(PREF_CONTINUE_GAME, false)
-    // .commit();
-    stopNewLetterTimer();
-    if (timeRemainingCounter != null) {
-      timeRemainingCounter.cancel();
-    }
-    if (mpCountDown != null) {
-      mpCountDown.release();
-    }
-    Util.playSound(this.getApplicationContext(), mpGameOver, gameOverResId,
-        false);
-
-    Intent i = new Intent(this, GameOver.class);
-    i.putExtra(Constants.PREF_CURR_SCORE, this.currScore);
-    i.putExtra(Constants.PREF_LONGEST_WORD, this.longestWord);
-    i.putExtra(Constants.PREF_CORRECT_WORDS, this.totalCorrectWords);
-    i.putExtra(Constants.PREF_INCORRECT_WORDS, this.totalIncorrectWords);
-    startActivity(i);
-    finish();
-  }
-
   /**
    * Selects a letter from the 3 sets in the following ratio letterSet1 :
    * letterSet2 : letterSet3 = 4 : 4 : 1
