@@ -30,13 +30,16 @@ import org.opencv.highgui.Highgui;
 
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.CaptureImage;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.Home;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.ProjectConstants;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TwoPlayerWordGame;
 import edu.neu.mhealth.api.KeyValueAPI;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
@@ -49,6 +52,7 @@ import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 public class Util {
@@ -57,6 +61,7 @@ public class Util {
   static Object staticObjectInstance;
   static boolean isCaptureEvent;
   static boolean skipTutorial;
+  static Context staticContext;
 
   public static HashMap<String, String> getDataMap(String bundlesStr, String tag) {
     HashMap<String, String> dataMap = new HashMap<String, String>();
@@ -731,6 +736,34 @@ public class Util {
 
     AlertDialog alertDialog = alertDialogBuilder.create();
     alertDialog.show();
+  }
+  
+  public static void showQuitConfirmationDialog(Activity context){
+	  staticContext = context;
+	  AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+	    // set title
+	    alertDialogBuilder.setTitle(ProjectConstants.QUIT_TITLE);
+	    // set dialog message
+	    alertDialogBuilder
+	        .setMessage(ProjectConstants.QUIT_GAME_MESSAGE)
+	        .setCancelable(false)
+	        .setPositiveButton(ProjectConstants.YES,
+	            new DialogInterface.OnClickListener() {
+	              public void onClick(DialogInterface dialog, int id) {
+	                dialog.cancel();
+	                Intent mainMainActivity = new Intent(staticContext, Home.class);
+	                mainMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	                staticContext.startActivity(mainMainActivity);
+	              }
+	            })
+	    	.setNegativeButton(ProjectConstants.NO, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+
+	    AlertDialog alertDialog = alertDialogBuilder.create();
+	    alertDialog.show();
   }
   
   /*

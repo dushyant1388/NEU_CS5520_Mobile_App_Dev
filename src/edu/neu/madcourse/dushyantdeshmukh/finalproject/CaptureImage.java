@@ -161,10 +161,10 @@ public class CaptureImage extends BaseCameraActivity {
 
   public void startMatchActivity() {
 	  Intent captureIntent = new Intent(context,MatchImage.class);
-	  captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	  captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	  startActivity(captureIntent);		
   }
-
+ 
   @Override
   protected void processCapturedPicture(byte[] data) {
     

@@ -1,28 +1,17 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
-import java.util.HashMap;
-
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import edu.neu.madcourse.dushyantdeshmukh.R;
-import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
-import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class GameFinish extends Activity implements OnClickListener{
 
@@ -108,7 +97,7 @@ public class GameFinish extends Activity implements OnClickListener{
 	    switch (v.getId()) {
 	    case R.id.final_proj_main_menu_button:
 	    	 Intent mainMenuIntent = new Intent(context,Home.class);
-	    	 mainMenuIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	    	 mainMenuIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    	 startActivity(mainMenuIntent);
 	    	 break;
 	    }

@@ -69,7 +69,16 @@ public class ProjectConstants {
 		  public static int TOTAL_NO_OF_IMAGES = 2;
 		  
 		  public static final String PREF_SKIP_TUTORIAL = "SKIP_TUTORIAL";
-	  
+		  
+		  public static final String QUIT_GAME_MESSAGE = "Are you sure you want to quit?";
+		  public static final String QUIT_TITLE = "Quit Menu";
+		  public static final String YES = "Yes";
+		  public static final String NO = "No";
+		  
+		  public static final String WAITING_MESSAGE = "Waiting for the opponent to finish game!\n" +
+		  											   "You can quit this game to return to main menu!";
+		  public static final String WAITING_TITLE = "Quit Menu";
+		  public static final String QUIT_BUTTON = "QUIT";
 		  
 		  public static String IS_OPPONENT_GAME_OVER = "IS_OPPONENT_GAME_OVER";
 		  public static String OPPONENT_TIME = "OPPONENT_TIME";

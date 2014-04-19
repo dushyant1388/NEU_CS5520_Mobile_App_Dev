@@ -134,10 +134,9 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
       showMatchBtn(false);
       break;
     case R.id.final_proj_quit:
-      // Go to capture activity
-      Intent captureIntent = new Intent(context, CaptureImage.class);
-      captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-          | Intent.FLAG_ACTIVITY_NEW_TASK);
+      // Go to Connection Activity
+      Intent captureIntent = new Intent(context, Connection.class);
+      captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
       startActivity(captureIntent);
       break;
     }

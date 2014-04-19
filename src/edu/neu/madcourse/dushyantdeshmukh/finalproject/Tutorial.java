@@ -45,13 +45,13 @@ public class Tutorial extends Activity implements OnClickListener {
     switch (v.getId()) {
     case R.id.final_proj_practice:
       Intent practiceIntent = new Intent(this, Practice.class);
-      practiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+      practiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
       startActivity(practiceIntent);
       break;
     case R.id.final_proj_skip:
-      //  Go to capture activity
-      Intent captureIntent = new Intent(context, CaptureImage.class);
-      captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+      //  Go to connection activity
+      Intent captureIntent = new Intent(context, Connection.class);
+      captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
       startActivity(captureIntent); 
       break;
     }

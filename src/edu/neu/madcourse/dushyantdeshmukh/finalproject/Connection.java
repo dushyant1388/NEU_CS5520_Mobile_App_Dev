@@ -435,6 +435,7 @@ public class Connection extends Activity implements OnClickListener{
 	  
 	  public void startCaptureActivity() {
 			Intent captureIntent = new Intent(context, CaptureImage.class);
+			captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(captureIntent);	
 		}
 	 

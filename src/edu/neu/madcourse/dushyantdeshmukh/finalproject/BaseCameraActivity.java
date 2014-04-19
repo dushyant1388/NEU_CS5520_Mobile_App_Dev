@@ -194,12 +194,14 @@ public abstract class BaseCameraActivity extends Activity implements
 
     Log.d(TAG, "================= After checking max n min====================");
 
-    int screenWidth = Math.max(scrnHeight, scrnWidth);
+//    int screenWidth = Math.max(scrnHeight, scrnWidth);
+    int screenWidth = scrnWidth;
     Log.d(
         TAG,
         "Math.max(" + scrnHeight + ", " + scrnWidth + ") = "
             + Math.max(scrnHeight, scrnWidth));
-    int screenHeight = Math.min(scrnHeight, scrnWidth);
+//    int screenHeight = Math.min(scrnHeight, scrnWidth);
+    int screenHeight = scrnHeight;
     Log.d(
         TAG,
         "Math.min(" + scrnHeight + ", " + scrnWidth + ") = "
@@ -234,6 +236,7 @@ public abstract class BaseCameraActivity extends Activity implements
       }
     }
     Log.d(TAG, "=====================================");
+//    optSize = camera.new Size(scrnWidth, scrnHeight);
     Log.d(TAG, "optSize.height - " + optSize.height);
     Log.d(TAG, "optSize.width - " + optSize.width);
     return optSize;
