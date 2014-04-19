@@ -210,6 +210,12 @@ public class MatchImage extends BaseCameraActivity {
   }
   
   protected void processCapturedPicture(byte[] data) {
+    
+    if (currBmpImg != null) {
+      currBmpImg.recycle();
+    }
+    currBmpImg = Util.convertByteArrToBitmap(data);
+    
  // match imgsToMatchArr[currImgNo - 1] with bmpImg
     Mat imgMat1 = Util.convertBmpToMat(currBmpImg);
     Mat imgMat2 = Util.convertBmpToMat(imgsToMatchArr[currImgIndex]);

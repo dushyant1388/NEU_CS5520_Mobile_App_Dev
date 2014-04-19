@@ -1,6 +1,8 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import java.io.IOException;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,6 +11,7 @@ import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.Size;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -21,7 +24,8 @@ import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.trickiestpart.CameraPreview;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 
-public abstract class BaseCameraActivity extends Activity implements OnClickListener {
+public abstract class BaseCameraActivity extends Activity implements
+    OnClickListener {
 
   protected static final String TAG = "BASE CAMERA ACTIVITY";
   protected Context context;
@@ -72,8 +76,8 @@ public abstract class BaseCameraActivity extends Activity implements OnClickList
       ex.printStackTrace();
       Util.showToast(context, "Error setting camera preview display", 3000);
     }
-    
- // Initialize ProgressDialog
+
+    // Initialize ProgressDialog
     progress = new ProgressDialog(this);
     progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     progress.setIndeterminate(true);
@@ -130,7 +134,7 @@ public abstract class BaseCameraActivity extends Activity implements OnClickList
       }
     }.execute(null, null, null);
   }
-  
+
   private PictureCallback mPicture = new PictureCallback() {
 
     @Override
@@ -139,11 +143,6 @@ public abstract class BaseCameraActivity extends Activity implements OnClickList
 
       mCamera.startPreview();
 
-      if (currBmpImg != null) {
-        currBmpImg.recycle();
-      }
-      currBmpImg = Util.convertByteArrToBitmap(data);
-      
       processCapturedPicture(data);
 
     }
@@ -157,28 +156,94 @@ public abstract class BaseCameraActivity extends Activity implements OnClickList
     } catch (Exception e) {
       Log.e(TAG, "Camera is not available (in use or does not exist)");
       // Camera is not available (in use or does not exist)
-      Util.showToast(context, "Camera is not available (in use or does not exist)", 4000);
+      Util.showToast(context,
+          "Camera is not available (in use or does not exist)", 4000);
       return camera;
     }
-      Parameters parameters = camera.getParameters();
-      
-      DisplayMetrics displaymetrics = new DisplayMetrics();
-      windowManager.getDefaultDisplay().getMetrics(displaymetrics);
-      int screenHeight = displaymetrics.heightPixels;
-      int screenWidth = displaymetrics.widthPixels;
-      
-      Log.d(TAG, "Inside getcameraInstance(), setting picture size to screenWidth X screenHeight = " 
-            + screenWidth + " X " + screenHeight);
-      parameters.setPictureSize(screenWidth, screenHeight);
-      camera.setParameters(parameters);
+    Parameters parameters = camera.getParameters();
+
+    DisplayMetrics displaymetrics = new DisplayMetrics();
+    windowManager.getDefaultDisplay().getMetrics(displaymetrics);
+
+    int screenHeight = displaymetrics.heightPixels;
+    int screenWidth = displaymetrics.widthPixels;
+
+    List<Size> sizes = parameters.getSupportedPreviewSizes();
+    Size optimalSize = getOptimalPreviewSize(sizes, screenWidth, screenHeight,
+        camera);
+    parameters.setPreviewSize(optimalSize.width, optimalSize.height);
+
+    Log.d(
+        TAG,
+        "Inside getcameraInstance(), setting picture size to screenWidth X screenHeight = "
+            + optimalSize.width + " X " + optimalSize.height);
+
+    // Log.d(TAG,
+    // "Inside getcameraInstance(), setting picture size to screenWidth X screenHeight = "
+    // + screenWidth + " X " + screenHeight);
+    parameters.setPictureSize(screenWidth, screenHeight);
+    camera.setParameters(parameters);
     return camera; // returns null if camera is unavailable
+  }
+
+  private Size getOptimalPreviewSize(List<Size> sizes, int scrnWidth,
+      int scrnHeight, Camera camera) {
+    Log.d(TAG, "Inside getOptimalPreviewSize()");
+    Log.d(TAG, "scrnHeight - " + scrnHeight);
+    Log.d(TAG, "screenWidth - " + scrnWidth);
+
+    Log.d(TAG, "================= After checking max n min====================");
+
+    int screenWidth = Math.max(scrnHeight, scrnWidth);
+    Log.d(
+        TAG,
+        "Math.max(" + scrnHeight + ", " + scrnWidth + ") = "
+            + Math.max(scrnHeight, scrnWidth));
+    int screenHeight = Math.min(scrnHeight, scrnWidth);
+    Log.d(
+        TAG,
+        "Math.min(" + scrnHeight + ", " + scrnWidth + ") = "
+            + Math.min(scrnHeight, scrnWidth));
+
+    Log.d(TAG, "screenHeight - " + screenHeight);
+    Log.d(TAG, "screenWidth - " + screenWidth);
+
+    Log.d(TAG, "=====================================");
+
+    Size optSize = camera.new Size(0, 0);
+    int minHeightDiff = 1000;
+    int minWidthDiff = 1000;
+    for (Size s : sizes) {
+      int currHeight = s.height;
+      Log.d(TAG, "currHeight - " + currHeight);
+      Log.d(TAG, "currWidth - " + s.width);
+      int currHeightDiff = Math.abs(currHeight - screenHeight);
+      if (currHeightDiff <= minHeightDiff) {
+        Log.d(TAG, "only minHeightDiff:");
+        Log.d(TAG, "currHeight - " + currHeight);
+        int currWidth = s.width;
+        int currWidthDiff = Math.abs(currWidth - screenWidth);
+        if (currWidthDiff < minWidthDiff) {
+          Log.d(TAG, "Also minWidthDiff:");
+          Log.d(TAG, "currHeight - " + currHeight);
+          Log.d(TAG, "currWidth - " + currWidth);
+          minHeightDiff = currHeightDiff;
+          minWidthDiff = currWidthDiff;
+          optSize = camera.new Size(currWidth, currHeight);
+        }
+      }
+    }
+    Log.d(TAG, "=====================================");
+    Log.d(TAG, "optSize.height - " + optSize.height);
+    Log.d(TAG, "optSize.width - " + optSize.width);
+    return optSize;
   }
 
   @Override
   public abstract void onClick(View arg0);
-  
+
   protected abstract CharSequence getTakePictureWaitMsg();
-  
+
   protected abstract void processCapturedPicture(byte[] data);
- 
+
 }

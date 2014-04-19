@@ -137,6 +137,11 @@ public class CaptureImage extends BaseCameraActivity {
 
   @Override
   protected void processCapturedPicture(byte[] data) {
+    
+    if (currBmpImg != null) {
+      currBmpImg.recycle();
+    }
+    currBmpImg = Util.convertByteArrToBitmap(data);
     currImgData = data;
 
     // show captured image in image view
