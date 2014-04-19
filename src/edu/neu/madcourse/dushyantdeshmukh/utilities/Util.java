@@ -46,7 +46,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 public class Util {
@@ -559,7 +561,7 @@ public class Util {
         context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
         ProjectConstants.IMG_DIR_NAME);
     BitmapFactory.Options options = new BitmapFactory.Options();
-    options.inSampleSize = ProjectConstants.SCALE;
+//    options.inSampleSize = ProjectConstants.SCALE;
 
     for (int i = 0; i < totalNoOfImgs; i++) {
       Bitmap currBitmap = BitmapFactory.decodeFile(mediaStorageDir.getPath()
@@ -667,21 +669,18 @@ public class Util {
 
   /**
    * Converts the given byte[] into a Bitmap for the corresponding image
-   * 
    * @param imgData
+   * @param windowManager 
    * @return
    */
   public static Bitmap convertByteArrToBitmap(byte[] imgData) {
-    BitmapFactory.Options op = new BitmapFactory.Options();
-    op.inSampleSize = ProjectConstants.SCALE;
-    Bitmap bmpImg = BitmapFactory.decodeByteArray(imgData, 0, imgData.length,
-        op);
+    Log.d(TAG, "\n\n Inside convertByteArrToBitmap(), imgData length = " + imgData.length);
+    Bitmap bmpImg = BitmapFactory.decodeByteArray(imgData, 0, imgData.length, null);
     return bmpImg;
   }
 
   /**
    * Convert given Bitmap to Mat
-   * 
    * @param bmpImg
    * @return
    */

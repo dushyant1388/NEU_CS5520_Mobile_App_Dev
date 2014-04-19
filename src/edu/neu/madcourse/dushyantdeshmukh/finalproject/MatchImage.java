@@ -25,13 +25,16 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -47,21 +50,20 @@ import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 public class MatchImage extends Activity implements OnClickListener {
 
   protected static final String TAG = "MATCH ACTIVITY";
-  Context context;
-  LayoutInflater controlInflater = null;
+  private Context context;
+  private LayoutInflater controlInflater = null;
   private Camera mCamera;
   private CameraPreview mPreview;
   private FrameLayout preview;
-  View matchButton, skipButton, endButton;
-  TextView imgCountView, timeElapsedView;
-  ProgressDialog progress;
-  ImageView capturedImgView, imgToMatchView;
-  Bitmap currImg;
-  Bitmap imgsToMatchArr[];
-  boolean isImgMatchedArr[];
+  private View matchButton, skipButton, endButton;
+  private TextView imgCountView, timeElapsedView;
+  private ProgressDialog progress;
+  private ImageView capturedImgView, imgToMatchView;
+  private Bitmap currImg;
+  private Bitmap imgsToMatchArr[];
+  private boolean isImgMatchedArr[];
   private Bitmap bmpImg;
-  private int scale = 8; // lesser the value clearer the img
-  
+  private static WindowManager windowManager;
   private BroadcastReceiver receiver;
   private SharedPreferences projPreferences;
 
@@ -118,10 +120,13 @@ public class MatchImage extends Activity implements OnClickListener {
 
     // set camera preview as main layout for this activity
     setContentView(R.layout.final_proj_cam_preview);
+    
+    //  initialize WindowManager instance
+    windowManager = getWindowManager();
 
     // Create an instance of Camera
     mCamera = getCameraInstance();
-
+    
     // Create our Preview view and set it as the content of our activity.
     mPreview = new CameraPreview(this, mCamera);
     preview = (FrameLayout) findViewById(R.id.camera_preview);
@@ -169,7 +174,6 @@ public class MatchImage extends Activity implements OnClickListener {
         + "\n\n totalNoOfImgs = " + totalNoOfImgs);
     isImgMatchedArr = new boolean[totalNoOfImgs];
 
-
     // This will handle the broadcast
     receiver = new BroadcastReceiver() {
       @Override
@@ -183,7 +187,6 @@ public class MatchImage extends Activity implements OnClickListener {
         }
       }
     };
-    
     
     // render first image to match
     renderImgToMatch(0);
@@ -291,18 +294,30 @@ public class MatchImage extends Activity implements OnClickListener {
   }
 
   /** A safe way to get an instance of the Camera object. */
-  public static Camera getCameraInstance() {
-    Camera c = null;
+  public Camera getCameraInstance() {
+    Camera camera = null;
     try {
-      c = Camera.open(); // attempt to get a Camera instance
+      camera = Camera.open(); // attempt to get a Camera instance
     } catch (Exception e) {
       Log.e(TAG, "Camera is not available (in use or does not exist)");
       // Camera is not available (in use or does not exist)
+      Util.showToast(context, "Camera is not available (in use or does not exist)", 4000);
+      return camera;
     }
-    return c; // returns null if camera is unavailable
+      Parameters parameters = camera.getParameters();
+      
+      DisplayMetrics displaymetrics = new DisplayMetrics();
+      windowManager.getDefaultDisplay().getMetrics(displaymetrics);
+      int screenHeight = displaymetrics.heightPixels;
+      int screenWidth = displaymetrics.widthPixels;
+      
+      Log.d(TAG, "Inside getcameraInstance(), setting picture size to screenWidth X screenHeight = " 
+            + screenWidth + " X " + screenHeight);
+      parameters.setPictureSize(screenWidth, screenHeight);
+      camera.setParameters(parameters);
+    return camera; // returns null if camera is unavailable
   }
 
-  // ////////////////////////////////
   private PictureCallback mPicture = new PictureCallback() {
 
     @Override
@@ -311,21 +326,17 @@ public class MatchImage extends Activity implements OnClickListener {
 
       mCamera.startPreview();
 
-      BitmapFactory.Options o2 = new BitmapFactory.Options();
-      o2.inSampleSize = scale;
-
       if (bmpImg != null) {
         bmpImg.recycle();
       }
-      bmpImg = BitmapFactory.decodeByteArray(data, 0, data.length, o2);
-
+      bmpImg = Util.convertByteArrToBitmap(data);
+      
       // match imgsToMatchArr[currImgNo - 1] with bmpImg
       Mat imgMat1 = Util.convertBmpToMat(bmpImg);
       Mat imgMat2 = Util.convertBmpToMat(imgsToMatchArr[currImgIndex]);
 
       if (Util.imagesMatch(imgMat1, imgMat2)) {
-        // if match successful, increment img count and set
-        // isImgMatchedArr[currImgNo]
+        // if match successful, increment img count and set isImgMatchedArr[currImgNo]
 
         progress.cancel();
         Util.showToast(context, ProjectConstants.MATCH_SUCCESS_MSG, 1500);
@@ -381,7 +392,6 @@ public class MatchImage extends Activity implements OnClickListener {
   /**
    * Given the index of currently matched image, returns the index of next image
    * to be matched
-   * 
    * @param currMatchedImgIndex
    * @return
    */

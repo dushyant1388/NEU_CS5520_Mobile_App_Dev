@@ -45,7 +45,6 @@ public class ProjectConstants {
 		// Match and Capture constants
 		
 		public static double PSNR_THRESHOLD = 14.0;
-		  public static int SCALE = 8;  //  lesser the value clearer the img
 		  public static String IMG_DIR_NAME = "images_to_match";
 		  public static String IMG_NAME_PREFIX = "IMAGE_NO_";
 		  public static final int IMG_ALPHA = 85; // larger value indicates more focus on img to match

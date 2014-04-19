@@ -2,28 +2,25 @@ package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import java.io.IOException;
 
-import org.opencv.android.OpenCVLoader;
-
 import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.trickiestpart.CameraPreview;
-import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
-import edu.neu.mhealth.api.KeyValueAPI;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewDebug.FlagToString;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +29,7 @@ import android.widget.LinearLayout.LayoutParams;
 public class CaptureImage extends Activity implements OnClickListener {
 
   protected static final String TAG = "CAPTURE ACTIVITY";
-  Context context;
+  private Context context;
   LayoutInflater controlInflater = null;
   private Camera mCamera;
   private CameraPreview mPreview;
@@ -43,28 +40,34 @@ public class CaptureImage extends Activity implements OnClickListener {
   ImageView capturedImgView;
   byte[] currImgData;
   Bitmap imgArr[];
-  private Bitmap bmpImg;
+  private Bitmap currBmpImg;
   
   int currImgNo = 1;
   int totalNoOfImgs = ProjectConstants.TOTAL_NO_OF_IMAGES;
+  private static WindowManager windowManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Log.d(TAG, "Inside onCreate()");
 
     context = this;
 
     // set camera preview as main layout for this activity
     setContentView(R.layout.final_proj_cam_preview);
 
+    //  initialize WindowManager instance
+    windowManager = getWindowManager();
+
     // Create an instance of Camera
     mCamera = getCameraInstance();
-
+    
     // Create our Preview view and set it as the content of our activity.
     mPreview = new CameraPreview(this, mCamera);
+
     preview = (FrameLayout) findViewById(R.id.camera_preview);
     preview.addView(mPreview);
-
+   
     try {
       mCamera.setPreviewDisplay(mPreview.getHolder());
     } catch (IOException ex) {
@@ -117,7 +120,6 @@ public class CaptureImage extends Activity implements OnClickListener {
       preview.addView(mPreview);
     }
     mCamera.startPreview();
-
   }
 
   @Override
@@ -157,7 +159,7 @@ public class CaptureImage extends Activity implements OnClickListener {
     if (imgArr == null) {
       imgArr = new Bitmap[totalNoOfImgs];
     }
-    imgArr[currImgNo - 1] = Util.convertByteArrToBitmap(currImgData);
+    imgArr[currImgNo - 1] = currBmpImg;
     Util.storeImg(currImgData, currImgNo, context);
     currImgNo++;
     
@@ -195,18 +197,29 @@ public class CaptureImage extends Activity implements OnClickListener {
   }
 
   /** A safe way to get an instance of the Camera object. */
-  public static Camera getCameraInstance() {
-    Camera c = null;
+  public Camera getCameraInstance() {
+    Camera camera = null;
     try {
-      c = Camera.open(); // attempt to get a Camera instance
+      camera = Camera.open(); // attempt to get a Camera instance
     } catch (Exception e) {
       Log.e(TAG, "Camera is not available (in use or does not exist)");
       // Camera is not available (in use or does not exist)
+      Util.showToast(context, "Camera is not available (in use or does not exist)", 4000);
     }
-    return c; // returns null if camera is unavailable
+      Parameters parameters = camera.getParameters();
+      
+      DisplayMetrics displaymetrics = new DisplayMetrics();
+      windowManager.getDefaultDisplay().getMetrics(displaymetrics);
+      int screenHeight = displaymetrics.heightPixels;
+      int screenWidth = displaymetrics.widthPixels;
+      
+      Log.d(TAG, "Inside getcameraInstance(), setting picture size to screenWidth X screenHeight = " 
+            + screenWidth + " X " + screenHeight);
+      parameters.setPictureSize(screenWidth, screenHeight);
+      camera.setParameters(parameters);
+    return camera; // returns null if camera is unavailable
   }
 
-  // ////////////////////////////////
   private PictureCallback mPicture = new PictureCallback() {
 
     @Override
@@ -215,20 +228,15 @@ public class CaptureImage extends Activity implements OnClickListener {
 
       mCamera.startPreview();
 
-      // Replace Capture btn with Accept and reject btns
-      // showCaptureBtn(false);
-
       currImgData = data;
-      
-      if (bmpImg != null) {
-        bmpImg.recycle();
+      if (currBmpImg != null) {
+        currBmpImg.recycle();
       }
-      bmpImg = Util.convertByteArrToBitmap(data);
+      currBmpImg = Util.convertByteArrToBitmap(data);
       
       // show captured image in image view
-      capturedImgView.setImageBitmap(bmpImg);
+      capturedImgView.setImageBitmap(currBmpImg);
       showCapturedImg(true);
-      // dislayCapturedImg(bmp);
       progress.cancel();
     }
   };
@@ -254,16 +262,6 @@ public class CaptureImage extends Activity implements OnClickListener {
       preview.setVisibility(View.VISIBLE);
     }
     showCaptureBtn(!show);
-  }
-
-  private void dislayCapturedImg(Bitmap bmImg) {
-
-    capturedImgView.setImageBitmap(bmImg);
-    capturedImgView.setVisibility(View.VISIBLE);
-    // capturedImgView.setAlpha(75);
-
-    // Log.d(TAG, "\n Cancelling progress dialog... \n");
-    // progress.cancel();
   }
 
   public void startMatchActivity() {
