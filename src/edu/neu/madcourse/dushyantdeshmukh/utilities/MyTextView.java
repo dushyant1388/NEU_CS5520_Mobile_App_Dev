@@ -27,6 +27,6 @@ public class MyTextView extends TextView {
      Typeface font = Typeface.createFromAsset(context.getAssets(), "font/COOPBL.TTF");
      setTypeface(font);
      setTextColor(getResources().getColor(R.color.final_proj_txt_fore_color));
-     setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+     setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
   }
 }

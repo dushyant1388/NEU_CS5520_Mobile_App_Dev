@@ -18,44 +18,50 @@
         android:layout_alignParentTop="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
-        
-       
-        
     </RelativeLayout>
      
-    <LinearLayout android:id="@+id/buttons"
+    <LinearLayout 
+        android:id="@+id/buttons"
 	    android:orientation="horizontal"
 	    android:layout_alignParentBottom="true"
 	    android:gravity="center"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content">
     
-       <Button
+       <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
             android:id="@+id/final_proj_capture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:text="@string/final_proj_capture_btn" />
        
-       <Button
+       <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
             android:id="@+id/final_proj_match"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:text="@string/final_proj_match_btn" />
        
-       <Button
+       <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
             android:id="@+id/final_proj_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:text="@string/final_proj_clear_btn" />
        
-       <Button
+       <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
             android:id="@+id/final_proj_quit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:text="@string/final_proj_quit_btn" />
        
     </LinearLayout>

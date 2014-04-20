@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.Button;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 public class MyButton extends Button {
@@ -58,6 +59,12 @@ public class MyButton extends Button {
     }
     setTextColor(getResources().getColor(R.color.final_proj_btn_fore_color));
     setBackgroundDrawable(getResources().getDrawable(R.drawable.mybutton));
+   /* LayoutParams params = new LayoutParams(
+            LayoutParams.WRAP_CONTENT,      
+            LayoutParams.WRAP_CONTENT
+    );
+    params.setMargins(25,25,25,25);
+    setLayoutParams(params);*/
   }
   
   

@@ -1,6 +1,9 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
+import org.opencv.android.Utils;
+
 import edu.neu.madcourse.dushyantdeshmukh.R;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -66,6 +69,7 @@ public class Home extends Activity implements OnClickListener {
       }
       break;
     case R.id.final_proj_single_phone_mode_button:
+    	Util.showToast(this,"Sorry...We are still working on it!", 5000);
       break;
     case R.id.final_proj_exit_game_button:
       finish();

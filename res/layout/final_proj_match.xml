@@ -19,13 +19,15 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         
-        <TextView android:id="@+id/img_count"
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyTextView
+        android:id="@+id/img_count"
         android:text="@string/final_proj_img_count_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"/>
         
-        <TextView android:id="@+id/time_elapsed"
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyTextView 
+        android:id="@+id/time_elapsed"
         android:text="@string/final_proj_time_elapsed_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,25 +42,31 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content">
     
-       <Button
+       <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
             android:id="@+id/final_proj_skip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:text="@string/final_proj_skip_btn" />
        
-       <Button
+       <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
             android:id="@+id/final_proj_match"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:text="@string/final_proj_match_btn" />
        
-       <Button
+       <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
             android:id="@+id/final_proj_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:text="@string/final_proj_end_btn" />
        
     </LinearLayout>

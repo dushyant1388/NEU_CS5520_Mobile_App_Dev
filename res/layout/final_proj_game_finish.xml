@@ -18,18 +18,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
                 
-        <TextView
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyTextView
             android:id="@+id/final_proj_show_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:padding="15dp" />
         
-        <Button
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
             android:id="@+id/final_proj_main_menu_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:text="@string/final_proj_main_menu_label" />
         
     </LinearLayout>

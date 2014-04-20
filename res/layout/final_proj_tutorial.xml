@@ -18,14 +18,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
             android:id="@+id/final_proj_practice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:text="@string/final_proj_practice_btn" />
         
-        <Button
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
             android:id="@+id/final_proj_skip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
