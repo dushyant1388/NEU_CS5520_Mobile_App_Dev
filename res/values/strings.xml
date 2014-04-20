@@ -318,6 +318,8 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_find_opponent">Find Opponent</string>
     <string name="final_proj_back">Back</string>
     <string name="final_proj_connection_label">Find Opponent</string>
+    <string name="final_proj_proceed_to_game">Proceed To Game</string>
+    <string name="final_proj_proceed_to_ack">Proceed To Acknowledgements</string>
     
     <string name="final_proj_skip_btn">Skip</string>
     <string name="final_proj_end_btn">End</string>
@@ -332,6 +334,7 @@ Sample about text. Needs to be updated&#8230;</string>
 
     <string name="final_proj_tutorial_label">Tutorial</string>
     <string name="final_proj_practice_label">Practice</string>
+    <string name="final_proj_practice_btn">Practice</string>
     <string name="final_proj_clear_btn">Clear</string>
     <string name="final_proj_quit_btn">Quit</string>
     
@@ -368,4 +371,17 @@ Sample about text. Needs to be updated&#8230;</string>
         http://docs.opencv.org/doc/tutorials/highgui/video-input-psnr-ssim/video-input-psnr-ssim.html#videoinputpsnrmssim \r\n
     </string>
     <string name="final_proj_ok_label">OK</string>
+    <string name="final_proj_intro_screen_label">App Description</string>
+    <string name="final_proj_app_description_text">APP DESCRIPTION \n\n
+        										\'Match Me If You Can\' \n 
+				  								Do you like using your phone camera to click pictures? 
+				  								\'Match Me If You Can\' will allow you play a scavenger hunt 
+				  								photo based exergame \n 
+				  								Play this two player game and click images  
+				  								of objects around the house. Both players will then hunt for the images
+				  								clicked by one another. \n 
+				  								The player to find maximum images first wins. \n\n
+				  								Dushyant Deshmukh (deshmukh.d@husky.neu.edu) \n
+				  								Gaurav Rane (rane.g@husky.neu.edu) \n\n
+	</string>
 </resources>

@@ -23,7 +23,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:padding="15dp" />
+            android:padding="15dp" 
+            android:text="@string/final_proj_app_description_text"/>
          
         <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
             style="@style/button"

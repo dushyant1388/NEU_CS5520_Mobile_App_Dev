@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import edu.neu.madcourse.dushyantdeshmukh.communication.Communication;
 import edu.neu.madcourse.dushyantdeshmukh.dictionary.Dictionary;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.Home;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.IntroScreen;
 import edu.neu.madcourse.dushyantdeshmukh.sudoku.*;
 import edu.neu.madcourse.dushyantdeshmukh.trickiestpart.TrickiestPart;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TwoPlayerWordGame;
@@ -100,7 +101,7 @@ public class MainActivity extends Activity implements OnClickListener {
       startActivity(i);
       break;
 		case R.id.final_proj_button:
-      i = new Intent(this, Home.class);
+      i = new Intent(this, IntroScreen.class);
       startActivity(i);
       break;
 		case R.id.quit_button:
