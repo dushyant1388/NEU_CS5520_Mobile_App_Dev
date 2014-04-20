@@ -19,6 +19,7 @@ import org.opencv.highgui.Highgui;
 
 import edu.neu.madcourse.dushyantdeshmukh.R;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,6 +31,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -51,7 +53,10 @@ public class Test extends Activity implements OnClickListener {
   View matchButton, captureButton, clearButton, quitButton;
   ImageView img1View;
   protected boolean isImg1Present = false;
-
+  LayoutInflater controlInflater = null;
+  
+  ProgressDialog progress;
+  
   private CameraBridgeViewBase mOpenCvCameraView;
 
   private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -128,6 +133,18 @@ public class Test extends Activity implements OnClickListener {
     
     setCamPreviewHeight();
     
+    progress = new ProgressDialog(this);
+    
+    progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    progress.setIndeterminate(true);
+    
+    //////////////////////////////
+//    controlInflater = LayoutInflater.from(getBaseContext());
+//    View viewControl = controlInflater.inflate(R.layout.trickiest_part_overlay, null);
+//    LayoutParams layoutParamsControl
+//     = new LayoutParams(LayoutParams.FILL_PARENT,
+//     LayoutParams.FILL_PARENT);
+//    this.addContentView(viewControl, layoutParamsControl);
   }
 
   private void setCamPreviewHeight() {
@@ -170,6 +187,10 @@ public class Test extends Activity implements OnClickListener {
   private void dislayImg(Bitmap bmImg) {
     img1View = (ImageView) findViewById(R.id.image_to_match);
     img1View.setImageBitmap(bmImg);
+    img1View.setAlpha(75);
+    
+    Log.d(TAG, "\n Cancelling progress dialog... \n");
+    progress.cancel();
   }
 
   @Override
@@ -221,11 +242,13 @@ public class Test extends Activity implements OnClickListener {
       mCamera.startPreview();
 
       if (isImg1Present) {
+        Log.d(TAG, "\n Matching image... \n");
         // Match the current Img with Img1
         storeImg(IMG_2_NAME, data);
         matchImages(IMG_1_NAME, IMG_2_NAME);
       } else {
-        // Store current Img as Img1
+        Log.d(TAG, "\n Storing image... \n");
+      // Store current Img as Img1
 
         storeImg(IMG_1_NAME, data);
         isImg1Present = true;
@@ -244,10 +267,14 @@ public class Test extends Activity implements OnClickListener {
     Log.d(TAG, "Inside onClick()");
     switch (v.getId()) {
     case R.id.trickiest_part_capture_img_button:
+      progress.setMessage("Storing image...");
+      progress.show();
       Log.d(TAG, "Clicked on Capture button... taking picture...");
         mCamera.takePicture(null, null, mPicture);
       break;
     case R.id.trickiest_part_match_img_button:
+      progress.setMessage("Matching image... ");
+      progress.show();
       Log.d(TAG, "Clicked on Match button... taking & matching picture...");
       mCamera.takePicture(null, null, mPicture);
       break;
@@ -285,7 +312,8 @@ public class Test extends Activity implements OnClickListener {
       }else{
         isMatching = false;
       }
-      
+      Log.d(TAG, "\n Cancelling progress dialog... \n");
+      progress.cancel();
       showResult(isMatching);
   }
 

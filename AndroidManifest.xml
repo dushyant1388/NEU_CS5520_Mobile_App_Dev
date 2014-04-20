@@ -152,7 +152,12 @@
              android:theme="@android:style/Theme.Dialog" />
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.IntroScreen" 
-             android:screenOrientation="portrait" android:label="@string/final_proj_intro_screen_label"/>
+             android:screenOrientation="portrait" android:label="@string/final_proj_intro_screen_label">
+            <intent-filter>
+                <action android:name="edu.neu.madcourse.dushyantdeshmukh.INTRO_SCREEN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         
     </application>
 </manifest>
