@@ -45,4 +45,9 @@
     <!-- Trickiest Part colors -->
     <color name="trickiest_part_background">#223344dd</color>
     
+    <!-- Final Project -->
+    <color name="final_proj_btn_bg_color">#FFFFD553</color>
+    <color name="final_proj_btn_fore_color">#FF8B2A13</color>
+    <color name="final_proj_txt_fore_color">#FF8B2A13</color>
+    
 </resources>

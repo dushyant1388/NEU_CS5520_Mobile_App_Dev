@@ -17,4 +17,8 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="button" parent="@android:style/Widget.Button">
+	    <item name="edu.neu.madcourse.dushyantdeshmukh:font">font/ITCKRIST.TTF</item>
+	</style>
+    
 </resources>
