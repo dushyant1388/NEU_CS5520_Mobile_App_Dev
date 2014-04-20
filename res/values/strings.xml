@@ -352,4 +352,20 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_skip_tutorial">Skip Tutorial</string>
     <string name="final_proj_next">Next</string>
     <string name="final_proj_practice">Practice</string>
+    <string name="final_proj_ack">Acknowledgements</string>
+    <string name="final_proj_acks">Following is the list of online resources referred:\r\n \r\n
+        1. Computing regression line equation to get the threshold value to decide matching \r\n
+        http://www.mathportal.org/calculators/statistics-calculator/correlation-and-regression-calculator.php \r\n \r\n
+        2. Android Camera \r\n
+        http://developer.android.com/guide/topics/media/camera.html#custom-camera \r\n \r\n
+        3. Converting an image file into bitmap \r\n
+        http://stackoverflow.com/questions/8710515/reading-an-image-file-into-bitmap-from-sdcard \r\n \r\n
+        4. Decoding a scaled image \r\n
+        http://developer.android.com/training/camera/photobasics.html \r\n \r\n
+        5. pHash algorithm to detect similarity \r\n
+        http://phash.org/ \r\n \r\n
+        6. Using OpenCV for similarity measurement \r\n
+        http://docs.opencv.org/doc/tutorials/highgui/video-input-psnr-ssim/video-input-psnr-ssim.html#videoinputpsnrmssim \r\n
+    </string>
+    <string name="final_proj_ok_label">OK</string>
 </resources>
