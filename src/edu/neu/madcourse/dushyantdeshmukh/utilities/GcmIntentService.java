@@ -224,6 +224,7 @@ public class GcmIntentService extends IntentService {
 			Log.d(TAG, "isAppActive - starting activity: " + i.toString());
 			SendBroadcast(data, intentAction);
 		} else {
+			
 			sendNotification(data, i);
 		}
 	}

@@ -127,7 +127,7 @@ public class MatchImage extends BaseCameraActivity {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				Log.d(TAG,
-						"Inside onReceive of Broadcast receiver of ChooseOpponent.class");
+						"Inside onReceive of Broadcast receiver of MatchImage class");
 				String action = intent.getAction();
 				if (action
 						.equals(ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH)) {

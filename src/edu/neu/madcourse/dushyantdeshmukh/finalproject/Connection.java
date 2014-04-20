@@ -158,7 +158,7 @@ public class Connection extends Activity implements OnClickListener{
 	    	 String userName = userNameEditText.getText().toString();
 	    	 
 	    	 if(userName.equals("")){
-	    		 Util.showToast(context,"Please enter a non empty userName",Toast.LENGTH_LONG);
+	    		 Util.showToast(context,"Please enter a non empty userName!",Toast.LENGTH_LONG);
 	    	 }else {
 	    		this.username = userName;
 	    		userNameEditText.setText("");
@@ -173,7 +173,7 @@ public class Connection extends Activity implements OnClickListener{
 		   String oppUsername = opponentEditText.getText().toString();
 
 		   if (oppUsername.equals("")) {
-	       	 Util.showToast(context,"Please enter a valid opponent username value.", Toast.LENGTH_LONG);
+	       	 Util.showToast(context,"Please enter a valid opponent username value!", Toast.LENGTH_LONG);
 		   } else {
 			   opponentEditText.setText("");
 			   findOpponent(oppUsername);
@@ -247,7 +247,7 @@ public class Connection extends Activity implements OnClickListener{
 
 	          if (registeredUsersList.contains("Error: No Such Key")) {
 	            // No player waiting... put your own regId
-	            retVal = "Error while putting your regId on server: " + result;
+	            retVal = "Error finding player!";
 	          } else {
 	            if (registeredUsersList.trim() != "") {
 	              String usersArr[] = registeredUsersList.split(",");
@@ -274,13 +274,12 @@ public class Connection extends Activity implements OnClickListener{
 	                    Log.d(TAG, "Result of HTTP POST: " + result);
 	                    // displayMsg("Connected to user:" + oppName + " (" +
 	                    // oppRegId + ")");
-	                    retVal = "Sent connect request to opponent:" + oppName
-	                        + " (" + oppRegId + ")";
+	                    retVal = "Sent connect request to opponent " + oppName;
 	                    // sendPost("data=" + myRegId);
 	                  } catch (Exception e) {
 	                    // TODO Auto-generated catch block
 	                    // displayMsg("Error occurred while making an HTTP post call.");
-	                    retVal = "Error occured while making an HTTP post call.";
+	                    retVal = "Error finding player!";
 	                    e.printStackTrace();
 	                  }
 	                  foundOpponent = true;
@@ -306,7 +305,7 @@ public class Connection extends Activity implements OnClickListener{
 	        Log.d(TAG, "result: " + result);
 	        Util.showToast(context, result, Toast.LENGTH_LONG);
 	        if (!result.equals(ProjectConstants.OPPONENT_NOT_FOUND)) {
-	        	messageTextView.setText("Waiting for opponent's response... ");
+	        	messageTextView.setText("Waiting for opponent's response! ");
 	        }
 	      }
 	    }.execute(oppUsername, null, null);

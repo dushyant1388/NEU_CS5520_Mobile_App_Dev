@@ -79,6 +79,7 @@ public class ProjectConstants {
 		  public static final String WAITING_MESSAGE = "Waiting for the opponent to finish game!\n" +
 		  											   "You can quit this game to return to main menu!";
 		  public static final String WAITING_TITLE = "Quit Menu";
+		  public static final String WAITING_DIALOG_SHOW = "WAITING_DIALOG_SHOW";
 		  public static final String QUIT_BUTTON = "QUIT";
 		  
 		  public static String IS_OPPONENT_GAME_OVER = "IS_OPPONENT_GAME_OVER";
