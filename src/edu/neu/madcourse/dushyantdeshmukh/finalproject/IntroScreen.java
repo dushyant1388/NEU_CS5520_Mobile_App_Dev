@@ -34,9 +34,9 @@ public class IntroScreen extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		 switch (v.getId()) {
 		    case R.id.final_proj_go_to_ack:
-		     /* Intent ackIntent = new Intent(this,);
+		      Intent ackIntent = new Intent(this,Acknowledgements.class);
 		      ackIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		      startActivity(ackIntent);*/
+		      startActivity(ackIntent);
 		      break;
 		    case R.id.final_proj_go_to_game:
 		      Intent gameIntent = new Intent(this,Home.class);
