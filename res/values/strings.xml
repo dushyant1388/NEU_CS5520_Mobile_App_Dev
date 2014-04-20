@@ -318,8 +318,8 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_find_opponent">Find Opponent</string>
     <string name="final_proj_back">Back</string>
     <string name="final_proj_connection_label">Find Opponent</string>
-    <string name="final_proj_proceed_to_game">Proceed To Game</string>
-    <string name="final_proj_proceed_to_ack">Proceed To Acknowledgements</string>
+    <string name="final_proj_proceed_to_game">Proceed to Game</string>
+    <string name="final_proj_proceed_to_ack">Acknowledgements</string>
     
     <string name="final_proj_skip_btn">Skip</string>
     <string name="final_proj_end_btn">End</string>
@@ -357,30 +357,36 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_practice">Practice</string>
     <string name="final_proj_ack">Acknowledgements</string>
     <string name="final_proj_acks">Following is the list of online resources referred:\r\n \r\n
-        1. Computing regression line equation to get the threshold value to decide matching \r\n
-        http://www.mathportal.org/calculators/statistics-calculator/correlation-and-regression-calculator.php \r\n \r\n
-        2. Android Camera \r\n
-        http://developer.android.com/guide/topics/media/camera.html#custom-camera \r\n \r\n
-        3. Converting an image file into bitmap \r\n
-        http://stackoverflow.com/questions/8710515/reading-an-image-file-into-bitmap-from-sdcard \r\n \r\n
-        4. Decoding a scaled image \r\n
-        http://developer.android.com/training/camera/photobasics.html \r\n \r\n
-        5. pHash algorithm to detect similarity \r\n
-        http://phash.org/ \r\n \r\n
-        6. Using OpenCV for similarity measurement \r\n
-        http://docs.opencv.org/doc/tutorials/highgui/video-input-psnr-ssim/video-input-psnr-ssim.html#videoinputpsnrmssim \r\n
+        1. OpenCV library to make use of utility methods for image processing.\r\n
+        2. \'Pro Android Augmented Reality\' text for learning concepts regarding working with camera and images. \r\n
+        3. \'Hello Android, 3rd edition\', have been very helpful for understanding various basic concepts in Android development. \r\n
+        4. \'Android Essential Training\' on \'www.lynda.com\' and tutorials on \'www.vogella.com\' have been other very useful online resources. \r\n
+        5. Google cloud messaging is used for handling the two player connection, communication and notification. \r\n
+        6. Server data is being stored on the CCIS mHealth server provided by our Professor. \r\n
+        7. All sounds used throughout the app have been taken from either of following 2 links: \r\n
+           http://soundbible.com and http://www.soundjay.com \r\n
+        8. App Icon is referred from following link: \r\n
+           https://www.google.com/search?q=bee+magnifying+glass+icon \r\n
+        9. The splash images for buttons were created by \'Vikram Deshmukh\' along with giving us creative feedback for color combinations and genral look and feel of the game. \r\n
+        10. Last but not the least, we are extremely thankful to Prof. Stephen Intille, Shang Ma and Zhongjie Mao for their valuable suggestions and feedback which has made it possible for us to have such a wonderful experience creating such a wonderful. \r\n
+        \r\n\r\n
+        Phones used for testing (apart from Netbeans emulators):\r\n
+        1. Samsung Galaxy S2 (Android version: 4.1.2) \r\n
+        2. Samsung Galaxy S3 (Android version: 4.3) \r\n
+        3. Kyocera C5155 (Android version: 4.0.4) \r\n\r\n
     </string>
     <string name="final_proj_ok_label">OK</string>
     <string name="final_proj_intro_screen_label">App Description</string>
     <string name="final_proj_app_description_text">APP DESCRIPTION \n\n
         										\'Match Me If You Can\' \n 
 				  								Do you like using your phone camera to click pictures? 
-				  								\'Match Me If You Can\' will allow you play a scavenger hunt 
-				  								photo based exergame \n 
-				  								Play this two player game and click images  
-				  								of objects around the house. Both players will then hunt for the images
-				  								clicked by one another. \n 
-				  								The player to find maximum images first wins. \n\n
+				  								\'Match Me If You Can\' will allow you play a scavenger hunt photo based exergame \n 
+				  								Play this two player game and click images of objects around the house. Both players will then hunt for the images clicked by one another. \n 
+				  								The player to find maximum images first wins. \n
+				  								It let\'s kids enjoy a fun playing experience while encouraging high levels of physical activity as they run around the house matching images. \n
+				  								\r\n
+				  								Target audience: 8 - 14 year old kids \r\n \r\n
+				  								Team Members: \r\n
 				  								Dushyant Deshmukh (deshmukh.d@husky.neu.edu) \n
 				  								Gaurav Rane (rane.g@husky.neu.edu) \n\n
 	</string>
