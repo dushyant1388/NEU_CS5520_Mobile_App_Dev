@@ -765,6 +765,16 @@ public class Util {
 	    AlertDialog alertDialog = alertDialogBuilder.create();
 	    alertDialog.show();
   }
+
+  /**
+   * Given the start time in secs, returns the time elapsed in secs
+   * @param startTime
+   * @return
+   */
+  public static int getTimeElapsed(int startTime) {
+    int currTime = (int) System.currentTimeMillis() / 1000;
+    return currTime - startTime;
+  }
   
   /*
    * new AsyncTask<String, Integer, String>() {
