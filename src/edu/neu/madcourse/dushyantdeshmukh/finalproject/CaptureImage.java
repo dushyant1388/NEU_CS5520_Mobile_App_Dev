@@ -1,6 +1,7 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -160,6 +161,10 @@ public class CaptureImage extends BaseCameraActivity {
   }
 
   public void startMatchActivity() {
+    //  set start time for matching activity
+     projPreferences.edit().putInt(ProjectConstants.START_TIME, 
+         (int) System.currentTimeMillis() / 1000).commit();
+    
 	  Intent captureIntent = new Intent(context,MatchImage.class);
 	  captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	  startActivity(captureIntent);		

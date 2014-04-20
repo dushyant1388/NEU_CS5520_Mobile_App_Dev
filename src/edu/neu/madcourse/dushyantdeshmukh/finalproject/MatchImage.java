@@ -43,7 +43,7 @@ public class MatchImage extends BaseCameraActivity {
 	private boolean isImgMatchedArr[];
 	private AlertDialog alertDialog;
 	private BroadcastReceiver receiver;
-	private int timeElapsed = 0; // in secs
+	private int startTime = 0;
 	private int imagesMatched = 0, currImgIndex = 0;
 
 	Timer myTimer = new Timer();
@@ -54,7 +54,7 @@ public class MatchImage extends BaseCameraActivity {
 	final Runnable timeElapsedRunnable = new Runnable() {
 		public void run() {
 			// increment & update time elapsed text view
-			timeElapsedView.setText(Util.getTimeStr(++timeElapsed));
+			timeElapsedView.setText(Util.getTimeStr(Util.getTimeElapsed(startTime)));
 		}
 	};
 
@@ -143,9 +143,15 @@ public class MatchImage extends BaseCameraActivity {
 
 		// start timer
 		startTimeElapsedTimer();
+		
+		initializeClassVars();
 	}
 
-	private void renderImgToMatch(int imgIndex) {
+	private void initializeClassVars() {
+    startTime = projPreferences.getInt(ProjectConstants.START_TIME, 0);
+  }
+
+  private void renderImgToMatch(int imgIndex) {
 		imgToMatchView.setImageBitmap(imgsToMatchArr[imgIndex]);
 		imgToMatchView.setAlpha(ProjectConstants.IMG_ALPHA);
 	}
@@ -161,30 +167,37 @@ public class MatchImage extends BaseCameraActivity {
 		registerReceiver(receiver, new IntentFilter(
 				ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH));
 		handleNotification(projPreferences);
+		
+		Log.d(TAG, "Inside onResume(), startTime = " + startTime);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		unregisterReceiver(receiver);
+		Log.d(TAG, "Inside onPause(), startTime = " + startTime);
 	}
 
 	private void restoreState() {
 		// restore images matched so far
 		imagesMatched = projPreferences.getInt(
 				ProjectConstants.NUMBER_OF_IMAGES_MATCHED, 0);
+		startTime = projPreferences.getInt(
+        ProjectConstants.START_TIME, 0);
 		imgCountView.setText("Img Count: " + imagesMatched + "/"
 				+ totalNoOfImgs);
 		Log.d(TAG, "Reading Img Count: " + imagesMatched);
+		Log.d(TAG, "Reading startTime: " + startTime);
 	}
 
 	private void storeState() {
 		// store no of images captured so far
-		projPreferences
-				.edit()
-				.putInt(ProjectConstants.NUMBER_OF_IMAGES_MATCHED,
-						imagesMatched).commit();
+	  Editor e = projPreferences.edit();
+	  e.putInt(ProjectConstants.NUMBER_OF_IMAGES_MATCHED, imagesMatched);
+	  e.putInt(ProjectConstants.START_TIME, startTime);
+	  e.commit();
 		Log.d(TAG, "Setting imagesMatched: " + imagesMatched);
+		Log.d(TAG, "Setting startTime: " + startTime);
 	}
 
 	@Override
@@ -284,6 +297,7 @@ public class MatchImage extends BaseCameraActivity {
 				Util.showToast(context, "Finished matching " + totalNoOfImgs
 						+ " images", 3000);
 
+				int timeElapsed = Util.getTimeElapsed(startTime);
 				Editor editor = projPreferences.edit();
 				// TODO: change time
 				editor.putString(ProjectConstants.PLAYER_TIME,
