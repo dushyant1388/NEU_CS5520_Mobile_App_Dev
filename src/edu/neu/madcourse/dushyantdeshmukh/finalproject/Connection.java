@@ -180,7 +180,9 @@ public class Connection extends Activity implements OnClickListener{
 		   }
 		   break;
 	   case R.id.final_proj_back_button:
-	      finish();
+	      Intent mainMenuIntent = new Intent(this, Home.class);
+	      mainMenuIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	      startActivity(mainMenuIntent);
 	      break;
 	    }
 	  }
@@ -385,8 +387,10 @@ public class Connection extends Activity implements OnClickListener{
 	  }
 
 	  private void handleNotification(SharedPreferences sp) {
+		Log.d(TAG, "Inside handle notification method...");
 	    String data = sp.getString(ProjectConstants.KEY_NOTIFICATION_DATA, "");
 	    if (!data.equals("")) {
+	      Log.d(TAG, "data exists: " + data);
 	      handleOpponentResponse(data);
 	      sp.edit().putString(ProjectConstants.KEY_NOTIFICATION_DATA, "").commit();
 	    }

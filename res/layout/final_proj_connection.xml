@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:text="@string/final_proj_back" />
+            android:text="@string/final_proj_back_to_main_menu_label" />
       
         <TextView
             android:id="@+id/final_proj_msg"
