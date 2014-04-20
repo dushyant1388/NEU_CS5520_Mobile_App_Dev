@@ -332,7 +332,40 @@ Sample about text. Needs to be updated&#8230;</string>
 
     <string name="final_proj_tutorial_label">Tutorial</string>
     <string name="final_proj_practice_label">Practice</string>
-    <string name="final_proj_practice_btn">Practice</string>
     <string name="final_proj_clear_btn">Clear</string>
     <string name="final_proj_quit_btn">Quit</string>
+    
+    <string name="final_proj_tutorial">Tutorial</string>
+    <string name="final_proj_step1">\r\nStep 1: \r\n
+                                    Find an opponent by entering his/her username. \r\n
+                                    First time users need to enter their own username before trying to connect to an opponent.\r\n</string>
+    <string name="final_proj_step2">\r\nStep 2: \r\n
+                                    Swap phone with opponent and capture images for your opponent to find. \r\n
+                                    Once an image is captured, you can save or discard it. \r\n</string>
+    <string name="final_proj_step3">\r\nStep 3: \r\n
+                                    Swap phones with opponent again and start matching the images that show up on the screen. \r\n
+                                    You can skip an image and come back to it later. \r\n
+                                    Try to complete matching all images in lesser time than your opponent. (Refer timer on top right)\r\n</string>
+    <string name="final_proj_step4">\r\nStep 4: \r\n
+                                    The player to match more images or taking least time wins the game. \r\n
+                                    So make sure you move around quickly.\r\n</string>
+    <string name="final_proj_skip_tutorial">Skip Tutorial</string>
+    <string name="final_proj_next">Next</string>
+    <string name="final_proj_practice">Practice</string>
+    <string name="final_proj_ack">Acknowledgements</string>
+    <string name="final_proj_acks">Following is the list of online resources referred:\r\n \r\n
+        1. Computing regression line equation to get the threshold value to decide matching \r\n
+        http://www.mathportal.org/calculators/statistics-calculator/correlation-and-regression-calculator.php \r\n \r\n
+        2. Android Camera \r\n
+        http://developer.android.com/guide/topics/media/camera.html#custom-camera \r\n \r\n
+        3. Converting an image file into bitmap \r\n
+        http://stackoverflow.com/questions/8710515/reading-an-image-file-into-bitmap-from-sdcard \r\n \r\n
+        4. Decoding a scaled image \r\n
+        http://developer.android.com/training/camera/photobasics.html \r\n \r\n
+        5. pHash algorithm to detect similarity \r\n
+        http://phash.org/ \r\n \r\n
+        6. Using OpenCV for similarity measurement \r\n
+        http://docs.opencv.org/doc/tutorials/highgui/video-input-psnr-ssim/video-input-psnr-ssim.html#videoinputpsnrmssim \r\n
+    </string>
+    <string name="final_proj_ok_label">OK</string>
 </resources>

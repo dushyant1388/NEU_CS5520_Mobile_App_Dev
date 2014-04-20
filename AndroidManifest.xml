@@ -147,5 +147,9 @@
             android:label="@string/final_proj_practice_label">
         </activity>
         
+        <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Acknowledgements" 
+             android:screenOrientation="portrait" android:label="@string/final_proj_ack" 
+             android:theme="@android:style/Theme.Dialog" />
+        
     </application>
 </manifest>

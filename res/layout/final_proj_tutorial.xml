@@ -18,23 +18,83 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyTextView
+            android:id="@+id/final_proj_tutorial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="@string/final_proj_tutorial"
+            />
+
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyTextView
+            android:id="@+id/final_proj_step1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/final_proj_step1" />
+        
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyTextView
+            android:id="@+id/final_proj_step2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/final_proj_step2" />
+        
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyTextView
+            android:id="@+id/final_proj_step3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/final_proj_step3" />
+        
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyTextView
+            android:id="@+id/final_proj_step4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/final_proj_step4" />
+        
+        <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+            
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
+            android:id="@+id/final_proj_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/final_proj_back" />
+        
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
+            android:id="@+id/final_proj_skip_tutorial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/final_proj_skip_tutorial" />
+        
+        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
+            style="@style/button"
+            android:id="@+id/final_proj_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/final_proj_next" />
+        
         <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
             style="@style/button"
             android:id="@+id/final_proj_practice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="@string/final_proj_practice_btn" />
+            android:visibility="gone"
+            android:text="@string/final_proj_practice" />
         
-        <edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton
-            style="@style/button"
-            android:id="@+id/final_proj_skip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/final_proj_skip_btn" />
-      
+        </LinearLayout>
     </LinearLayout>
     
 </ScrollView>
