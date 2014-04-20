@@ -10,12 +10,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class Home extends Activity implements OnClickListener {
 
   Context context;
   AlertDialog alertDialog;
-  Button dualPhoneModeButton, singlePhoneModeButton, exitGameButton;
+  ImageButton dualPhoneModeButton, singlePhoneModeButton, exitGameButton;
   boolean isDualPhoneModeSelected = false;
 
   public Home() {
@@ -29,13 +30,13 @@ public class Home extends Activity implements OnClickListener {
     context = this;
 
     // Set up click listeners for all the buttons
-    dualPhoneModeButton = (Button) findViewById(R.id.final_proj_dual_phone_mode_button);
+    dualPhoneModeButton = (ImageButton) findViewById(R.id.final_proj_dual_phone_mode_button);
     dualPhoneModeButton.setOnClickListener(this);
 
-    singlePhoneModeButton = (Button) findViewById(R.id.final_proj_single_phone_mode_button);
+    singlePhoneModeButton = (ImageButton) findViewById(R.id.final_proj_single_phone_mode_button);
     singlePhoneModeButton.setOnClickListener(this);
 
-    exitGameButton = (Button) findViewById(R.id.final_proj_exit_game_button);
+    exitGameButton = (ImageButton) findViewById(R.id.final_proj_exit_game_button);
     exitGameButton.setOnClickListener(this);
 
   }
