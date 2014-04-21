@@ -18,23 +18,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.net.ssl.HttpsURLConnection;
-
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.highgui.Highgui;
-
-import edu.neu.madcourse.dushyantdeshmukh.finalproject.CaptureImage;
-import edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection;
-import edu.neu.madcourse.dushyantdeshmukh.finalproject.Home;
-import edu.neu.madcourse.dushyantdeshmukh.finalproject.ProjectConstants;
-import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
-import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TwoPlayerWordGame;
-import edu.neu.mhealth.api.KeyValueAPI;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -46,14 +35,17 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.widget.Toast;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.CaptureImage;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.Home;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.MatchImage;
+import edu.neu.madcourse.dushyantdeshmukh.finalproject.ProjectConstants;
+import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
+import edu.neu.mhealth.api.KeyValueAPI;
 
 public class Util {
 
@@ -62,6 +54,7 @@ public class Util {
   static boolean isCaptureEvent;
   static boolean skipTutorial;
   static Context staticContext;
+  static int currState;
 
   public static HashMap<String, String> getDataMap(String bundlesStr, String tag) {
     HashMap<String, String> dataMap = new HashMap<String, String>();
@@ -738,6 +731,10 @@ public class Util {
     alertDialog.show();
   }
   
+  /**
+   * Show alert dialog to confirm if user wants to quit the game
+   * @param context
+   */
   public static void showQuitConfirmationDialog(Activity context){
 	  staticContext = context;
 	  AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
@@ -774,6 +771,94 @@ public class Util {
   public static int getTimeElapsed(int startTime) {
     int currTime = (int) System.currentTimeMillis() / 1000;
     return currTime - startTime;
+  }
+  
+  /**
+   * Increments the state of the Single phone mode game and returns it
+   * @param sp
+   * @return
+   */
+  public static int nextState(SharedPreferences sp) {
+    int currState = sp.getInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, 1);
+    int nextState = currState++;
+    sp.edit().putInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, nextState).commit();
+    return nextState;
+  }
+  
+  /**
+   * Returns the message to be displayed on the alert dialog
+   * depending on the current state of the single phone mode
+   * @param currState
+   * @return
+   */
+  public static String getSinglePhoneDialogMsg(int currState) {
+    String msg = "";
+    switch(currState) {
+    case ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE:
+      msg = ProjectConstants.SINGLE_PHONE_P1_CAPTURE_MSG;
+      break;
+    case ProjectConstants.SINGLE_PHONE_P2_CAPTURE_STATE:
+      msg = ProjectConstants.SINGLE_PHONE_P2_CAPTURE_MSG;
+      break;
+    case ProjectConstants.SINGLE_PHONE_P1_MATCH_STATE:
+      msg = ProjectConstants.SINGLE_PHONE_P1_MATCH_MSG;
+      break;
+    case ProjectConstants.SINGLE_PHONE_P2_MATCH_STATE:
+      msg = ProjectConstants.SINGLE_PHONE_P2_MATCH_MSG;
+      break;
+    }
+    return msg;
+  }
+  
+  /**
+   * Returns the title to be displayed on the alert dialog
+   * depending on the current state of the single phone mode
+   * @param currState
+   * @return
+   */
+  public static String getSinglePhoneDialogTitle(int currState) {
+    String title = "";
+    if (currState <= 2) {
+      title = ProjectConstants.CAPTURE_TITLE;
+    } else {
+      title = ProjectConstants.MATCH_TITLE;
+    }
+    return title;
+  }
+  
+  /**
+   * Show alert dialog to proceed to CaptureImage or MatchImage activity depending 
+   * on the current state of the game
+   * @param context
+   * @param currentState
+   */
+  public static void showSinglePhoneDialog(Activity context, int currentState){
+    staticContext = context;
+    currState = currentState;
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+      // set title
+      alertDialogBuilder.setTitle(getSinglePhoneDialogTitle(currState));
+      // set dialog message
+      alertDialogBuilder
+          .setMessage(getSinglePhoneDialogMsg(currState))
+          .setCancelable(false)
+          .setPositiveButton(ProjectConstants.START,
+              new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                  dialog.cancel();
+                  Intent i;
+                  if (currState <= 2) {
+                    i = new Intent(staticContext, CaptureImage.class);
+                  } else {
+                    i = new Intent(staticContext, MatchImage.class);
+                  }
+                  i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                  staticContext.startActivity(i);
+                }
+      });
+
+      AlertDialog alertDialog = alertDialogBuilder.create();
+      alertDialog.show();
   }
   
   /*

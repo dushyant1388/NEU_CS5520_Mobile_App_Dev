@@ -1,19 +1,17 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
-import org.opencv.android.Utils;
-
-import edu.neu.madcourse.dushyantdeshmukh.R;
-import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageButton;
+import edu.neu.madcourse.dushyantdeshmukh.R;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 
 public class Home extends Activity implements OnClickListener {
 
@@ -21,6 +19,7 @@ public class Home extends Activity implements OnClickListener {
   AlertDialog alertDialog;
   ImageButton dualPhoneModeButton, singlePhoneModeButton, exitGameButton;
   boolean isDualPhoneModeSelected = false;
+  private SharedPreferences projPreferences;
 
   public Home() {
   }
@@ -31,6 +30,7 @@ public class Home extends Activity implements OnClickListener {
     setContentView(R.layout.final_proj_home);
 
     context = this;
+    projPreferences = getSharedPreferences();
 
     // Set up click listeners for all the buttons
     dualPhoneModeButton = (ImageButton) findViewById(R.id.final_proj_dual_phone_mode_button);
@@ -57,8 +57,11 @@ public class Home extends Activity implements OnClickListener {
   @Override
   public void onClick(View v) {
     switch (v.getId()) {
+    case R.id.final_proj_single_phone_mode_button:
+      initiateGameInSinglePhoneMode();
+      break;
     case R.id.final_proj_dual_phone_mode_button:
-      boolean skipTutorial = getSharedPreferences().getBoolean(
+      boolean skipTutorial = projPreferences.getBoolean(
           ProjectConstants.PREF_SKIP_TUTORIAL, false);
       if (skipTutorial) {
         Intent dualPhoneIntent = new Intent(this, Connection.class);
@@ -68,13 +71,22 @@ public class Home extends Activity implements OnClickListener {
         startActivity(tutorialIntent);
       }
       break;
-    case R.id.final_proj_single_phone_mode_button:
-    	Util.showToast(this,"Sorry...We are still working on it!", 5000);
-      break;
     case R.id.final_proj_exit_game_button:
       finish();
       break;
     }
+  }
+
+  /**
+   * Initializes vars in shared preferences and starts a game in single phone mode
+   */
+  private void initiateGameInSinglePhoneMode() {
+    int currentState = ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE;
+    Editor e = projPreferences.edit();
+    e.putBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, true);
+    e.putInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, currentState);
+    e.commit();
+    Util.showSinglePhoneDialog(this, currentState);
   }
 
   private SharedPreferences getSharedPreferences() {
