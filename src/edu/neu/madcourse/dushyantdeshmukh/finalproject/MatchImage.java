@@ -141,6 +141,7 @@ public class MatchImage extends BaseCameraActivity {
   }
 
   private void initializeClassVars() {
+    Log.d(TAG, "initializeClassVars(), startTime = " + startTime);
     startTime = projPreferences.getInt(ProjectConstants.START_TIME, 0);
     isSinglePhoneMode = projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, false);
     currState = projPreferences.getInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, 1);
@@ -186,20 +187,16 @@ public class MatchImage extends BaseCameraActivity {
     // restore images matched so far
     imagesMatched = projPreferences.getInt(
         ProjectConstants.NUMBER_OF_IMAGES_MATCHED, 0);
-    startTime = projPreferences.getInt(ProjectConstants.START_TIME, 0);
     imgCountView.setText("Img Count: " + imagesMatched + "/" + totalNoOfImgs);
     Log.d(TAG, "Reading Img Count: " + imagesMatched);
-    Log.d(TAG, "Reading startTime: " + startTime);
   }
 
   private void storeState() {
     // store no of images captured so far
     Editor e = projPreferences.edit();
     e.putInt(ProjectConstants.NUMBER_OF_IMAGES_MATCHED, imagesMatched);
-    e.putInt(ProjectConstants.START_TIME, startTime);
     e.commit();
     Log.d(TAG, "Setting imagesMatched: " + imagesMatched);
-    Log.d(TAG, "Setting startTime: " + startTime);
   }
 
   @Override

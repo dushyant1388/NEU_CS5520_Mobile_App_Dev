@@ -546,7 +546,7 @@ public class Util {
     int min, sec;
     min = time / 60;
     sec = time % 60;
-    return (min + ":" + sec);
+    return (((min < 10) ? ("0" + min) : min) + ":" + ((sec < 10) ? ("0" + sec) : sec));
   }
 
   /**
@@ -888,6 +888,12 @@ public class Util {
                   i = new Intent(staticContext, CaptureImage.class);
                 } else {
                   i = new Intent(staticContext, MatchImage.class);
+                  
+                  // set start time for matching activity
+                  SharedPreferences projPreferences = staticContext.
+                      getSharedPreferences(ProjectConstants.FINAL_PROJECT, Context.MODE_PRIVATE);
+                  projPreferences.edit().putInt(ProjectConstants.START_TIME,
+                          (int) System.currentTimeMillis() / 1000).commit();
                 }
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 staticContext.startActivity(i);

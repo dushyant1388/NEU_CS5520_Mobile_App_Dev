@@ -57,12 +57,17 @@ public class GameFinish extends Activity implements OnClickListener {
 
     if (isSinglePhoneMode) {
       int p1Time = projPreferences.getInt(ProjectConstants.PLAYER_1_TIME, -1);
-      int p2Time = projPreferences.getInt(ProjectConstants.PLAYER_1_TIME, -1);
+      int p2Time = projPreferences.getInt(ProjectConstants.PLAYER_2_TIME, -1);
       int p1ImageCount = projPreferences.getInt(
-          ProjectConstants.PLAYER_2_IMAGE_COUNT, -1);
+          ProjectConstants.PLAYER_1_IMAGE_COUNT, -1);
       int p2ImageCount = projPreferences.getInt(
           ProjectConstants.PLAYER_2_IMAGE_COUNT, -1);
 
+      Log.d(TAG, "p1Time = " + p1Time);
+      Log.d(TAG, "p2Time = " + p2Time);
+      Log.d(TAG, "p1ImageCount = " + p1ImageCount);
+      Log.d(TAG, "p2ImageCount = " + p2ImageCount);
+      
       resultMsg = getSinglePhoneResultMsg(p1Time, p2Time, p1ImageCount,
           p2ImageCount);
       resultDetailsMsg = getResultDetailMsg("Player 1", "Player 2", p1Time,
@@ -109,7 +114,7 @@ public class GameFinish extends Activity implements OnClickListener {
     } else if (p1ImageCount < p2ImageCount) {
       resultMsg = "Player 2 Won!";
     } else if (p1Time < p2Time) {
-      resultMsg = "You Won!";
+      resultMsg = "Player 1 Won!";
     } else {
       resultMsg = "Player 2 Won!";
     }
