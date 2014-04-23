@@ -104,7 +104,8 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   @Override
   protected void onResume() {
     super.onResume();
-    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_6, this, mLoaderCallback);
+    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_6, this,
+        mLoaderCallback);
     showMatchBtn(isImg1Present);
   }
 
@@ -205,7 +206,11 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
 
   @Override
   protected CharSequence getTakePictureWaitMsg() {
-    return ProjectConstants.MATCH_WAIT_MSG;
+    if (isImg1Present) {
+      return ProjectConstants.MATCH_WAIT_MSG;
+    } else {
+      return ProjectConstants.CAPTURE_WAIT_MSG;
+    }
   }
 
   @Override
