@@ -498,15 +498,6 @@ public class Connection extends Activity implements OnClickListener {
 	}
 
 	private void initiateGame(boolean asPLayerOne) {
-		/*projPreferences.edit()
-				.putBoolean(ProjectConstants.IS_SWAP_ALERT_PAUSED, false)
-				.commit();
-
-		Log.d(TAG,
-				"isSwapAlertPaused: "
-						+ projPreferences.getBoolean(
-								ProjectConstants.IS_SWAP_ALERT_PAUSED, true));*/
-
 		// Util method to show dialog
 		swapAlertDialog = Util.showSwapPhonesAlertDialog(context, this, true,projPreferences);
 		swapAlertDialog.show();

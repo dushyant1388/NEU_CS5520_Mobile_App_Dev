@@ -101,7 +101,8 @@ public class ProjectConstants {
 
   public static final String CAPTURE_TITLE = "Capture Images";
   public static final String MATCH_TITLE = "Match Images";
-  public static final String SINGLE_PHONE_P1_CAPTURE_MSG = "Player 1's turn to capture images.";
+  public static final String SINGLE_PHONE_P1_CAPTURE_MSG = "Let's start the game. \n" +
+		  												   "Player 1's turn to capture images.";
   public static final String SINGLE_PHONE_P2_CAPTURE_MSG = "Player 2's turn to capture images.";
   public static final String SINGLE_PHONE_P1_MATCH_MSG = "Player 1's turn to match images.";
   public static final String SINGLE_PHONE_P2_MATCH_MSG = "Player 2's turn to match images.";

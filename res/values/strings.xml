@@ -337,6 +337,7 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_practice_btn">Practice</string>
     <string name="final_proj_clear_btn">Clear</string>
     <string name="final_proj_quit_btn">Quit</string>
+    <string name="final_proj_end_practice_btn">End Practice</string>
     
     <string name="final_proj_tutorial">Tutorial</string>
     <string name="final_proj_step1">\r\nStep 1: \r\n
