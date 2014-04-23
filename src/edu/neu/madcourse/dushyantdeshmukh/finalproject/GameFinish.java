@@ -1,10 +1,12 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
+import java.io.File;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,8 +42,36 @@ public class GameFinish extends Activity implements OnClickListener {
     finalScoreText = (TextView) findViewById(R.id.final_proj_show_result);
 
     projPreferences = getSharedPreferences();
+    
+    clearAllImages();
   }
 
+  /**
+   * delete all images captured during the game
+   */
+  private void clearAllImages() {
+    File mediaStorageDir = new File(
+        context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+        ProjectConstants.IMG_DIR_NAME);
+    deleteRecursive(mediaStorageDir);
+  }
+
+  /**
+   * Recursively delete the given file or directory
+   * @param fileOrDirectory
+   */
+  private void deleteRecursive(File fileOrDirectory) {
+    if (fileOrDirectory.isDirectory())
+        for (File child : fileOrDirectory.listFiles())
+        {
+          Log.d(TAG, "Deleting: " + child.getAbsolutePath());
+            child.delete();
+            deleteRecursive(child);
+        }
+
+    fileOrDirectory.delete();
+  }
+  
   @Override
   protected void onResume() {
     super.onResume();
