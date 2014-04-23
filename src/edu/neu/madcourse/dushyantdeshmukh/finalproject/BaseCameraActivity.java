@@ -181,7 +181,7 @@ public abstract class BaseCameraActivity extends Activity implements
     // Log.d(TAG,
     // "Inside getcameraInstance(), setting picture size to screenWidth X screenHeight = "
     // + screenWidth + " X " + screenHeight);
-    parameters.setPictureSize(screenWidth, screenHeight);
+    parameters.setPictureSize(optimalSize.width, optimalSize.height);
     camera.setParameters(parameters);
     return camera; // returns null if camera is unavailable
   }

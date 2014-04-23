@@ -799,7 +799,7 @@ public class Util {
 	 * 
 	 * @param context
 	 */
-	public static void showQuitConfirmationDialog(Activity context) {
+	public static AlertDialog showQuitConfirmationDialog(Activity context) {
 		staticContext = context;
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				context);
@@ -828,7 +828,7 @@ public class Util {
 						});
 
 		AlertDialog alertDialog = alertDialogBuilder.create();
-		alertDialog.show();
+		return alertDialog;
 	}
 
 	/**

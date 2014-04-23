@@ -41,11 +41,11 @@ public class MatchImage extends BaseCameraActivity {
   private ImageView imgToMatchView;
   private Bitmap imgsToMatchArr[];
   private boolean isImgMatchedArr[];
-  private AlertDialog alertDialog;
+  private AlertDialog waitingAlertDialog,quitAlertDialog;
   private BroadcastReceiver receiver;
   private int startTime = 0;
   private int imagesMatched = 0, currImgIndex = 0;
-  boolean isSinglePhoneMode;
+  boolean isSinglePhoneMode,isWaitingAlertDialogShown;
   int currState;
   String oppRegId;
 
@@ -173,8 +173,12 @@ public class MatchImage extends BaseCameraActivity {
         ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH));
     handleNotification(projPreferences);
     projPreferences.edit().putBoolean(ProjectConstants.IS_ACTIVITY_PAUSED, false).commit();
-    
     Log.d(TAG, "Inside onResume(), startTime = " + startTime);
+    
+    if(isWaitingAlertDialogShown){
+    	showWaitingAlertDialog();
+    	isWaitingAlertDialogShown = true;
+    }
   }
 
   @Override
@@ -183,6 +187,14 @@ public class MatchImage extends BaseCameraActivity {
     unregisterReceiver(receiver);
     Log.d(TAG, "Inside onPause(), startTime = " + startTime);
     projPreferences.edit().putBoolean(ProjectConstants.IS_ACTIVITY_PAUSED, true).commit();
+    
+    if(waitingAlertDialog != null){
+    	waitingAlertDialog.dismiss();
+    }
+    
+    if(quitAlertDialog != null){
+    	quitAlertDialog.dismiss();
+    }
   }
 
   private void restoreState() {
@@ -190,6 +202,7 @@ public class MatchImage extends BaseCameraActivity {
     imagesMatched = projPreferences.getInt(
         ProjectConstants.NUMBER_OF_IMAGES_MATCHED, 0);
     imgCountView.setText("Img Count: " + imagesMatched + "/" + totalNoOfImgs);
+    isWaitingAlertDialogShown = projPreferences.getBoolean(ProjectConstants.IS_WAITING_ALERT_DIALOG_SHOWN, false);
     Log.d(TAG, "Reading Img Count: " + imagesMatched);
   }
 
@@ -197,6 +210,7 @@ public class MatchImage extends BaseCameraActivity {
     // store no of images captured so far
     Editor e = projPreferences.edit();
     e.putInt(ProjectConstants.NUMBER_OF_IMAGES_MATCHED, imagesMatched);
+    e.putBoolean(ProjectConstants.IS_WAITING_ALERT_DIALOG_SHOWN, isWaitingAlertDialogShown);
     e.commit();
     Log.d(TAG, "Setting imagesMatched: " + imagesMatched);
   }
@@ -225,7 +239,8 @@ public class MatchImage extends BaseCameraActivity {
       skipToNextimg();
       break;
     case R.id.final_proj_end:
-      // showCapturedImg(false);
+      quitAlertDialog = Util.showQuitConfirmationDialog(this);
+      quitAlertDialog.show();
       break;
     }
   }
@@ -351,26 +366,32 @@ public class MatchImage extends BaseCameraActivity {
     if (isOppGameOver) {
       startGameFinishActivity();
     } else {
-      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-      // set title
-      alertDialogBuilder.setTitle(ProjectConstants.WAITING_TITLE);
-
-      // set dialog message
-      alertDialogBuilder
-          .setMessage(ProjectConstants.WAITING_MESSAGE)
-          .setCancelable(false)
-          .setPositiveButton(ProjectConstants.QUIT_BUTTON,
-              new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                  dialog.cancel();
-                  showQuitConfirmation();
-                }
-              });
-
-      alertDialog = alertDialogBuilder.create();
-      alertDialog.show();
+      showWaitingAlertDialog();
+      isWaitingAlertDialogShown = true;
     }
   }
+
+	protected void showWaitingAlertDialog() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MatchImage.this);
+	      // set title
+	      alertDialogBuilder.setTitle(ProjectConstants.WAITING_TITLE);
+	
+	      // set dialog message
+	      alertDialogBuilder
+	          .setMessage(ProjectConstants.WAITING_MESSAGE)
+	          .setCancelable(false)
+	          .setPositiveButton(ProjectConstants.QUIT_BUTTON,
+	              new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int id) {
+	                  dialog.cancel();
+	                  isWaitingAlertDialogShown = false;
+	                  showQuitConfirmation();
+	                }
+	              });
+	
+	      waitingAlertDialog = alertDialogBuilder.create();
+	      waitingAlertDialog.show();
+	}
 
   protected void showQuitConfirmation() {
     Util.showQuitConfirmationDialog(this);
@@ -406,9 +427,9 @@ public class MatchImage extends BaseCameraActivity {
         editor.commit();
 
         if (imagesMatched == totalNoOfImgs) {
-          if (alertDialog != null) {
+          /*if (alertDialog != null) {
             alertDialog.dismiss();
-          }
+          }*/
           startGameFinishActivity();
         }
       } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_MOVE)) {
