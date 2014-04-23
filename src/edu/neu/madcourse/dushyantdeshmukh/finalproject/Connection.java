@@ -46,7 +46,8 @@ public class Connection extends Activity implements OnClickListener {
 	private String username, regId, oppName, oppRegId;
 	private BroadcastReceiver receiver;
 	private SharedPreferences projPreferences;
-
+	private AlertDialog swapAlertDialog, showAcceptRejectDialog;
+	private boolean isSwapAlertDialogShown = false;
 	GoogleCloudMessaging gcm;
 	Context context;
 
@@ -118,6 +119,19 @@ public class Connection extends Activity implements OnClickListener {
 		super.onStop();
 	}
 
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		projPreferences
+				.edit()
+				.putBoolean(ProjectConstants.IS_SWAP_ALERT_DIALOG_SHOWN,
+						isSwapAlertDialogShown).commit();
+	}
+	
+	protected void onRestoreInstanceState(Bundle savedInstanceState){
+		super.onRestoreInstanceState(savedInstanceState);
+		isSwapAlertDialogShown = projPreferences.getBoolean(ProjectConstants.IS_SWAP_ALERT_DIALOG_SHOWN, false);
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -141,12 +155,68 @@ public class Connection extends Activity implements OnClickListener {
 		registerReceiver(receiver, new IntentFilter(
 				ProjectConstants.INTENT_ACTION_CONNECTION));
 		handleNotification(projPreferences);
+
+		projPreferences.edit()
+				.putBoolean(ProjectConstants.IS_ACTIVITY_PAUSED, false)
+				.commit();
+
+		
+		if(isSwapAlertDialogShown){
+			swapAlertDialog = Util.showSwapPhonesAlertDialog(this, this, true,projPreferences);
+			swapAlertDialog.show();
+			isSwapAlertDialogShown = true;
+		}
+		/*  if (projPreferences.getBoolean(ProjectConstants.IS_SWAP_ALERT_PAUSED,
+		 false)) { swapAlertDialog = Util.showSwapPhonesAlertDialog(context,
+		 this, true); // isSwapAlertDialogShown = true;
+		 swapAlertDialog.show(); projPreferences.edit()
+		 .putBoolean(ProjectConstants.IS_SWAP_ALERT_PAUSED, false) .commit();
+		 // isSwapAlertDialogShown = false; }
+*/		 
+
+		Log.d(TAG,
+				"IS_ACCEPT_REJECT_ALERT_PAUSED: "
+						+ projPreferences.getBoolean(
+								ProjectConstants.IS_ACCEPT_REJECT_ALERT_PAUSED,
+								false));
+
+		if (projPreferences.getBoolean(
+				ProjectConstants.IS_ACCEPT_REJECT_ALERT_PAUSED, false)) {
+			// isAcceptRejectDialogShown = true;
+			showAcceptRejectDialog();
+			projPreferences
+					.edit()
+					.putBoolean(ProjectConstants.IS_ACCEPT_REJECT_ALERT_PAUSED,
+							false).commit();
+			// isAcceptRejectDialogShown = false;
+		}
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		unregisterReceiver(receiver);
+		Log.d(TAG, "onPause...");
+		Log.d(TAG, "onPause...SwapAlertDialog value: " + swapAlertDialog);
+		projPreferences.edit()
+				.putBoolean(ProjectConstants.IS_ACTIVITY_PAUSED, true).commit();
+		
+		
+		if (swapAlertDialog != null) {
+			swapAlertDialog.dismiss();
+		}
+
+		// Log.d(TAG, "onPause: isAcceptRejectDialogShown: " +
+		// isAcceptRejectDialogShown);
+		if (showAcceptRejectDialog != null) {
+			// if (isAcceptRejectDialogShown) {
+			projPreferences
+					.edit()
+					.putBoolean(ProjectConstants.IS_ACCEPT_REJECT_ALERT_PAUSED,
+							true).commit();
+			// }
+			showAcceptRejectDialog.dismiss();
+		}
 	}
 
 	@Override
@@ -353,10 +423,12 @@ public class Connection extends Activity implements OnClickListener {
 						.edit()
 						.putString(ProjectConstants.PREF_OPPONENT_REG_ID,
 								this.oppRegId).commit();
-				// Log.d(TAG, "\n\n Setting this.oppRegId in SP: " +
-				// this.oppRegId + "\n\n");
-				// displayMsg("Setting this.oppRegId in SP: " + this.oppRegId);
-				// show [Accept, Reject] dialog
+
+				projPreferences
+						.edit()
+						.putString(ProjectConstants.POTENTIAL_OPPONENT_NAME,
+								this.oppName).commit();
+				// isAcceptRejectDialogShown = true;
 				showAcceptRejectDialog();
 			} else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_ACK_ACCEPT)) {
 				Log.d(TAG, "Inside MSG_TYPE_FP_ACK_ACCEPT = "
@@ -386,15 +458,21 @@ public class Connection extends Activity implements OnClickListener {
 	}
 
 	private void showAcceptRejectDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(Connection.this);
 		builder.setCancelable(true);
 		builder.setTitle("Game Request");
-		builder.setMessage("User '" + oppName + "' has sent a game request.");
+		builder.setMessage("User '"
+				+ projPreferences.getString(
+						ProjectConstants.POTENTIAL_OPPONENT_NAME,
+						ProjectConstants.OPPONENT)
+				+ "' has sent a game request.");
 		builder.setPositiveButton("Accept",
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
+						showAcceptRejectDialog = null;
+						// isAcceptRejectDialogShown = true;
 						initiateGame(true);
 					}
 				});
@@ -403,30 +481,58 @@ public class Connection extends Activity implements OnClickListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
+						showAcceptRejectDialog = null;
+						// isAcceptRejectDialogShown = true;
 						// send an reject ack to oppponent
-						sendReqAckToOpponent(false, oppRegId);
+						String oppRegIdString = projPreferences.getString(
+								ProjectConstants.PREF_OPPONENT_REG_ID, null);
+						if (oppRegIdString != null) {
+							sendReqAckToOpponent(false, oppRegIdString);
+						}
+
 					}
 				});
-		AlertDialog alert = builder.create();
-		alert.show();
+		showAcceptRejectDialog = builder.create();
+		Log.d(TAG, "alert created: " + showAcceptRejectDialog);
+		showAcceptRejectDialog.show();
 	}
 
 	private void initiateGame(boolean asPLayerOne) {
+		/*projPreferences.edit()
+				.putBoolean(ProjectConstants.IS_SWAP_ALERT_PAUSED, false)
+				.commit();
+
+		Log.d(TAG,
+				"isSwapAlertPaused: "
+						+ projPreferences.getBoolean(
+								ProjectConstants.IS_SWAP_ALERT_PAUSED, true));*/
+
 		// Util method to show dialog
-		Util.showSwapPhonesAlertDialog(context, this, true);
-		Util.storeOppnentInSharedpref(projPreferences, oppName, oppRegId);
+		swapAlertDialog = Util.showSwapPhonesAlertDialog(context, this, true,projPreferences);
+		swapAlertDialog.show();
+		isSwapAlertDialogShown = true;
 
-		/* startActivity(i); */
+		swapAlertDialog = null;
+		String oppRegIdString = projPreferences.getString(
+				ProjectConstants.PREF_OPPONENT_REG_ID, null);
+		if (oppRegIdString != null) {
 
-		if (asPLayerOne) {
-			// send an accept ack to oppponent
-			sendReqAckToOpponent(true, oppRegId);
+			Util.storeOppnentInSharedpref(projPreferences, projPreferences
+					.getString(ProjectConstants.POTENTIAL_OPPONENT_NAME,
+							ProjectConstants.OPPONENT), oppRegIdString);
+
+			if (asPLayerOne) {
+				// send an accept ack to oppponent
+				sendReqAckToOpponent(true, oppRegIdString);
+			}
 		}
+
 	}
 
 	private void handleNotification(SharedPreferences sp) {
 		Log.d(TAG, "Inside handle notification method...");
 		String data = sp.getString(ProjectConstants.KEY_NOTIFICATION_DATA, "");
+		Log.d(TAG, "data " + data);
 		if (!data.equals("")) {
 			Log.d(TAG, "data exists: " + data);
 			handleOpponentResponse(data);
@@ -505,7 +611,6 @@ public class Connection extends Activity implements OnClickListener {
 						regId = gcm.register(ProjectConstants.SENDER_ID);
 						// msg = "Device registered, registration ID=" + regid;
 						msg = "Device registered for the first time...";
-
 						storeRegistrationId(context, regId);
 					} catch (IOException ex) {
 						msg = "Error :" + ex.getMessage();

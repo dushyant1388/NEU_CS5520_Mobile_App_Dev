@@ -110,4 +110,10 @@ public class ProjectConstants {
   public static String PLAYER_1_IMAGE_COUNT = "PLAYER_1_IMAGE_COUNT";
   public static String PLAYER_2_TIME = "PLAYER_2_TIME";
   public static String PLAYER_2_IMAGE_COUNT = "PLAYER_2_IMAGE_COUNT";
+  
+  public static final String IS_ACTIVITY_PAUSED = "IS_ACTIVITY_PAUSED";
+  public static final String OPPONENT = "Opponent";
+  public static final String IS_SWAP_ALERT_DIALOG_SHOWN = "IS_SWAP_ALERT_DIALOG_SHOWN";
+  public static final String IS_ACCEPT_REJECT_ALERT_PAUSED = "IS_ACCEPT_REJECT_ALERT_PAUSED";
+  public static final String POTENTIAL_OPPONENT_NAME = "POTENTIAL_OPPONENT_NAME";
 }

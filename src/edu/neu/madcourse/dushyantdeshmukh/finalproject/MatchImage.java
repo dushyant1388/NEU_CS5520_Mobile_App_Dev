@@ -172,7 +172,8 @@ public class MatchImage extends BaseCameraActivity {
     registerReceiver(receiver, new IntentFilter(
         ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH));
     handleNotification(projPreferences);
-
+    projPreferences.edit().putBoolean(ProjectConstants.IS_ACTIVITY_PAUSED, false).commit();
+    
     Log.d(TAG, "Inside onResume(), startTime = " + startTime);
   }
 
@@ -181,6 +182,7 @@ public class MatchImage extends BaseCameraActivity {
     super.onPause();
     unregisterReceiver(receiver);
     Log.d(TAG, "Inside onPause(), startTime = " + startTime);
+    projPreferences.edit().putBoolean(ProjectConstants.IS_ACTIVITY_PAUSED, true).commit();
   }
 
   private void restoreState() {

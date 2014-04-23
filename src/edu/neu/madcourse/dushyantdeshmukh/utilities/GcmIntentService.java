@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.communication.TestInterphoneComm;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.MatchImage;
@@ -16,7 +17,6 @@ import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Game;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.MsgFromOpponent;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.RequestFromOpponent;
 import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.TwoPlayerWordGame;
-import android.R;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.app.IntentService;
@@ -85,12 +85,15 @@ public class GcmIntentService extends IntentService {
 
 	private boolean isFinalProjectActivityActive(Intent intent) {
 		boolean isActive = false;
+		boolean isActivityPaused = getSharedPreferences(ProjectConstants.FINAL_PROJECT,
+				Context.MODE_PRIVATE).getBoolean(ProjectConstants.IS_ACTIVITY_PAUSED, false);
+		Log.d("GCM_INTENT_SERVICE", "isActivityPaused: " + isActivityPaused);
 		ActivityManager activityManager = (ActivityManager) getApplicationContext()
 				.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> services = activityManager
 				.getRunningTasks(Integer.MAX_VALUE);
 		if (services.get(0).topActivity.getClassName().equalsIgnoreCase(
-				intent.getComponent().getClassName())) {
+				intent.getComponent().getClassName()) && !isActivityPaused) {
 			isActive = true;
 		}
 		return isActive;
@@ -117,35 +120,34 @@ public class GcmIntentService extends IntentService {
 						+ ProjectConstants.MSG_TYPE_FP_CONNECT);
 				i = new Intent(this, Connection.class);
 				processFinalProjectMsg(data, i,
-						ProjectConstants.INTENT_ACTION_CONNECTION);
-
+						ProjectConstants.INTENT_ACTION_CONNECTION,dataMap.get(ProjectConstants.KEY_USERNAME));
 			} else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_ACK_ACCEPT)) {
 				Log.d(TAG, "Inside MSG_TYPE_CONNECT = "
 						+ ProjectConstants.MSG_TYPE_FP_ACK_ACCEPT);
 				i = new Intent(this, Connection.class);
 				processFinalProjectMsg(data, i,
-						ProjectConstants.INTENT_ACTION_CONNECTION);
+						ProjectConstants.INTENT_ACTION_CONNECTION,dataMap.get(ProjectConstants.KEY_USERNAME));
 
 			} else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_ACK_REJECT)) {
 				Log.d(TAG, "Inside MSG_TYPE_CONNECT = "
 						+ ProjectConstants.MSG_TYPE_FP_ACK_REJECT);
 				i = new Intent(this, Connection.class);
 				processFinalProjectMsg(data, i,
-						ProjectConstants.INTENT_ACTION_CONNECTION);
+						ProjectConstants.INTENT_ACTION_CONNECTION,dataMap.get(ProjectConstants.KEY_USERNAME));
 
 			} else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_MOVE)) {
 				Log.d(TAG, "Inside MSG_TYPE_FP_MOVE = "
 						+ ProjectConstants.MSG_TYPE_FP_MOVE);
 				i = new Intent(this, MatchImage.class);
 				processFinalProjectMsg(data, i,
-						ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH);
+						ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH,ProjectConstants.OPPONENT);
 
 			} else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_GAME_OVER)) {
 				Log.d(TAG, "Inside MSG_TYPE_FP_GAME_OVER = "
 						+ ProjectConstants.MSG_TYPE_FP_GAME_OVER);
 				i = new Intent(this, MatchImage.class);
 				processFinalProjectMsg(data, i,
-						ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH);
+						ProjectConstants.INTENT_ACTION_GAME_MOVE_AND_FINISH,ProjectConstants.OPPONENT);
 
 			} else if (msgType.equals(Constants.MSG_TYPE_2P_CONNECT)) {
 				Log.d(TAG, "Inside MSG_TYPE_CONNECT = "
@@ -218,14 +220,13 @@ public class GcmIntentService extends IntentService {
 	}
 
 	private void processFinalProjectMsg(String data, Intent i,
-			String intentAction) {
+			String intentAction,String oppName) {
 		Log.d(TAG, "Inside process2PMsg()");
 		if (isFinalProjectActivityActive(i)) {
 			Log.d(TAG, "isAppActive - starting activity: " + i.toString());
 			SendBroadcast(data, intentAction);
 		} else {
-			
-			sendNotification(data, i);
+			sendFinalProjectNotification(data, i,oppName);
 		}
 	}
 
@@ -279,11 +280,6 @@ public class GcmIntentService extends IntentService {
 				| Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
 		
-		getSharedPreferences(ProjectConstants.FINAL_PROJECT,
-				Context.MODE_PRIVATE).edit()
-				.putString(ProjectConstants.KEY_NOTIFICATION_DATA, data)
-				.commit();
-		
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				this)
 				.setSmallIcon(R.drawable.stat_notify_more)
@@ -296,9 +292,44 @@ public class GcmIntentService extends IntentService {
 
 		mBuilder.setContentIntent(contentIntent);
 		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-
 	}
 
+	private void sendFinalProjectNotification(String data, Intent i,String oppName){
+		mNotificationManager = (NotificationManager) this
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+
+		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+				| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
+		
+		getSharedPreferences(ProjectConstants.FINAL_PROJECT,
+				Context.MODE_PRIVATE).edit()
+				.putString(ProjectConstants.KEY_NOTIFICATION_DATA, data)
+				.commit();
+		
+		String opponentName = getSharedPreferences(ProjectConstants.FINAL_PROJECT,
+				Context.MODE_PRIVATE).getString(ProjectConstants.PREF_OPPONENT_NAME, ProjectConstants.OPPONENT);
+		
+		if(opponentName.equals(ProjectConstants.OPPONENT)){
+			opponentName = oppName;
+		}
+		
+		Log.d("ProjectNotifications", "opponent name: " + opponentName);
+		
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				this)
+				.setSmallIcon(R.drawable.ic_proj_notification)
+				.setContentTitle("Match Me If You Can")
+				.setStyle(
+						new NotificationCompat.BigTextStyle()
+								.bigText("Received new game message from " + opponentName + "."))
+				.setContentText("New game message received from " + opponentName + ".")
+				.setAutoCancel(true);
+
+		mBuilder.setContentIntent(contentIntent);
+		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());	
+	}
+	
 	public void showDebugToast(String msg) {
 		// Toast t = Toast.makeText(getApplicationContext(), msg, 2000);
 		// t.show();
