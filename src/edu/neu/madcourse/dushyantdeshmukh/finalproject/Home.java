@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -15,6 +16,7 @@ import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 
 public class Home extends Activity implements OnClickListener {
 
+  private static final String TAG = "HOME ACIVITY";
   Context context;
   AlertDialog alertDialog;
   ImageButton dualPhoneModeButton, singlePhoneModeButton, exitGameButton;
@@ -56,13 +58,19 @@ public class Home extends Activity implements OnClickListener {
 
   @Override
   public void onClick(View v) {
+    boolean skipTutorial = projPreferences.getBoolean(
+        ProjectConstants.PREF_SKIP_TUTORIAL, false);
     switch (v.getId()) {
     case R.id.final_proj_single_phone_mode_button:
       initiateGameInSinglePhoneMode();
+      if (skipTutorial) {
+        Util.showSinglePhoneDialog(this, ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE);
+      } else {
+        Intent tutorialIntent = new Intent(this, Tutorial.class);
+        startActivity(tutorialIntent);
+      }
       break;
     case R.id.final_proj_dual_phone_mode_button:
-      boolean skipTutorial = projPreferences.getBoolean(
-          ProjectConstants.PREF_SKIP_TUTORIAL, false);
       if (skipTutorial) {
         Intent dualPhoneIntent = new Intent(this, Connection.class);
         startActivity(dualPhoneIntent);
@@ -81,12 +89,11 @@ public class Home extends Activity implements OnClickListener {
    * Initializes vars in shared preferences and starts a game in single phone mode
    */
   private void initiateGameInSinglePhoneMode() {
-    int currentState = ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE;
     Editor e = projPreferences.edit();
     e.putBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, true);
-    e.putInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, currentState);
+    e.putInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE);
     e.commit();
-    Util.showSinglePhoneDialog(this, currentState);
+    Log.d(TAG, "isSinglePhoneMode = " + projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, false));
   }
 
   private SharedPreferences getSharedPreferences() {

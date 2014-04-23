@@ -45,7 +45,8 @@ public class ProjectConstants {
 
   public static double PSNR_THRESHOLD = 14.0;
   public static String IMG_DIR_NAME = "images_to_match";
-  public static String IMG_NAME_PREFIX = "IMAGE_NO_";
+  public static String P1_IMG_NAME_PREFIX = "P1_IMAGE_NO_";
+  public static String P2_IMG_NAME_PREFIX = "P2_IMAGE_NO_";
   public static final int IMG_ALPHA = 85; // larger value indicates more focus
                                           // on img to match
   public static final String CAPTURE_SWAP_MSG = "Swap Phone and ask opponent to press start to capture images";
@@ -104,4 +105,9 @@ public class ProjectConstants {
   public static final String SINGLE_PHONE_P2_CAPTURE_MSG = "Player 2's turn to capture images.";
   public static final String SINGLE_PHONE_P1_MATCH_MSG = "Player 1's turn to match images.";
   public static final String SINGLE_PHONE_P2_MATCH_MSG = "Player 2's turn to match images.";
+  
+  public static String PLAYER_1_TIME = "PLAYER_1_TIME";
+  public static String PLAYER_1_IMAGE_COUNT = "PLAYER_1_IMAGE_COUNT";
+  public static String PLAYER_2_TIME = "PLAYER_2_TIME";
+  public static String PLAYER_2_IMAGE_COUNT = "PLAYER_2_IMAGE_COUNT";
 }

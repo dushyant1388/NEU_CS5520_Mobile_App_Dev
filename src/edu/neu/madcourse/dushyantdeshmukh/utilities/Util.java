@@ -18,12 +18,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.net.ssl.HttpsURLConnection;
+
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -553,7 +556,9 @@ public class Util {
    * @param totalNoOfImgs
    * @return
    */
-  public static Bitmap[] getImgsToMatch(int totalNoOfImgs, Context context) {
+  public static Bitmap[] getImgsToMatch(int totalNoOfImgs, int currState,
+      Context context) {
+    Log.d(TAG, "Inside getImgsToMatch(), currState = " + currState);
     Bitmap[] bitmapImgArr = new Bitmap[totalNoOfImgs];
     File mediaStorageDir = new File(
         context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
@@ -562,8 +567,8 @@ public class Util {
 
     for (int i = 0; i < totalNoOfImgs; i++) {
       Bitmap currBitmap = BitmapFactory.decodeFile(mediaStorageDir.getPath()
-          + File.separator + ProjectConstants.IMG_NAME_PREFIX + (i + 1),
-          options);
+          + File.separator + getImagePrefix(currState) + (i + 1), options);
+      Log.d(TAG, "Reading img to match: " + getImagePrefix(currState) + (i + 1));
       bitmapImgArr[i] = currBitmap;
     }
     return bitmapImgArr;
@@ -576,9 +581,10 @@ public class Util {
    * @param currImgData
    * @param currImgNo
    */
-  public static void storeImg(byte[] imgData, int imgNo, Context context) {
-    File pictureFile = getOutputMediaFile(ProjectConstants.IMG_NAME_PREFIX
-        + imgNo, context);
+  public static void storeImg(byte[] imgData, int imgNo, int currState,
+      Context context) {
+    String imgName = getImagePrefix(currState) + imgNo;
+    File pictureFile = getOutputMediaFile(imgName, context);
     if (pictureFile == null) {
       Log.d(TAG, "Error creating media file, check storage permissions!");
       return;
@@ -592,6 +598,22 @@ public class Util {
     } catch (IOException e) {
       Log.d(TAG, "Error accessing file: " + e.getMessage());
     }
+  }
+
+  /**
+   * 
+   * @param currState
+   * @return
+   */
+  private static String getImagePrefix(int currState) {
+    String imgPrefix = "";
+    if ((ProjectConstants.SINGLE_PHONE_P2_CAPTURE_STATE == currState)
+        || (ProjectConstants.SINGLE_PHONE_P2_MATCH_STATE == currState)) {
+      imgPrefix = ProjectConstants.P2_IMG_NAME_PREFIX;
+    } else {
+      imgPrefix = ProjectConstants.P1_IMG_NAME_PREFIX;
+    }
+    return imgPrefix;
   }
 
   /**
@@ -621,8 +643,6 @@ public class Util {
     }
 
     // Create a media file name
-    // String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-    // .format(new Date());
     File mediaFile = new File(mediaStorageDir.getPath() + File.separator
         + imgName);
     Log.d(TAG, "Storing img at path: " + mediaStorageDir.getPath()
@@ -666,18 +686,22 @@ public class Util {
 
   /**
    * Converts the given byte[] into a Bitmap for the corresponding image
+   * 
    * @param imgData
-   * @param windowManager 
+   * @param windowManager
    * @return
    */
   public static Bitmap convertByteArrToBitmap(byte[] imgData) {
-    Log.d(TAG, "\n\n Inside convertByteArrToBitmap(), imgData length = " + imgData.length);
-    Bitmap bmpImg = BitmapFactory.decodeByteArray(imgData, 0, imgData.length, null);
+    Log.d(TAG, "\n\n Inside convertByteArrToBitmap(), imgData length = "
+        + imgData.length);
+    Bitmap bmpImg = BitmapFactory.decodeByteArray(imgData, 0, imgData.length,
+        null);
     return bmpImg;
   }
 
   /**
    * Convert given Bitmap to Mat
+   * 
    * @param bmpImg
    * @return
    */
@@ -730,41 +754,44 @@ public class Util {
     AlertDialog alertDialog = alertDialogBuilder.create();
     alertDialog.show();
   }
-  
+
   /**
    * Show alert dialog to confirm if user wants to quit the game
+   * 
    * @param context
    */
-  public static void showQuitConfirmationDialog(Activity context){
-	  staticContext = context;
-	  AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-	    // set title
-	    alertDialogBuilder.setTitle(ProjectConstants.QUIT_TITLE);
-	    // set dialog message
-	    alertDialogBuilder
-	        .setMessage(ProjectConstants.QUIT_GAME_MESSAGE)
-	        .setCancelable(false)
-	        .setPositiveButton(ProjectConstants.YES,
-	            new DialogInterface.OnClickListener() {
-	              public void onClick(DialogInterface dialog, int id) {
-	                dialog.cancel();
-	                Intent mainMainActivity = new Intent(staticContext, Home.class);
-	                mainMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	                staticContext.startActivity(mainMainActivity);
-	              }
-	            })
-	    	.setNegativeButton(ProjectConstants.NO, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.cancel();
-				}
-			});
+  public static void showQuitConfirmationDialog(Activity context) {
+    staticContext = context;
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+    // set title
+    alertDialogBuilder.setTitle(ProjectConstants.QUIT_TITLE);
+    // set dialog message
+    alertDialogBuilder
+        .setMessage(ProjectConstants.QUIT_GAME_MESSAGE)
+        .setCancelable(false)
+        .setPositiveButton(ProjectConstants.YES,
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+                Intent mainMainActivity = new Intent(staticContext, Home.class);
+                mainMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                staticContext.startActivity(mainMainActivity);
+              }
+            })
+        .setNegativeButton(ProjectConstants.NO,
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+              }
+            });
 
-	    AlertDialog alertDialog = alertDialogBuilder.create();
-	    alertDialog.show();
+    AlertDialog alertDialog = alertDialogBuilder.create();
+    alertDialog.show();
   }
 
   /**
    * Given the start time in secs, returns the time elapsed in secs
+   * 
    * @param startTime
    * @return
    */
@@ -772,28 +799,33 @@ public class Util {
     int currTime = (int) System.currentTimeMillis() / 1000;
     return currTime - startTime;
   }
-  
+
   /**
    * Increments the state of the Single phone mode game and returns it
+   * 
    * @param sp
    * @return
    */
   public static int nextState(SharedPreferences sp) {
     int currState = sp.getInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, 1);
-    int nextState = currState++;
-    sp.edit().putInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, nextState).commit();
+    int nextState = currState + 1;
+    Log.d(TAG, "currState = " + currState);
+    Log.d(TAG, "nextState = " + nextState);
+    sp.edit().putInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, nextState)
+        .commit();
     return nextState;
   }
-  
+
   /**
-   * Returns the message to be displayed on the alert dialog
-   * depending on the current state of the single phone mode
+   * Returns the message to be displayed on the alert dialog depending on the
+   * current state of the single phone mode
+   * 
    * @param currState
    * @return
    */
   public static String getSinglePhoneDialogMsg(int currState) {
     String msg = "";
-    switch(currState) {
+    switch (currState) {
     case ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE:
       msg = ProjectConstants.SINGLE_PHONE_P1_CAPTURE_MSG;
       break;
@@ -809,58 +841,63 @@ public class Util {
     }
     return msg;
   }
-  
+
   /**
-   * Returns the title to be displayed on the alert dialog
-   * depending on the current state of the single phone mode
+   * Returns the title to be displayed on the alert dialog depending on the
+   * current state of the single phone mode
+   * 
    * @param currState
    * @return
    */
   public static String getSinglePhoneDialogTitle(int currState) {
     String title = "";
-    if (currState <= 2) {
+    if (ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE == currState
+        || ProjectConstants.SINGLE_PHONE_P2_CAPTURE_STATE == currState) {
       title = ProjectConstants.CAPTURE_TITLE;
     } else {
       title = ProjectConstants.MATCH_TITLE;
     }
     return title;
   }
-  
+
   /**
-   * Show alert dialog to proceed to CaptureImage or MatchImage activity depending 
-   * on the current state of the game
+   * Show alert dialog to proceed to CaptureImage or MatchImage activity
+   * depending on the current state of the game
+   * 
    * @param context
    * @param currentState
    */
-  public static void showSinglePhoneDialog(Activity context, int currentState){
+  public static void showSinglePhoneDialog(Activity context, int currentState) {
     staticContext = context;
     currState = currentState;
+    Log.d(TAG, "inside showSinglePhoneDialog(), currState = " + currState);
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-      // set title
-      alertDialogBuilder.setTitle(getSinglePhoneDialogTitle(currState));
-      // set dialog message
-      alertDialogBuilder
-          .setMessage(getSinglePhoneDialogMsg(currState))
-          .setCancelable(false)
-          .setPositiveButton(ProjectConstants.START,
-              new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                  dialog.cancel();
-                  Intent i;
-                  if (currState <= 2) {
-                    i = new Intent(staticContext, CaptureImage.class);
-                  } else {
-                    i = new Intent(staticContext, MatchImage.class);
-                  }
-                  i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                  staticContext.startActivity(i);
+    // set title
+    alertDialogBuilder.setTitle(getSinglePhoneDialogTitle(currState));
+    // set dialog message
+    alertDialogBuilder
+        .setMessage(getSinglePhoneDialogMsg(currState))
+        .setCancelable(false)
+        .setPositiveButton(ProjectConstants.START,
+            new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+                Intent i;
+                if (ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE == currState
+                    || ProjectConstants.SINGLE_PHONE_P2_CAPTURE_STATE == currState) {
+                  i = new Intent(staticContext, CaptureImage.class);
+                } else {
+                  i = new Intent(staticContext, MatchImage.class);
                 }
-      });
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                staticContext.startActivity(i);
+              }
+            });
 
-      AlertDialog alertDialog = alertDialogBuilder.create();
-      alertDialog.show();
+    AlertDialog alertDialog = alertDialogBuilder.create();
+    alertDialog.show();
   }
-  
+
   /*
    * new AsyncTask<String, Integer, String>() {
    * 

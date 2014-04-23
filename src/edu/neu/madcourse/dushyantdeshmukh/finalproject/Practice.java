@@ -4,12 +4,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -27,13 +31,14 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
 
   protected static final String TAG = "PRACTICE ACTIVITY";
 
-  private static final String IMG_1_NAME = ProjectConstants.IMG_NAME_PREFIX + 1;
-  private static final String IMG_2_NAME = ProjectConstants.IMG_NAME_PREFIX + 2;
+  private static final String IMG_1_NAME = ProjectConstants.P1_IMG_NAME_PREFIX + 1;
+  private static final String IMG_2_NAME = ProjectConstants.P1_IMG_NAME_PREFIX + 2;
 
   LayoutInflater controlInflater = null;
   View captureButton, matchButton, clearButton, quitButton;
   ImageView capturedImgView, imgToMatchView;
   protected boolean isImg1Present = false;
+  boolean isSinglePhoneMode;
 
   private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
     @Override
@@ -54,6 +59,12 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    context = this;
+    projPreferences = getSharedPreferences();
+    isSinglePhoneMode = projPreferences.getBoolean(
+        ProjectConstants.IS_SINGLE_PHONE_MODE, false);
+    Log.d(TAG, "isSinglePhoneMode = " + isSinglePhoneMode);
 
     // set final_proj_image_to_match and final_proj_match layouts as
     // overlayed layouts on top of the camera preview layout
@@ -87,14 +98,13 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
     if (isImg1Present) {
       displayImg(readImgBmp(1));
     }
+
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_6, this,
-        mLoaderCallback);
-
+    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_6, this, mLoaderCallback);
     showMatchBtn(isImg1Present);
   }
 
@@ -134,10 +144,16 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
       showMatchBtn(false);
       break;
     case R.id.final_proj_quit:
-      // Go to Connection Activity
-      Intent captureIntent = new Intent(context, Connection.class);
-      captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-      startActivity(captureIntent);
+      Log.d(TAG, "isSinglePhoneMode = " + isSinglePhoneMode);
+      if (isSinglePhoneMode) {
+        Util.showSinglePhoneDialog(this,
+            ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE);
+      } else {
+        // Go to Connection Activity
+        Intent captureIntent = new Intent(context, Connection.class);
+        captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(captureIntent);
+      }
       break;
     }
   }
@@ -147,11 +163,12 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
         context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
         ProjectConstants.IMG_DIR_NAME);
     BitmapFactory.Options options = new BitmapFactory.Options();
-    Bitmap bitmap = BitmapFactory.decodeFile(mediaStorageDir.getPath()
-        + File.separator + ProjectConstants.IMG_NAME_PREFIX + imgNo, options);
+    Bitmap bitmap = BitmapFactory
+        .decodeFile(mediaStorageDir.getPath() + File.separator
+            + ProjectConstants.P1_IMG_NAME_PREFIX + imgNo, options);
 
     Log.d(TAG, "Reading img at path: " + mediaStorageDir.getPath()
-        + File.separator + ProjectConstants.IMG_NAME_PREFIX + imgNo);
+        + File.separator + ProjectConstants.P1_IMG_NAME_PREFIX + imgNo);
     return bitmap;
   }
 
@@ -169,9 +186,9 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
         context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
         ProjectConstants.IMG_DIR_NAME);
     String img1Path = mediaStorageDir.getPath() + File.separator
-        + ProjectConstants.IMG_NAME_PREFIX + img1No;
+        + ProjectConstants.P1_IMG_NAME_PREFIX + img1No;
     String img2Path = mediaStorageDir.getPath() + File.separator
-        + ProjectConstants.IMG_NAME_PREFIX + img2No;
+        + ProjectConstants.P1_IMG_NAME_PREFIX + img2No;
 
     Mat imageMatrix1 = Highgui.imread(img1Path);
     Mat imageMatrix2 = Highgui.imread(img2Path);
@@ -230,6 +247,11 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
     } catch (IOException e) {
       Log.d(TAG, "Error accessing file: " + e.getMessage());
     }
+  }
+
+  private SharedPreferences getSharedPreferences() {
+    return getSharedPreferences(ProjectConstants.FINAL_PROJECT,
+        Context.MODE_PRIVATE);
   }
 
 }

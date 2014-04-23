@@ -23,11 +23,13 @@ public class CaptureImage extends BaseCameraActivity {
   byte[] currImgData;
   Bitmap imgArr[];
   int currImgNo = 0;
+  boolean isSinglePhoneMode;
+  int currState;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    
+
     // set final_proj_capture layout as an overlayed layout
     // on top of the camera preview layout
     controlInflater = LayoutInflater.from(getBaseContext());
@@ -55,12 +57,15 @@ public class CaptureImage extends BaseCameraActivity {
     showCapturedImg(false);
 
     initializeClassVars();
-    
   }
 
   private void initializeClassVars() {
     Log.d(TAG, "Inside initializeClassVars()");
     imgArr = new Bitmap[totalNoOfImgs];
+    isSinglePhoneMode = projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, false);
+    currState = projPreferences.getInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, 1);
+    Log.d(TAG, "isSinglePhoneMode = " + isSinglePhoneMode);
+    Log.d(TAG, "currState = " + currState);
   }
 
   @Override
@@ -69,7 +74,7 @@ public class CaptureImage extends BaseCameraActivity {
   }
 
   private void restoreState() {
-    //  restore images captured so far
+    // restore images captured so far
     currImgNo = projPreferences.getInt(ProjectConstants.NUMBER_OF_IMAGES, 0);
     imgCountView.setText("Img Count: " + currImgNo + "/" + totalNoOfImgs);
     Log.d(TAG, "Reading Img Count: " + currImgNo);
@@ -81,8 +86,10 @@ public class CaptureImage extends BaseCameraActivity {
   }
 
   private void storeState() {
-    //  store no of images captured so far
-    projPreferences.edit().putInt(ProjectConstants.NUMBER_OF_IMAGES, currImgNo).commit();
+    // store no of images captured so far
+    Editor e = projPreferences.edit();
+    e.putInt(ProjectConstants.NUMBER_OF_IMAGES, currImgNo);
+    e.commit();
     Log.d(TAG, "Setting currImgNo: " + currImgNo);
   }
 
@@ -91,13 +98,13 @@ public class CaptureImage extends BaseCameraActivity {
     super.onSaveInstanceState(outState);
     storeState();
   }
-  
+
   @Override
   protected void onRestoreInstanceState(Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
     restoreState();
   }
-  
+
   @Override
   public void onClick(View v) {
     Log.d(TAG, "Inside onClick()");
@@ -123,13 +130,17 @@ public class CaptureImage extends BaseCameraActivity {
       imgArr = new Bitmap[totalNoOfImgs];
     }
     imgArr[currImgNo - 1] = currBmpImg;
-    Util.storeImg(currImgData, currImgNo, context);
-    
+    Util.storeImg(currImgData, currImgNo, currState, context);
+
     if (currImgNo >= totalNoOfImgs) {
       // finished capturing images
-      Util.showToast(context, "Finished capturing " + totalNoOfImgs + " images",
-          3000);
-      Util.showSwapPhonesAlertDialog(context,this,false);
+      Util.showToast(context,
+          "Finished capturing " + totalNoOfImgs + " images", 3000);
+      if (isSinglePhoneMode) {
+        Util.showSinglePhoneDialog(this, Util.nextState(projPreferences));
+      } else {
+        Util.showSwapPhonesAlertDialog(context, this, false);
+      }
     }
   }
 
@@ -161,18 +172,20 @@ public class CaptureImage extends BaseCameraActivity {
   }
 
   public void startMatchActivity() {
-    //  set start time for matching activity
-     projPreferences.edit().putInt(ProjectConstants.START_TIME, 
-         (int) System.currentTimeMillis() / 1000).commit();
-    
-	  Intent captureIntent = new Intent(context,MatchImage.class);
-	  captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	  startActivity(captureIntent);		
+    // set start time for matching activity
+    projPreferences
+        .edit()
+        .putInt(ProjectConstants.START_TIME,
+            (int) System.currentTimeMillis() / 1000).commit();
+
+    Intent captureIntent = new Intent(context, MatchImage.class);
+    captureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    startActivity(captureIntent);
   }
- 
+
   @Override
   protected void processCapturedPicture(byte[] data) {
-    
+
     if (currBmpImg != null) {
       currBmpImg.recycle();
     }
