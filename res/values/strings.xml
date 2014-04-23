@@ -316,7 +316,7 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_user_name_hint">Enter user username here&#8230;</string>
     <string name="final_proj_submit_user_name">Submit User Name</string>
     <string name="final_proj_find_opponent">Find Opponent</string>
-    <string name="final_proj_back">Back</string>
+    <string name="final_proj_back_to_menu">Back to Main Menu</string>
     <string name="final_proj_connection_label">Find Opponent</string>
     <string name="final_proj_proceed_to_game">Proceed to Game</string>
     <string name="final_proj_proceed_to_ack">Acknowledgements</string>
@@ -350,9 +350,24 @@ Sample about text. Needs to be updated&#8230;</string>
                                     You can skip an image and come back to it later. \r\n
                                     Try to complete matching all images in lesser time than your opponent. (Refer timer on top right)\r\n</string>
     <string name="final_proj_step4">\r\nStep 4: \r\n
-                                    The player to match more images or taking least time wins the game. \r\n
+                                    The player to match more images in less time wins the game. \r\n
                                     So make sure you move around quickly.\r\n</string>
+                                    
+    <string name="final_proj_single_phone_step1">\r\nStep 1: \r\n
+                                    Player 1 should capture images for player 2 to find. \r\n
+                                    Once an image is captured, players can save or discard it.\r\n</string>
+    <string name="final_proj_single_phone_step2">\r\nStep 2: \r\n
+                                    Once player 1 has finished, player 2 should capture images for player 1 to find. \r\n</string>
+    <string name="final_proj_single_phone_step3">\r\nStep 3: \r\n
+                                    Player 1 should start matching the images that show up on the screen. \r\n
+                                    Players can skip an image and come back to it later. \r\n</string>
+    <string name="final_proj_single_phone_step4">\r\nStep 4: \r\n
+                                    After player 1 has finished, player 2 should start matching the images. \r\n
+                                    The player to match more images in less time wins the game. \r\n
+                                    So make sure you move around quickly.\r\n</string>
+                                    
     <string name="final_proj_skip_tutorial">Skip Tutorial</string>
+    <string name="final_proj_prev">Previous</string>
     <string name="final_proj_next">Next</string>
     <string name="final_proj_practice">Practice</string>
     <string name="final_proj_ack">Acknowledgements</string>

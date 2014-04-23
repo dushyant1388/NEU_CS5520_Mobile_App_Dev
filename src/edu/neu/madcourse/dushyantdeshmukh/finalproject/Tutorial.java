@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.MyButton;
 import edu.neu.madcourse.dushyantdeshmukh.utilities.MyTextView;
@@ -17,7 +18,8 @@ import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
 public class Tutorial extends Activity implements OnClickListener {
 
   private static final String TAG = "TUTORIAL ACTIVITY";
-  MyButton backButton, skipTutorialButton, practiceButton, nextButton;
+  MyButton backButton, skipTutorialButton, practiceButton;
+  ImageButton nextButton, prevButton;
   MyTextView tutorialTextView;
   MyTextView[] stepTextView = new MyTextView[4];
   SharedPreferences projPreferences;
@@ -44,7 +46,10 @@ public class Tutorial extends Activity implements OnClickListener {
     skipTutorialButton = (MyButton) findViewById(R.id.final_proj_skip_tutorial);
     skipTutorialButton.setOnClickListener(this);
 
-    nextButton = (MyButton) findViewById(R.id.final_proj_next);
+    prevButton = (ImageButton) findViewById(R.id.final_proj_prev);
+    prevButton.setOnClickListener(this);
+    
+    nextButton = (ImageButton) findViewById(R.id.final_proj_next);
     nextButton.setOnClickListener(this);
 
     practiceButton = (MyButton) findViewById(R.id.final_proj_practice);
@@ -54,20 +59,21 @@ public class Tutorial extends Activity implements OnClickListener {
     tutorialTextView.setOnClickListener(this);
 
     stepTextView[0] = (MyTextView) findViewById(R.id.final_proj_step1);
-    stepTextView[0].setOnClickListener(this);
-
     stepTextView[1] = (MyTextView) findViewById(R.id.final_proj_step2);
-    stepTextView[1].setOnClickListener(this);
-
     stepTextView[2] = (MyTextView) findViewById(R.id.final_proj_step3);
-    stepTextView[2].setOnClickListener(this);
-
     stepTextView[3] = (MyTextView) findViewById(R.id.final_proj_step4);
-    stepTextView[3].setOnClickListener(this);
-
-    tutorialTextView = (MyTextView) findViewById(R.id.final_proj_tutorial);
-    tutorialTextView.setOnClickListener(this);
-
+    
+    if (isSinglePhoneMode) {
+      stepTextView[0].setText(getString(R.string.final_proj_single_phone_step1));
+      stepTextView[1].setText(getString(R.string.final_proj_single_phone_step2));
+      stepTextView[2].setText(getString(R.string.final_proj_single_phone_step3));
+      stepTextView[3].setText(getString(R.string.final_proj_single_phone_step4));
+    } else {
+      stepTextView[0].setText(getString(R.string.final_proj_step1));
+      stepTextView[1].setText(getString(R.string.final_proj_step2));
+      stepTextView[2].setText(getString(R.string.final_proj_step3));
+      stepTextView[3].setText(getString(R.string.final_proj_step4));
+    }
   }
 
   @Override
@@ -129,6 +135,9 @@ public class Tutorial extends Activity implements OnClickListener {
         startActivity(connectionIntent);
       }
       break;
+    case R.id.final_proj_prev:
+      showPrevStep();
+      break;
     case R.id.final_proj_next:
       showNextStep();
       break;
@@ -140,15 +149,31 @@ public class Tutorial extends Activity implements OnClickListener {
     }
   }
 
+  private void showPrevStep() {
+    if (currStepNo == 2) {
+      // hide prev button
+      prevButton.setVisibility(View.GONE);
+    }
+    practiceButton.setVisibility(View.GONE);
+    nextButton.setVisibility(View.VISIBLE);
+    hideAllSteps();
+    currStepNo--;
+    stepTextView[currStepNo - 1].setVisibility(View.VISIBLE);
+  }
+  
   private void showNextStep() {
+    Log.d(TAG, "Inside showNextStep(), currStepNo = " + currStepNo);
     if (currStepNo == 3) {
       // hide next button and show practice button
       nextButton.setVisibility(View.GONE);
       practiceButton.setVisibility(View.VISIBLE);
     }
+    if (currStepNo > 0) {
+      prevButton.setVisibility(View.VISIBLE);
+    }
     hideAllSteps();
-    stepTextView[currStepNo].setVisibility(View.VISIBLE);
     currStepNo++;
+    stepTextView[currStepNo - 1].setVisibility(View.VISIBLE);
   }
 
   private void hideAllSteps() {

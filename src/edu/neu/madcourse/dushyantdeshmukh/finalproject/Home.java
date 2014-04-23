@@ -71,6 +71,7 @@ public class Home extends Activity implements OnClickListener {
       }
       break;
     case R.id.final_proj_dual_phone_mode_button:
+      initiateGameInDualPhoneMode();
       if (skipTutorial) {
         Intent dualPhoneIntent = new Intent(this, Connection.class);
         startActivity(dualPhoneIntent);
@@ -92,6 +93,16 @@ public class Home extends Activity implements OnClickListener {
     Editor e = projPreferences.edit();
     e.putBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, true);
     e.putInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE);
+    e.commit();
+    Log.d(TAG, "isSinglePhoneMode = " + projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, false));
+  }
+  
+  /**
+   * Initializes vars in shared preferences and starts a game in dual phone mode
+   */
+  private void initiateGameInDualPhoneMode() {
+    Editor e = projPreferences.edit();
+    e.putBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, false);
     e.commit();
     Log.d(TAG, "isSinglePhoneMode = " + projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, false));
   }
