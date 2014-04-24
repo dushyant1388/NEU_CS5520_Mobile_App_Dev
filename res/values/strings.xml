@@ -397,6 +397,8 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_yes_label">Yes</string>
     <string name="final_proj_no_label">No</string>
     <string name="final_proj_ok_label">OK</string>
+	<string name="final_proj_end_game_label">End Game</string>
+    <string name="final_proj_end_matching_label">End Matching</string>
     <string name="final_proj_intro_screen_label">App Description</string>
     <string name="final_proj_app_description_text">APP DESCRIPTION \n\n
         										\'Match Me If You Can\' \n 

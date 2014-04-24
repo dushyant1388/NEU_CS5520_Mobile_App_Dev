@@ -124,7 +124,7 @@ public class MatchImage extends BaseCameraActivity {
     skipButton = findViewById(R.id.final_proj_skip);
     skipButton.setOnClickListener(this);
 
-    endButton = findViewById(R.id.final_proj_end);
+    endButton = findViewById(R.id.final_proj_end_matching);
     endButton.setOnClickListener(this);
 
     imgCountView = (TextView) findViewById(R.id.img_count);
@@ -255,12 +255,34 @@ public class MatchImage extends BaseCameraActivity {
     case R.id.final_proj_skip:
       skipToNextimg();
       break;
-    case R.id.final_proj_end:
+    case R.id.final_proj_end_matching:
+    	skipToNextEvent();
       break;
     }
   }
 
-  private void skipToNextimg() {
+  private void skipToNextEvent() {
+	  myTimer.cancel();
+	  int timeElapsed = Util.getTimeElapsed(startTime);
+	  Editor editor = projPreferences.edit();
+	    if (currState == ProjectConstants.SINGLE_PHONE_P1_MATCH_STATE) {
+	      // Save P1's time and no of imgs
+	      editor.putInt(ProjectConstants.PLAYER_1_TIME, timeElapsed);
+	      editor.putInt(ProjectConstants.PLAYER_1_IMAGE_COUNT, imagesMatched);
+	      singlePhoneDialog = Util.showSinglePhoneDialog(this,
+	    		  Util.nextState(projPreferences),projPreferences);
+	         singlePhoneDialog.show();
+	         isSinglePhoneDialogShown = true;
+	    } else if(currState == ProjectConstants.SINGLE_PHONE_P2_MATCH_STATE){
+	      // Save P2's time and no of imgs
+	      editor.putInt(ProjectConstants.PLAYER_2_TIME, timeElapsed);
+	      editor.putInt(ProjectConstants.PLAYER_2_IMAGE_COUNT, imagesMatched);
+	      startGameFinishActivity();
+	    }
+	    editor.commit();
+  }
+
+private void skipToNextimg() {
     if (imagesMatched == (totalNoOfImgs - 1)) {
       Util.showToast(context, ProjectConstants.SKIP_FAIL_MSG, 1500);
     } else {

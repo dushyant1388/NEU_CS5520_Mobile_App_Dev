@@ -1,6 +1,7 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
@@ -18,7 +19,7 @@ public class CaptureImage extends BaseCameraActivity {
 
 	protected static final String TAG = "CAPTURE ACTIVITY";
 	LayoutInflater controlInflater = null;
-	View captureButton, acceptButton, rejectButton;
+	View captureButton, acceptButton, rejectButton, endGameButton;
 	TextView imgCountView;
 	ImageView capturedImgView;
 	byte[] currImgData;
@@ -27,6 +28,7 @@ public class CaptureImage extends BaseCameraActivity {
 	boolean isSinglePhoneMode, isSwapAlertDialogShown;
 	private boolean isSinglePhoneDialogShown = false;
 	private AlertDialog singlePhoneDialog;
+	private Dialog endGameDialog;
 	int currState;
 	private AlertDialog swapPhonesAlertDialog;
 
@@ -52,7 +54,10 @@ public class CaptureImage extends BaseCameraActivity {
 
 		rejectButton = findViewById(R.id.final_proj_reject);
 		rejectButton.setOnClickListener(this);
-
+		
+		endGameButton = findViewById(R.id.final_proj_capture_game_end);
+		endGameButton.setOnClickListener(this);
+		
 		imgCountView = (TextView) findViewById(R.id.img_count);
 		capturedImgView = (ImageView) findViewById(R.id.captured_image);
 
@@ -157,6 +162,10 @@ public class CaptureImage extends BaseCameraActivity {
 			break;
 		case R.id.final_proj_reject:
 			showCapturedImg(false);
+			break;
+		case R.id.final_proj_capture_game_end:
+			endGameDialog = Util.showCustomQuitDialog(CaptureImage.this);
+			endGameDialog.show();
 			break;
 		}
 	}
