@@ -9,6 +9,7 @@ import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 
+import android.R.integer;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -256,7 +257,13 @@ public class MatchImage extends BaseCameraActivity {
       skipToNextimg();
       break;
     case R.id.final_proj_end_matching:
-    	skipToNextEvent();
+    	if(isSinglePhoneMode){
+    		skipToNextEvent();
+    	}else{
+    		myTimer.cancel();
+    		int timeElapsed = Util.getTimeElapsed(startTime);
+    		handleDualPhoneEndOfMatching(timeElapsed);
+    	}
       break;
     }
   }
@@ -474,7 +481,9 @@ private void skipToNextimg() {
         Log.d(TAG, "Inside MSG_TYPE_FP_MOVE = "
             + ProjectConstants.MSG_TYPE_FP_MOVE);
         // Show toast that opponent found out new Image
-        Util.showToast(this, "Opponent matched new Image!", Toast.LENGTH_LONG);
+        String oppName = projPreferences.getString(ProjectConstants.PREF_OPPONENT_NAME, ProjectConstants.OPPONENT);
+        String imageNumber = dataMap.get(ProjectConstants.NUMBER_OF_IMAGES);
+        Util.showToast(this,  oppName + " matched image number " + imageNumber + "!", Toast.LENGTH_LONG);
       }
     }
   }
