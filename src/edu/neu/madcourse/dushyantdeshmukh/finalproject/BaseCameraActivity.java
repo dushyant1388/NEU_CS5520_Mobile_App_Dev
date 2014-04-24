@@ -2,7 +2,7 @@ package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import java.io.IOException;
 import java.util.List;
-
+import org.opencv.android.OpenCVLoader;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -251,5 +251,17 @@ public abstract class BaseCameraActivity extends Activity implements
   protected abstract CharSequence getTakePictureWaitMsg();
 
   protected abstract void processCapturedPicture(byte[] data);
+  
+  /**
+   * Initializes the openCV library
+   */
+  protected static void initializeOpenCV() {
+    if (OpenCVLoader.initDebug()) {
+      Log.i(TAG, "OpenCV library initialized successfully");
+    } else {
+      // Handle initialization error
+      Log.e(TAG, "Error while initializing OpenCV library.");
+    }
+  }
 
 }

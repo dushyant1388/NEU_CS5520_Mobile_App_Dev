@@ -43,22 +43,10 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   private AlertDialog singlePhoneDialog;
   boolean isSinglePhoneMode;
 
-  private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-    @Override
-    public void onManagerConnected(int status) {
-      switch (status) {
-      case LoaderCallbackInterface.SUCCESS: {
-        Log.i(TAG, "OpenCV loaded successfully");
-      }
-        break;
-      default: {
-        super.onManagerConnected(status);
-      }
-        break;
-      }
-    }
-  };
-
+  static {
+    initializeOpenCV();
+  }
+  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -119,8 +107,6 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   @Override
   protected void onResume() {
     super.onResume();
-    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_6, this,
-        mLoaderCallback);
     showMatchBtn(isImg1Present);
     
     if(isSinglePhoneDialogShown){
@@ -288,5 +274,5 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
     return getSharedPreferences(ProjectConstants.FINAL_PROJECT,
         Context.MODE_PRIVATE);
   }
-
+  
 }

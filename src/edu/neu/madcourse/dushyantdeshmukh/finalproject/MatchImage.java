@@ -83,22 +83,9 @@ public class MatchImage extends BaseCameraActivity {
     myTimer.schedule(timeElapsedTimerTask, 0, 1000);
   }
 
-  private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-    @Override
-    public void onManagerConnected(int status) {
-      switch (status) {
-      case LoaderCallbackInterface.SUCCESS: {
-        Log.i(TAG, "OpenCV loaded successfully");
-        // mOpenCvCameraView.enableView();
-      }
-        break;
-      default: {
-        super.onManagerConnected(status);
-      }
-        break;
-      }
-    }
-  };
+  static {
+    initializeOpenCV();
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -176,9 +163,6 @@ public class MatchImage extends BaseCameraActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_6, this,
-        mLoaderCallback);
-
     // This needs to be in the activity that will end up receiving the
     // broadcast
     registerReceiver(receiver, new IntentFilter(
