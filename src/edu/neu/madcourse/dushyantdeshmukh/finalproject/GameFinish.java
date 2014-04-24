@@ -79,7 +79,7 @@ public class GameFinish extends Activity implements OnClickListener {
   }
 
   private void showFinalResultToPlayer() {
-    Log.d(TAG, "Inside isSinglePhoneMode(), isSinglePhoneMode = "
+    Log.d(TAG, "Inside showFinalResultToPlayer(), isSinglePhoneMode = "
         + isSinglePhoneMode);
 
     String resultMsg;

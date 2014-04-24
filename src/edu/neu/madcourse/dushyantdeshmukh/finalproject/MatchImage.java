@@ -421,9 +421,9 @@ public class MatchImage extends BaseCameraActivity {
 
         Editor editor = projPreferences.edit();
         editor.putBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, true);
-        editor.putString(ProjectConstants.OPPONENT_TIME, opponent_matchingTime);
-        editor.putString(ProjectConstants.OPPONENT_IMAGE_COUNT,
-            opponent_num_of_images);
+        editor.putInt(ProjectConstants.OPPONENT_TIME, Integer.parseInt(opponent_matchingTime));
+        editor.putInt(ProjectConstants.OPPONENT_IMAGE_COUNT,
+            Integer.parseInt(opponent_num_of_images));
         editor.commit();
 
         if (imagesMatched == totalNoOfImgs) {
