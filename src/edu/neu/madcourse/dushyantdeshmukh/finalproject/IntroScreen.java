@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 public class IntroScreen extends Activity implements OnClickListener{
 	Context context;
-	Button goToAcknowledgements, goToGame;
+	Button goToAcknowledgements, goToGame, backBtn;
 	
 	 @Override
 	  protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,9 @@ public class IntroScreen extends Activity implements OnClickListener{
 
 	    goToGame = (Button) findViewById(R.id.final_proj_go_to_game);
 	    goToGame.setOnClickListener(this);
+	    
+	    backBtn = (Button) findViewById(R.id.final_proj_back);
+	    backBtn.setOnClickListener(this);
 
 	  }
 
@@ -43,7 +46,9 @@ public class IntroScreen extends Activity implements OnClickListener{
 		      gameIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		      startActivity(gameIntent);
 		      break;
+		    case R.id.final_proj_back:
+          finish();
+          break;
 		    }
-		
 	}
 }

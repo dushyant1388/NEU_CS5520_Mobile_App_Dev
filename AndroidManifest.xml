@@ -148,11 +148,14 @@
         </activity>
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Acknowledgements" 
-             android:screenOrientation="portrait" android:label="@string/final_proj_ack" 
+             android:screenOrientation="landscape"
+             android:label="@string/final_proj_ack" 
              android:theme="@android:style/Theme.Dialog" />
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.IntroScreen" 
-             android:screenOrientation="portrait" android:label="@string/final_proj_intro_screen_label">
+             android:screenOrientation="landscape"
+             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+             android:label="@string/final_proj_intro_screen_label">
             <intent-filter>
                 <action android:name="edu.neu.madcourse.dushyantdeshmukh.FINAL_PROJECT" />
                 <category android:name="android.intent.category.DEFAULT" />
