@@ -29,6 +29,7 @@ import org.opencv.core.Scalar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,7 +42,12 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+import edu.neu.madcourse.dushyantdeshmukh.R;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.CaptureImage;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.Connection;
 import edu.neu.madcourse.dushyantdeshmukh.finalproject.Home;
@@ -58,7 +64,9 @@ public class Util {
 	static boolean skipTutorial;
 	static SharedPreferences staticSP;
 	static Context staticContext;
+	static Activity staticActivity;
 	static int currState;
+	static Dialog quitDialog;
 
 	public static HashMap<String, String> getDataMap(String bundlesStr,
 			String tag) {
@@ -795,43 +803,6 @@ public class Util {
 	}
 
 	/**
-	 * Show alert dialog to confirm if user wants to quit the game
-	 * 
-	 * @param context
-	 */
-	public static AlertDialog showQuitConfirmationDialog(Activity context) {
-		staticContext = context;
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-				context);
-		// set title
-		alertDialogBuilder.setTitle(ProjectConstants.QUIT_TITLE);
-		// set dialog message
-		alertDialogBuilder
-				.setMessage(ProjectConstants.QUIT_GAME_MESSAGE)
-				.setCancelable(false)
-				.setPositiveButton(ProjectConstants.YES,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.cancel();
-								Intent mainMainActivity = new Intent(
-										staticContext, Home.class);
-								mainMainActivity
-										.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-								staticContext.startActivity(mainMainActivity);
-							}
-						})
-				.setNegativeButton(ProjectConstants.NO,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.cancel();
-							}
-						});
-
-		AlertDialog alertDialog = alertDialogBuilder.create();
-		return alertDialog;
-	}
-
-	/**
 	 * Given the start time in secs, returns the time elapsed in secs
 	 * 
 	 * @param startTime
@@ -909,9 +880,11 @@ public class Util {
 	 * @param context
 	 * @param currentState
 	 */
-	public static void showSinglePhoneDialog(Activity context, int currentState) {
+	public static AlertDialog showSinglePhoneDialog(Activity context, int currentState, SharedPreferences sp) {
 		staticContext = context;
+		staticActivity = context;
 		currState = currentState;
+		staticSP = sp;
 		Log.d(TAG, "inside showSinglePhoneDialog(), currState = " + currState);
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				context);
@@ -948,11 +921,72 @@ public class Util {
 								}
 								i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 								staticContext.startActivity(i);
+								
+								staticSP.edit()
+								.putBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN,
+										false).commit();
+							}
+						})
+				.setNegativeButton(ProjectConstants.END_GAME,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int id) {
+								quitDialog = showCustomQuitDialog(staticActivity);
+								quitDialog.show();
 							}
 						});
 
 		AlertDialog alertDialog = alertDialogBuilder.create();
-		alertDialog.show();
+		return alertDialog;
+	}
+	
+	public static Dialog showCustomQuitDialog(Activity context){
+		staticContext = context;
+		final Dialog quitDialog = new Dialog(context);
+		quitDialog.setContentView(R.layout.final_proj_custom_quit_dialog);
+		quitDialog.setTitle(ProjectConstants.QUIT_TITLE);
+
+		// set the custom dialog components - text, image and button
+		TextView text = (TextView) quitDialog.findViewById(R.id.final_proj_quit_dialog_textview);
+		text.setText(ProjectConstants.QUIT_GAME_MESSAGE);
+
+		Button yesButton = (Button) quitDialog.findViewById(R.id.final_proj_quit_dialog_yes_button);
+		// if button is clicked, close the custom dialog
+		yesButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				quitDialog.dismiss();
+				Intent mainMainActivity = new Intent(
+						staticContext, Home.class);
+				mainMainActivity
+						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				staticContext.startActivity(mainMainActivity);
+			}
+		});
+		
+		Button noButton = (Button) quitDialog.findViewById(R.id.final_proj_quit_dialog_no_button);
+		// if button is clicked, close the custom dialog
+		noButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				quitDialog.dismiss();
+			}
+		});
+		
+		return quitDialog;
+	}
+	
+	public static boolean isQuitDialogShown(){
+		if(quitDialog == null){
+			return false;
+		}else{
+			return quitDialog.isShowing();
+		}
+	}
+
+	public static void dismissQuitDialog() {
+		quitDialog.dismiss();
+		
 	}
 
 	/*

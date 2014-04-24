@@ -21,6 +21,8 @@ public class Home extends Activity implements OnClickListener {
   AlertDialog alertDialog;
   ImageButton dualPhoneModeButton, singlePhoneModeButton, exitGameButton;
   boolean isDualPhoneModeSelected = false;
+  private boolean isSinglePhoneDialogShown = false;
+  private AlertDialog singlePhoneDialog;
   private SharedPreferences projPreferences;
 
   public Home() {
@@ -45,15 +47,45 @@ public class Home extends Activity implements OnClickListener {
     exitGameButton.setOnClickListener(this);
 
   }
+  
+  	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		projPreferences
+				.edit()
+				.putBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN,
+						isSinglePhoneDialogShown).commit();
+	}
+	
+  	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState){
+		super.onRestoreInstanceState(savedInstanceState);
+		isSinglePhoneDialogShown = projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN, false);
+	}
 
+	
   @Override
   protected void onPause() {
     super.onPause();
+    if(singlePhoneDialog != null){
+    	singlePhoneDialog.dismiss();
+    }
+    
+    if(Util.isQuitDialogShown()){
+    	Util.dismissQuitDialog();
+    }
   }
 
   @Override
   protected void onResume() {
     super.onResume();
+    
+    if(isSinglePhoneDialogShown){
+    	singlePhoneDialog = Util.showSinglePhoneDialog(this,
+                ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE,projPreferences);
+           singlePhoneDialog.show();
+           isSinglePhoneDialogShown = true;
+    }
   }
 
   @Override
@@ -64,7 +96,10 @@ public class Home extends Activity implements OnClickListener {
     case R.id.final_proj_single_phone_mode_button:
       initiateGameInSinglePhoneMode();
       if (skipTutorial) {
-        Util.showSinglePhoneDialog(this, ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE);
+    	  singlePhoneDialog = Util.showSinglePhoneDialog(this,
+    	            ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE,projPreferences);
+    	       singlePhoneDialog.show();
+    	       isSinglePhoneDialogShown = true;
       } else {
         Intent tutorialIntent = new Intent(this, Tutorial.class);
         startActivity(tutorialIntent);

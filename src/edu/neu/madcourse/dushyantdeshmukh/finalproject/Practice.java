@@ -11,6 +11,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +39,8 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   View captureButton, matchButton, clearButton, quitButton;
   ImageView capturedImgView, imgToMatchView;
   protected boolean isImg1Present = false;
+  private boolean isSinglePhoneDialogShown = false;
+  private AlertDialog singlePhoneDialog;
   boolean isSinglePhoneMode;
 
   private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -98,15 +101,34 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
     if (isImg1Present) {
       displayImg(readImgBmp(1));
     }
-
   }
 
+  	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		projPreferences
+				.edit()
+				.putBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN,
+						isSinglePhoneDialogShown).commit();
+	}
+	
+	protected void onRestoreInstanceState(Bundle savedInstanceState){
+		super.onRestoreInstanceState(savedInstanceState);
+		isSinglePhoneDialogShown = projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN, false);
+	}
+	
   @Override
   protected void onResume() {
     super.onResume();
     OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_6, this,
         mLoaderCallback);
     showMatchBtn(isImg1Present);
+    
+    if(isSinglePhoneDialogShown){
+    	singlePhoneDialog = Util.showSinglePhoneDialog(this,
+                ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE,projPreferences);
+    	singlePhoneDialog.show();
+    	isSinglePhoneDialogShown = true;
+    }
   }
 
   private void showMatchBtn(boolean show) {
@@ -122,6 +144,12 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   @Override
   protected void onPause() {
     super.onPause();
+    if(singlePhoneDialog != null){
+    	singlePhoneDialog.dismiss();
+    }
+    if(Util.isQuitDialogShown()){
+    	Util.dismissQuitDialog();
+    }
   }
 
   @Override
@@ -147,8 +175,10 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
     case R.id.final_proj_quit:
       Log.d(TAG, "isSinglePhoneMode = " + isSinglePhoneMode);
       if (isSinglePhoneMode) {
-        Util.showSinglePhoneDialog(this,
-            ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE);
+        singlePhoneDialog = Util.showSinglePhoneDialog(this,
+            ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE,projPreferences);
+        singlePhoneDialog.show();
+        isSinglePhoneDialogShown = true;
       } else {
         // Go to Connection Activity
         Intent captureIntent = new Intent(context, Connection.class);

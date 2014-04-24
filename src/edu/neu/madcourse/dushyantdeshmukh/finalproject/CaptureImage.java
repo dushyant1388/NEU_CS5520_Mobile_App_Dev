@@ -157,8 +157,9 @@ public class CaptureImage extends BaseCameraActivity {
 			Util.showToast(context, "Finished capturing " + totalNoOfImgs
 					+ " images", 3000);
 			if (isSinglePhoneMode) {
-				Util.showSinglePhoneDialog(this,
-						Util.nextState(projPreferences));
+				// TODO: uncomment and change this.
+				/*Util.showSinglePhoneDialog(this,
+						Util.nextState(projPreferences));*/
 			} else {
 				swapPhonesAlertDialog = Util.showSwapPhonesAlertDialog(context,
 						this, false,projPreferences);

@@ -10,6 +10,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,7 +42,8 @@ public class MatchImage extends BaseCameraActivity {
   private ImageView imgToMatchView;
   private Bitmap imgsToMatchArr[];
   private boolean isImgMatchedArr[];
-  private AlertDialog waitingAlertDialog,quitAlertDialog;
+  private AlertDialog waitingAlertDialog;
+  private Dialog quitAlertDialog;
   private BroadcastReceiver receiver;
   private int startTime = 0;
   private int imagesMatched = 0, currImgIndex = 0;
@@ -192,8 +194,8 @@ public class MatchImage extends BaseCameraActivity {
     	waitingAlertDialog.dismiss();
     }
     
-    if(quitAlertDialog != null){
-    	quitAlertDialog.dismiss();
+    if(Util.isQuitDialogShown()){
+    	Util.dismissQuitDialog();
     }
   }
 
@@ -239,8 +241,6 @@ public class MatchImage extends BaseCameraActivity {
       skipToNextimg();
       break;
     case R.id.final_proj_end:
-      quitAlertDialog = Util.showQuitConfirmationDialog(this);
-      quitAlertDialog.show();
       break;
     }
   }
@@ -338,7 +338,8 @@ public class MatchImage extends BaseCameraActivity {
       // Save P1's time and no of imgs
       editor.putInt(ProjectConstants.PLAYER_1_TIME, timeElapsed);
       editor.putInt(ProjectConstants.PLAYER_1_IMAGE_COUNT, imagesMatched);
-      Util.showSinglePhoneDialog(this, Util.nextState(projPreferences));
+      //TODO: uncomment and change this
+      /*Util.showSinglePhoneDialog(this, Util.nextState(projPreferences));*/
     } else {
       // Save P2's time and no of imgs
       editor.putInt(ProjectConstants.PLAYER_2_TIME, timeElapsed);
@@ -385,7 +386,8 @@ public class MatchImage extends BaseCameraActivity {
 	                public void onClick(DialogInterface dialog, int id) {
 	                  dialog.cancel();
 	                  isWaitingAlertDialogShown = false;
-	                  showQuitConfirmation();
+	                  quitAlertDialog = Util.showCustomQuitDialog(MatchImage.this);
+	                  quitAlertDialog.show();	              
 	                }
 	              });
 	
@@ -393,9 +395,6 @@ public class MatchImage extends BaseCameraActivity {
 	      waitingAlertDialog.show();
 	}
 
-  protected void showQuitConfirmation() {
-    Util.showQuitConfirmationDialog(this);
-  }
 
   private void handleNotification(SharedPreferences sp) {
     String data = sp.getString(ProjectConstants.KEY_NOTIFICATION_DATA, "");

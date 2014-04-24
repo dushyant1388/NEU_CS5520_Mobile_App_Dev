@@ -303,8 +303,8 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_icon_name">MAD14S-Match Me If You Can</string>
     <string name="final_proj_capture_label">Capture</string>
     <string name="final_proj_capture_btn">Capture</string>
-    <string name="final_proj_accept_btn">Accept</string>
-    <string name="final_proj_reject_btn">Reject</string>
+    <string name="final_proj_accept_btn">Save</string>
+    <string name="final_proj_reject_btn">Discard</string>
     <string name="final_proj_match_btn">Match</string>
     <string name="final_proj_Skip_btn">Skip</string>
 	<string name="final_proj_single_phone_mode">Single Phone Mode</string>
@@ -391,6 +391,8 @@ Sample about text. Needs to be updated&#8230;</string>
         2. Samsung Galaxy S3 (Android version: 4.3) \r\n
         3. Kyocera C5155 (Android version: 4.0.4) \r\n\r\n
     </string>
+    <string name="final_proj_yes_label">Yes</string>
+    <string name="final_proj_no_label">No</string>
     <string name="final_proj_ok_label">OK</string>
     <string name="final_proj_intro_screen_label">App Description</string>
     <string name="final_proj_app_description_text">APP DESCRIPTION \n\n

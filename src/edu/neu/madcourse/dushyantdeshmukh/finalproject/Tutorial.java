@@ -1,6 +1,7 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,6 +25,8 @@ public class Tutorial extends Activity implements OnClickListener {
   MyTextView[] stepTextView = new MyTextView[4];
   SharedPreferences projPreferences;
   Context context;
+  private boolean isSinglePhoneDialogShown = false;
+  private AlertDialog singlePhoneDialog;
   boolean isSinglePhoneMode;
   int currStepNo = 1;
 
@@ -79,6 +82,14 @@ public class Tutorial extends Activity implements OnClickListener {
   @Override
   protected void onPause() {
     super.onPause();
+    
+    if(singlePhoneDialog != null){
+    	singlePhoneDialog.dismiss();
+    }
+    
+    if(Util.isQuitDialogShown()){
+    	Util.dismissQuitDialog();
+    }
   }
 
   @Override
@@ -86,11 +97,18 @@ public class Tutorial extends Activity implements OnClickListener {
     super.onResume();
     currStepNo--;
     showNextStep();
+    if(isSinglePhoneDialogShown){
+    	singlePhoneDialog = Util.showSinglePhoneDialog(this,
+                ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE,projPreferences);
+           singlePhoneDialog.show();
+           isSinglePhoneDialogShown = true;
+    }
   }
 
   private void restoreState() {
     // restore currStepNo
     currStepNo = projPreferences.getInt(ProjectConstants.CURRENT_STEP_NO, 0);
+    isSinglePhoneDialogShown = projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN, false);
     Log.d(TAG, "Reading currStepNo: " + currStepNo);
   }
 
@@ -98,8 +116,10 @@ public class Tutorial extends Activity implements OnClickListener {
     // store currStepNo
     Editor e = projPreferences.edit();
     e.putInt(ProjectConstants.CURRENT_STEP_NO, currStepNo);
+    e.putBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN, isSinglePhoneDialogShown);
     e.commit();
     Log.d(TAG, "Setting currStepNo: " + currStepNo);
+    
   }
 
   @Override
@@ -126,8 +146,10 @@ public class Tutorial extends Activity implements OnClickListener {
     case R.id.final_proj_skip_tutorial:
       Log.d(TAG, "isSinglePhoneMode = " + isSinglePhoneMode);
       if (isSinglePhoneMode) {
-        Util.showSinglePhoneDialog(this,
-            ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE);
+       singlePhoneDialog = Util.showSinglePhoneDialog(this,
+            ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE,projPreferences);
+       singlePhoneDialog.show();
+       isSinglePhoneDialogShown = true;
       } else {
         // Go to connection activity
         Intent connectionIntent = new Intent(context, Connection.class);

@@ -118,4 +118,9 @@ public class ProjectConstants {
   public static final String IS_WAITING_ALERT_DIALOG_SHOWN = "IS_WAITING_ALERT_DIALOG_SHOWN";
   public static final String IS_ACCEPT_REJECT_ALERT_PAUSED = "IS_ACCEPT_REJECT_ALERT_PAUSED";
   public static final String POTENTIAL_OPPONENT_NAME = "POTENTIAL_OPPONENT_NAME";
+  
+  public static final String IS_SINGLE_PHONE_DIALOG_SHOWN = "IS_SINGLE_PHONE_DIALOG_SHOWN";
+  
+  public static final String END_GAME = "End Game";
+  
 }
