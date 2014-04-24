@@ -48,6 +48,8 @@ public class MatchImage extends BaseCameraActivity {
   private int startTime = 0;
   private int imagesMatched = 0, currImgIndex = 0;
   boolean isSinglePhoneMode,isWaitingAlertDialogShown;
+  private boolean isSinglePhoneDialogShown = false;
+  private AlertDialog singlePhoneDialog;
   int currState;
   String oppRegId;
 
@@ -58,8 +60,15 @@ public class MatchImage extends BaseCameraActivity {
 
   final Runnable timeElapsedRunnable = new Runnable() {
     public void run() {
-      // increment & update time elapsed text view
-      timeElapsedView.setText(Util.getTimeStr(Util.getTimeElapsed(startTime)));
+     
+      Log.w(TAG, "Time set inside timer: " + Util.getTimeStr(Util.getTimeElapsed(startTime)));
+      if(!isSinglePhoneDialogShown){
+		  // increment & update time elapsed text view
+    	  timeElapsedView.setText(Util.getTimeStr(Util.getTimeElapsed(startTime)));
+      }else{
+    	  int timeToShow = projPreferences.getInt(ProjectConstants.PLAYER_1_TIME, 0);
+    	  timeElapsedView.setText(Util.getTimeStr(timeToShow));
+      }
     }
   };
 
@@ -197,6 +206,10 @@ public class MatchImage extends BaseCameraActivity {
     if(Util.isQuitDialogShown()){
     	Util.dismissQuitDialog();
     }
+	
+    if(singlePhoneDialog != null){
+    	singlePhoneDialog.dismiss();
+    }
   }
 
   private void restoreState() {
@@ -205,6 +218,7 @@ public class MatchImage extends BaseCameraActivity {
         ProjectConstants.NUMBER_OF_IMAGES_MATCHED, 0);
     imgCountView.setText("Img Count: " + imagesMatched + "/" + totalNoOfImgs);
     isWaitingAlertDialogShown = projPreferences.getBoolean(ProjectConstants.IS_WAITING_ALERT_DIALOG_SHOWN, false);
+	isSinglePhoneDialogShown = projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN, false);
     Log.d(TAG, "Reading Img Count: " + imagesMatched);
   }
 
@@ -213,6 +227,7 @@ public class MatchImage extends BaseCameraActivity {
     Editor e = projPreferences.edit();
     e.putInt(ProjectConstants.NUMBER_OF_IMAGES_MATCHED, imagesMatched);
     e.putBoolean(ProjectConstants.IS_WAITING_ALERT_DIALOG_SHOWN, isWaitingAlertDialogShown);
+	e.putBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN, isSinglePhoneDialogShown);
     e.commit();
     Log.d(TAG, "Setting imagesMatched: " + imagesMatched);
   }
@@ -338,8 +353,10 @@ public class MatchImage extends BaseCameraActivity {
       // Save P1's time and no of imgs
       editor.putInt(ProjectConstants.PLAYER_1_TIME, timeElapsed);
       editor.putInt(ProjectConstants.PLAYER_1_IMAGE_COUNT, imagesMatched);
-      //TODO: uncomment and change this
-      /*Util.showSinglePhoneDialog(this, Util.nextState(projPreferences));*/
+      singlePhoneDialog = Util.showSinglePhoneDialog(this,
+    		  Util.nextState(projPreferences),projPreferences);
+         singlePhoneDialog.show();
+         isSinglePhoneDialogShown = true;
     } else {
       // Save P2's time and no of imgs
       editor.putInt(ProjectConstants.PLAYER_2_TIME, timeElapsed);

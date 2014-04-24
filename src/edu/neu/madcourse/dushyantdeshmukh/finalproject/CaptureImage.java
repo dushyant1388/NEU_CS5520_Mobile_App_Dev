@@ -87,7 +87,7 @@ public class CaptureImage extends BaseCameraActivity {
 		
 		if(isSinglePhoneDialogShown){
 	    	singlePhoneDialog = Util.showSinglePhoneDialog(this,
-	    			Util.nextState(projPreferences),projPreferences);
+	    			currState,projPreferences);
 	           singlePhoneDialog.show();
 	           isSinglePhoneDialogShown = true;
 	    }
