@@ -749,11 +749,11 @@ public class Util {
 		return mat;
 	}
 
-	public static boolean imagesMatch(Mat imgMat1, Mat imgMat2) {
+	public static boolean imagesMatch(Mat imgMat1, Mat imgMat2, int matchingDifficultyLevel) {
 		boolean isMatching = false;
 		double psnr = getPSNR(imgMat1, imgMat2);
 
-		if (psnr >= ProjectConstants.PSNR_THRESHOLD) {
+		if (psnr >= getThresholdValPSNR(matchingDifficultyLevel)) {
 			isMatching = true;
 		} else {
 			isMatching = false;
@@ -761,7 +761,30 @@ public class Util {
 		return isMatching;
 	}
 
-	public static AlertDialog showSwapPhonesAlertDialog(Context context,
+	/**
+	 * Returns the threshold value of PSNR depending of the matching difficulty level
+	 * @param matchingDifficultyLevel
+	 * @return
+	 */
+	private static double getThresholdValPSNR(int matchingDifficultyLevel) {
+	  double psnrThresholdVal = ProjectConstants.PSNR_THRESHOLD_MEDIUM;
+    switch(matchingDifficultyLevel) {
+    case 1:
+      psnrThresholdVal = ProjectConstants.PSNR_THRESHOLD_EASY;
+      break;
+    case 2:
+      psnrThresholdVal = ProjectConstants.PSNR_THRESHOLD_MEDIUM;
+      break;
+    case 3:
+      psnrThresholdVal = ProjectConstants.PSNR_THRESHOLD_HARD;
+      break;
+    }
+    Log.d(TAG, "matchingDifficultyLevel = " + matchingDifficultyLevel);
+    Log.d(TAG, "psnrThresholdVal = " + psnrThresholdVal);
+    return psnrThresholdVal;
+  }
+
+  public static AlertDialog showSwapPhonesAlertDialog(Context context,
 			Object obj, boolean isCaptureEventTrue, SharedPreferences sp) {
 
 		staticObjectInstance = obj;

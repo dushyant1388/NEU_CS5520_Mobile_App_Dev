@@ -34,7 +34,8 @@ public abstract class BaseCameraActivity extends Activity implements
   protected FrameLayout preview;
   protected ProgressDialog progress;
   protected Bitmap currBmpImg;
-  protected int totalNoOfImgs = ProjectConstants.TOTAL_NO_OF_IMAGES;
+  protected int totalNoOfImgs;
+  protected int matchingDifficultyLevel;
   protected SharedPreferences projPreferences;
   protected static WindowManager windowManager;
 
@@ -54,6 +55,8 @@ public abstract class BaseCameraActivity extends Activity implements
 
     context = this;
     projPreferences = getSharedPreferences();
+    totalNoOfImgs = projPreferences.getInt(ProjectConstants.PREF_TOTAL_NO_OF_IMAGES, 3);
+    matchingDifficultyLevel = projPreferences.getInt(ProjectConstants.PREF_MATCHING_DIFFICULTY, 2);
 
     // set camera preview as main layout for this activity
     setContentView(R.layout.final_proj_cam_preview);

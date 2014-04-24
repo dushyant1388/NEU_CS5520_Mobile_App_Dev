@@ -19,11 +19,12 @@ public class Home extends Activity implements OnClickListener {
   private static final String TAG = "HOME ACIVITY";
   Context context;
   AlertDialog alertDialog;
-  ImageButton dualPhoneModeButton, singlePhoneModeButton, exitGameButton;
+  ImageButton dualPhoneModeButton, singlePhoneModeButton, settingsButton, exitGameButton;
   boolean isDualPhoneModeSelected = false;
   private boolean isSinglePhoneDialogShown = false;
   private AlertDialog singlePhoneDialog;
   private SharedPreferences projPreferences;
+  boolean showTutorial;
 
   public Home() {
   }
@@ -43,6 +44,9 @@ public class Home extends Activity implements OnClickListener {
     singlePhoneModeButton = (ImageButton) findViewById(R.id.final_proj_single_phone_mode_button);
     singlePhoneModeButton.setOnClickListener(this);
 
+    settingsButton = (ImageButton) findViewById(R.id.final_proj_settings_button);
+    settingsButton.setOnClickListener(this);
+    
     exitGameButton = (ImageButton) findViewById(R.id.final_proj_exit_game_button);
     exitGameButton.setOnClickListener(this);
 
@@ -90,30 +94,31 @@ public class Home extends Activity implements OnClickListener {
 
   @Override
   public void onClick(View v) {
-    boolean skipTutorial = projPreferences.getBoolean(
-        ProjectConstants.PREF_SKIP_TUTORIAL, false);
     switch (v.getId()) {
     case R.id.final_proj_single_phone_mode_button:
       initiateGameInSinglePhoneMode();
-      if (skipTutorial) {
-    	  singlePhoneDialog = Util.showSinglePhoneDialog(this,
-    	            ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE,projPreferences);
-    	       singlePhoneDialog.show();
-    	       isSinglePhoneDialogShown = true;
-      } else {
+      if (showTutorial) {
         Intent tutorialIntent = new Intent(this, Tutorial.class);
         startActivity(tutorialIntent);
+      } else {
+        singlePhoneDialog = Util.showSinglePhoneDialog(this,
+            ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE,projPreferences);
+        singlePhoneDialog.show();
+        isSinglePhoneDialogShown = true;
       }
       break;
     case R.id.final_proj_dual_phone_mode_button:
       initiateGameInDualPhoneMode();
-      if (skipTutorial) {
-        Intent dualPhoneIntent = new Intent(this, Connection.class);
-        startActivity(dualPhoneIntent);
-      } else {
+      if (showTutorial) {
         Intent tutorialIntent = new Intent(this, Tutorial.class);
         startActivity(tutorialIntent);
+      } else {
+        Intent dualPhoneIntent = new Intent(this, Connection.class);
+        startActivity(dualPhoneIntent);
       }
+      break;
+    case R.id.final_proj_settings_button:
+      startActivity(new Intent(this, Prefs.class));
       break;
     case R.id.final_proj_exit_game_button:
       finish();
@@ -128,6 +133,7 @@ public class Home extends Activity implements OnClickListener {
     Editor e = projPreferences.edit();
     e.putBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, true);
     e.putInt(ProjectConstants.SINGLE_PHONE_CURR_STATE, ProjectConstants.SINGLE_PHONE_P1_CAPTURE_STATE);
+    e = setPrefSettings(e);
     e.commit();
     Log.d(TAG, "isSinglePhoneMode = " + projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, false));
   }
@@ -138,8 +144,34 @@ public class Home extends Activity implements OnClickListener {
   private void initiateGameInDualPhoneMode() {
     Editor e = projPreferences.edit();
     e.putBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, false);
+    e = setPrefSettings(e);
     e.commit();
     Log.d(TAG, "isSinglePhoneMode = " + projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_MODE, false));
+  }
+
+  /**
+   * Fetches user preferences from settings and sets them in shared preference
+   * @param e
+   * @return
+   */
+  private Editor setPrefSettings(Editor e) {
+    Log.d(TAG, "Reading preference settings and putting in sared preferences:");
+    boolean musinOn = Prefs.getMusic(this);
+    showTutorial = Prefs.getShowTutorial(this);
+    int noOfImgs = Prefs.getNoOfImgs(this);
+    int matchingDifficulty = Prefs.getMatchingDifficultyLevel(this);
+    
+    e.putBoolean(ProjectConstants.PREF_MUSIC_ON, musinOn);
+    e.putBoolean(ProjectConstants.PREF_SHOW_TUTORIAL, showTutorial);
+    e.putInt(ProjectConstants.PREF_TOTAL_NO_OF_IMAGES, noOfImgs);
+    e.putInt(ProjectConstants.PREF_MATCHING_DIFFICULTY, matchingDifficulty);
+    
+    Log.d(TAG, "ProjectConstants.PREF_MUSIC_ON = " + musinOn);
+    Log.d(TAG, "ProjectConstants.PREF_SHOW_TUTORIAL = " + showTutorial);
+    Log.d(TAG, "ProjectConstants.PREF_TOTAL_NO_OF_IMAGES = " + noOfImgs);
+    Log.d(TAG, "ProjectConstants.PREF_MATCHING_DIFFICULTY = " + matchingDifficulty);
+    
+    return e;
   }
 
   private SharedPreferences getSharedPreferences() {

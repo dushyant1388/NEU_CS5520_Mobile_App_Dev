@@ -287,7 +287,7 @@ public class MatchImage extends BaseCameraActivity {
     Mat imgMat1 = Util.convertBmpToMat(currBmpImg);
     Mat imgMat2 = Util.convertBmpToMat(imgsToMatchArr[currImgIndex]);
 
-    if (Util.imagesMatch(imgMat1, imgMat2)) {
+    if (Util.imagesMatch(imgMat1, imgMat2, matchingDifficultyLevel)) {
       // if match successful, increment img count and set
       // isImgMatchedArr[currImgNo]
 

@@ -1,6 +1,7 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import java.io.File;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ public class GameFinish extends Activity implements OnClickListener {
   Context context;
   boolean isSinglePhoneMode;
   boolean isOpponentGameOver;
+  int totalNoOfImgs;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class GameFinish extends Activity implements OnClickListener {
     setContentView(R.layout.final_proj_game_finish);
 
     context = this;
+    totalNoOfImgs = Prefs.getNoOfImgs(this);
     projPreferences = getSharedPreferences();
     isSinglePhoneMode = projPreferences.getBoolean(
         ProjectConstants.IS_SINGLE_PHONE_MODE, false);
@@ -168,12 +171,12 @@ public class GameFinish extends Activity implements OnClickListener {
     return resultMsg;
   }
 
-  public static String getResultDetailMsg(String p1Name, String p2Name,
+  public String getResultDetailMsg(String p1Name, String p2Name,
       int p1Time, int p2Time, int p1ImageCount, int p2ImageCount) {
     String msg = p1Name + " captured " + p1ImageCount + " out of "
-        + ProjectConstants.TOTAL_NO_OF_IMAGES + " images in "
+        + totalNoOfImgs + " images in "
         + Util.getTimeStr(p1Time) + " mins \n" + p2Name + " captured "
-        + p2ImageCount + " out of " + ProjectConstants.TOTAL_NO_OF_IMAGES
+        + p2ImageCount + " out of " + totalNoOfImgs
         + " images in " + Util.getTimeStr(p2Time) + " mins";
 
     return msg;

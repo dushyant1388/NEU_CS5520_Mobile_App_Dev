@@ -43,10 +43,7 @@ public class ProjectConstants {
 
   // Match and Capture constants
 
-  public static double PSNR_THRESHOLD_EASY = 12.0;
-  public static double PSNR_THRESHOLD_MEDIUM = 14.0;
-  public static double PSNR_THRESHOLD_HARD = 15.5;
-  
+  public static double PSNR_THRESHOLD = 14.0;
   public static String IMG_DIR_NAME = "images_to_match";
   public static String P1_IMG_NAME_PREFIX = "P1_IMAGE_NO_";
   public static String P2_IMG_NAME_PREFIX = "P2_IMAGE_NO_";
@@ -70,10 +67,9 @@ public class ProjectConstants {
   public static String MATCH_FAIL_MSG = "Images did not match. Try again.";
   public static String SKIP_FAIL_MSG = "Cannot skip. Only one image is left to match.";
 
-  public static String PREF_MUSIC_ON = "PREF_MUSIC_ON";
-  public static String PREF_SHOW_TUTORIAL = "PREF_SHOW_TUTORIAL";
-  public static String PREF_TOTAL_NO_OF_IMAGES = "PREF_TOTAL_NO_OF_IMAGES";
-  public static String PREF_MATCHING_DIFFICULTY = "PREF_MATCHING_DIFFICULTY";
+  public static int TOTAL_NO_OF_IMAGES = 2;
+
+  public static final String PREF_SKIP_TUTORIAL = "SKIP_TUTORIAL";
 
   public static final String QUIT_GAME_MESSAGE = "Are you sure you want to quit? "
       + "This will end the current game";

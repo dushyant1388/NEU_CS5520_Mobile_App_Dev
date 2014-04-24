@@ -226,7 +226,7 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
 
     Log.d(TAG, "\n Cancelling progress dialog... \n");
     progress.cancel();
-    showResult(Util.imagesMatch(imageMatrix1, imageMatrix2));
+    showResult(Util.imagesMatch(imageMatrix1, imageMatrix2, matchingDifficultyLevel));
   }
 
   private void showResult(boolean isMatching) {

@@ -56,6 +56,16 @@
                 android:src="@drawable/final_proj_dual_phone_mode" />
 
             <ImageButton
+                android:id="@+id/final_proj_settings_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="13dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription="@string/final_proj_settings"
+                android:src="@drawable/final_proj_settings" />
+            
+            <ImageButton
                 android:id="@+id/final_proj_exit_game_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
