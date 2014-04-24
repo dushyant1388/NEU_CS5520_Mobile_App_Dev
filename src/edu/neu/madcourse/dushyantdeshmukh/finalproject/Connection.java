@@ -126,10 +126,11 @@ public class Connection extends Activity implements OnClickListener {
 				.putBoolean(ProjectConstants.IS_SWAP_ALERT_DIALOG_SHOWN,
 						isSwapAlertDialogShown).commit();
 	}
-	
-	protected void onRestoreInstanceState(Bundle savedInstanceState){
+
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		isSwapAlertDialogShown = projPreferences.getBoolean(ProjectConstants.IS_SWAP_ALERT_DIALOG_SHOWN, false);
+		isSwapAlertDialogShown = projPreferences.getBoolean(
+				ProjectConstants.IS_SWAP_ALERT_DIALOG_SHOWN, false);
 	}
 
 	@Override
@@ -160,19 +161,20 @@ public class Connection extends Activity implements OnClickListener {
 				.putBoolean(ProjectConstants.IS_ACTIVITY_PAUSED, false)
 				.commit();
 
-		
-		if(isSwapAlertDialogShown){
-			swapAlertDialog = Util.showSwapPhonesAlertDialog(this, this, true,projPreferences);
+		if (isSwapAlertDialogShown) {
+			swapAlertDialog = Util.showSwapPhonesAlertDialog(this, this, true,
+					projPreferences);
 			swapAlertDialog.show();
 			isSwapAlertDialogShown = true;
 		}
-		/*  if (projPreferences.getBoolean(ProjectConstants.IS_SWAP_ALERT_PAUSED,
-		 false)) { swapAlertDialog = Util.showSwapPhonesAlertDialog(context,
-		 this, true); // isSwapAlertDialogShown = true;
-		 swapAlertDialog.show(); projPreferences.edit()
-		 .putBoolean(ProjectConstants.IS_SWAP_ALERT_PAUSED, false) .commit();
-		 // isSwapAlertDialogShown = false; }
-*/		 
+		/*
+		 * if (projPreferences.getBoolean(ProjectConstants.IS_SWAP_ALERT_PAUSED,
+		 * false)) { swapAlertDialog = Util.showSwapPhonesAlertDialog(context,
+		 * this, true); // isSwapAlertDialogShown = true;
+		 * swapAlertDialog.show(); projPreferences.edit()
+		 * .putBoolean(ProjectConstants.IS_SWAP_ALERT_PAUSED, false) .commit();
+		 * // isSwapAlertDialogShown = false; }
+		 */
 
 		Log.d(TAG,
 				"IS_ACCEPT_REJECT_ALERT_PAUSED: "
@@ -200,8 +202,7 @@ public class Connection extends Activity implements OnClickListener {
 		Log.d(TAG, "onPause...SwapAlertDialog value: " + swapAlertDialog);
 		projPreferences.edit()
 				.putBoolean(ProjectConstants.IS_ACTIVITY_PAUSED, true).commit();
-		
-		
+
 		if (swapAlertDialog != null) {
 			swapAlertDialog.dismiss();
 		}
@@ -300,109 +301,120 @@ public class Connection extends Activity implements OnClickListener {
 					Toast.LENGTH_LONG);
 			return;
 		}
-		// check if user is waiting
-		// If user waiting, pair with that user
-		// Else, add yourself to waiting user list and start a service polling
-		// for
-		// another user
-		new AsyncTask<String, Integer, String>() {
-			@Override
-			protected String doInBackground(String... params) {
-				String oppUsername = params[0];
-				String retVal = "";
-				String result = "";
-				boolean foundOpponent = false;
-				if (KeyValueAPI.isServerAvailable()) {
-					String registeredUsersList = KeyValueAPI.get(
-							ProjectConstants.TEAM_NAME,
-							ProjectConstants.PASSWORD,
-							ProjectConstants.REGISTERED_USERS_LIST);
+		Log.w(TAG, "user name: " + projPreferences.getString(ProjectConstants.USER_NAME, "LALALA"));
+		if (!oppUsername.equals(projPreferences.getString(ProjectConstants.USER_NAME,
+						ProjectConstants.OPPONENT))) {
+			// check if user is waiting
+			// If user waiting, pair with that user
+			// Else, add yourself to waiting user list and start a service
+			// polling
+			// for
+			// another user
+			new AsyncTask<String, Integer, String>() {
+				@Override
+				protected String doInBackground(String... params) {
+					String oppUsername = params[0];
+					String retVal = "";
+					String result = "";
+					boolean foundOpponent = false;
+					if (KeyValueAPI.isServerAvailable()) {
+						String registeredUsersList = KeyValueAPI.get(
+								ProjectConstants.TEAM_NAME,
+								ProjectConstants.PASSWORD,
+								ProjectConstants.REGISTERED_USERS_LIST);
 
-					if (registeredUsersList.contains("Error: No Such Key")) {
-						// No player waiting... put your own regId
-						retVal = "Error finding player!";
-					} else {
-						if (registeredUsersList.trim() != "") {
-							String usersArr[] = registeredUsersList.split(",");
-							// Iterate over list of entries in key 'keyname'and
-							// check for val1
-							for (int i = 0; i < usersArr.length; i++) {
-								String tempArr[] = usersArr[i].split("::");
-								String oppName = tempArr[0];
-								String oppRegId = tempArr[1];
+						if (registeredUsersList.contains("Error: No Such Key")) {
+							// No player waiting... put your own regId
+							retVal = "Error finding player!";
+						} else {
+							if (registeredUsersList.trim() != "") {
+								String usersArr[] = registeredUsersList
+										.split(",");
+								// Iterate over list of entries in key
+								// 'keyname'and
+								// check for val1
+								for (int i = 0; i < usersArr.length; i++) {
+									String tempArr[] = usersArr[i].split("::");
+									String oppName = tempArr[0];
+									String oppRegId = tempArr[1];
 
-								if (oppUsername.equalsIgnoreCase(oppName)) {
-									Log.d(TAG, "\noppRegId= " + oppRegId + "\n");
-									Log.d(TAG, "\nregId= " + regId + "\n");
+									if (oppUsername.equalsIgnoreCase(oppName)) {
+										Log.d(TAG, "\noppRegId= " + oppRegId
+												+ "\n");
+										Log.d(TAG, "\nregId= " + regId + "\n");
 
-									// Get opponents regId and connect
-									Log.d(TAG,
-											"Sending connect request to opponent'"
-													+ "opponentName= "
-													+ oppName
-													+ ", opponentRegId= "
-													+ oppRegId);
+										// Get opponents regId and connect
+										Log.d(TAG,
+												"Sending connect request to opponent'"
+														+ "opponentName= "
+														+ oppName
+														+ ", opponentRegId= "
+														+ oppRegId);
 
-									try {
-										result = Util
-												.sendPost(
-														"data."
-																+ Constants.KEY_MSG_TYPE
-																+ "="
-																+ ProjectConstants.MSG_TYPE_FP_CONNECT
-																+ "&data."
-																+ ProjectConstants.KEY_REG_ID
-																+ "="
-																+ regId
-																+ "&data."
-																+ ProjectConstants.KEY_USERNAME
-																+ "="
-																+ username,
-														oppRegId);
-										Log.d(TAG, "Result of HTTP POST: "
-												+ result);
-										// displayMsg("Connected to user:" +
-										// oppName + " (" +
-										// oppRegId + ")");
-										retVal = "Sent connect request to opponent "
-												+ oppName;
-										// sendPost("data=" + myRegId);
-									} catch (Exception e) {
-										// TODO Auto-generated catch block
-										// displayMsg("Error occurred while making an HTTP post call.");
-										retVal = "Error finding player!";
-										e.printStackTrace();
+										try {
+											result = Util
+													.sendPost(
+															"data."
+																	+ Constants.KEY_MSG_TYPE
+																	+ "="
+																	+ ProjectConstants.MSG_TYPE_FP_CONNECT
+																	+ "&data."
+																	+ ProjectConstants.KEY_REG_ID
+																	+ "="
+																	+ regId
+																	+ "&data."
+																	+ ProjectConstants.KEY_USERNAME
+																	+ "="
+																	+ username,
+															oppRegId);
+											Log.d(TAG, "Result of HTTP POST: "
+													+ result);
+											// displayMsg("Connected to user:" +
+											// oppName + " (" +
+											// oppRegId + ")");
+											retVal = "Sent connect request to opponent "
+													+ oppName;
+											// sendPost("data=" + myRegId);
+										} catch (Exception e) {
+											// TODO Auto-generated catch block
+											// displayMsg("Error occurred while making an HTTP post call.");
+											retVal = "Error finding player!";
+											e.printStackTrace();
+										}
+										foundOpponent = true;
+										break;
 									}
-									foundOpponent = true;
-									break;
 								}
 							}
 						}
 					}
+					if (!foundOpponent) {
+						retVal = ProjectConstants.OPPONENT_NOT_FOUND;
+					}
+					Log.d(TAG, "retVal: " + retVal);
+					return retVal;
 				}
-				if (!foundOpponent) {
-					retVal = ProjectConstants.OPPONENT_NOT_FOUND;
-				}
-				Log.d(TAG, "retVal: " + retVal);
-				return retVal;
-			}
 
-			@Override
-			protected void onPostExecute(String result) {
-				// mDisplay.append(msg + "\n");
-				// Toast t = Toast.makeText(getApplicationContext(), result,
-				// 2000);
-				// t.show();
-				Log.d(TAG,
-						"\n===================================================\n");
-				Log.d(TAG, "result: " + result);
-				Util.showToast(context, result, Toast.LENGTH_LONG);
-				if (!result.equals(ProjectConstants.OPPONENT_NOT_FOUND)) {
-					messageTextView
-							.setText("Waiting for opponent's response! ");
+				@Override
+				protected void onPostExecute(String result) {
+					// mDisplay.append(msg + "\n");
+					// Toast t = Toast.makeText(getApplicationContext(), result,
+					// 2000);
+					// t.show();
+					Log.d(TAG,
+							"\n===================================================\n");
+					Log.d(TAG, "result: " + result);
+					Util.showToast(context, result, Toast.LENGTH_LONG);
+					if (!result.equals(ProjectConstants.OPPONENT_NOT_FOUND)) {
+						messageTextView
+								.setText("Waiting for opponent's response! ");
+					}
 				}
-			}
-		}.execute(oppUsername, null, null);
+			}.execute(oppUsername, null, null);
+		} else {
+			Util.showToast(context, ProjectConstants.OPPONENT_SAME_AS_USER,
+					6000);
+		}
 	}
 
 	protected void handleOpponentResponse(String data) {
@@ -499,7 +511,8 @@ public class Connection extends Activity implements OnClickListener {
 
 	private void initiateGame(boolean asPLayerOne) {
 		// Util method to show dialog
-		swapAlertDialog = Util.showSwapPhonesAlertDialog(context, this, true,projPreferences);
+		swapAlertDialog = Util.showSwapPhonesAlertDialog(context, this, true,
+				projPreferences);
 		swapAlertDialog.show();
 		isSwapAlertDialogShown = true;
 

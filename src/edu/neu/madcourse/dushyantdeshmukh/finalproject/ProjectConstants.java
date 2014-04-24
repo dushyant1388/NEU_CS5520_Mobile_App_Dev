@@ -38,6 +38,8 @@ public class ProjectConstants {
 
   public static final String OPPONENT_NOT_FOUND = "Unable to find specified opponent."
       + "Please search for another user or connect to a random opponent.";
+  
+  public static final String OPPONENT_SAME_AS_USER = "You cannot search for your own name as opponent!";
 
   public static final String KEY_NOTIFICATION_DATA = "NOTIFICATION_DATA";
 
