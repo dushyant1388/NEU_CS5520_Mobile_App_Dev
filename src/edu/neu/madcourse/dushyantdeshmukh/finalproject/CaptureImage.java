@@ -25,6 +25,8 @@ public class CaptureImage extends BaseCameraActivity {
 	Bitmap imgArr[];
 	int currImgNo = 0;
 	boolean isSinglePhoneMode, isSwapAlertDialogShown;
+	private boolean isSinglePhoneDialogShown = false;
+	private AlertDialog singlePhoneDialog;
 	int currState;
 	private AlertDialog swapPhonesAlertDialog;
 
@@ -82,6 +84,13 @@ public class CaptureImage extends BaseCameraActivity {
 			swapPhonesAlertDialog.show();
 			isSwapAlertDialogShown = true;
 		}
+		
+		if(isSinglePhoneDialogShown){
+	    	singlePhoneDialog = Util.showSinglePhoneDialog(this,
+	    			Util.nextState(projPreferences),projPreferences);
+	           singlePhoneDialog.show();
+	           isSinglePhoneDialogShown = true;
+	    }
 	}
 
 	private void restoreState() {
@@ -90,6 +99,7 @@ public class CaptureImage extends BaseCameraActivity {
 				.getInt(ProjectConstants.NUMBER_OF_IMAGES, 0);
 		imgCountView.setText("Img Count: " + currImgNo + "/" + totalNoOfImgs);
 		isSwapAlertDialogShown = projPreferences.getBoolean(ProjectConstants.IS_SWAP_ALERT_DIALOG_SHOWN, false);
+		isSinglePhoneDialogShown = projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN, false);
 		Log.d(TAG, "restoreState(): isSwapAlertDialogShown: " + isSwapAlertDialogShown);
 		Log.d(TAG, "Reading Img Count: " + currImgNo);
 	}
@@ -101,6 +111,13 @@ public class CaptureImage extends BaseCameraActivity {
 		if (swapPhonesAlertDialog != null) {
 			swapPhonesAlertDialog.dismiss();
 		}
+		if(singlePhoneDialog != null){
+	    	singlePhoneDialog.dismiss();
+	    }
+	    
+	    if(Util.isQuitDialogShown()){
+	    	Util.dismissQuitDialog();
+	    }
 	}
 
 	private void storeState() {
@@ -108,6 +125,7 @@ public class CaptureImage extends BaseCameraActivity {
 		Editor e = projPreferences.edit();
 		e.putInt(ProjectConstants.NUMBER_OF_IMAGES, currImgNo);
 		e.putBoolean(ProjectConstants.IS_SWAP_ALERT_DIALOG_SHOWN, isSwapAlertDialogShown);
+		e.putBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN, isSinglePhoneDialogShown);
 		e.commit();
 		Log.d(TAG, "storeState(): isSwapAlertDialogShown: " + isSwapAlertDialogShown);
 		Log.d(TAG, "Setting currImgNo: " + currImgNo);
@@ -157,9 +175,10 @@ public class CaptureImage extends BaseCameraActivity {
 			Util.showToast(context, "Finished capturing " + totalNoOfImgs
 					+ " images", 3000);
 			if (isSinglePhoneMode) {
-				// TODO: uncomment and change this.
-				/*Util.showSinglePhoneDialog(this,
-						Util.nextState(projPreferences));*/
+				singlePhoneDialog = Util.showSinglePhoneDialog(this,
+			            Util.nextState(projPreferences),projPreferences);
+			       singlePhoneDialog.show();
+			       isSinglePhoneDialogShown = true;
 			} else {
 				swapPhonesAlertDialog = Util.showSwapPhonesAlertDialog(context,
 						this, false,projPreferences);
