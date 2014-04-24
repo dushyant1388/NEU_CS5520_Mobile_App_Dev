@@ -102,7 +102,7 @@
         
         <activity android:name="edu.neu.madcourse.dushyantdeshmukh.finalproject.Home" 
             	  android:label="@string/final_proj_name"
-            	  android:icon="@drawable/project_launcher"
+            	  android:icon="@drawable/final_proj_app_icon"
             	  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             	  android:screenOrientation="landscape">
             <intent-filter android:label="@string/final_proj_icon_name">

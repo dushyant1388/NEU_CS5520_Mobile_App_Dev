@@ -318,7 +318,7 @@ public class GcmIntentService extends IntentService {
 		
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				this)
-				.setSmallIcon(R.drawable.ic_proj_notification)
+				.setSmallIcon(R.drawable.final_proj_notification_icon)
 				.setContentTitle("Match Me If You Can")
 				.setStyle(
 						new NotificationCompat.BigTextStyle()
