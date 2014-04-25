@@ -174,6 +174,13 @@ public class MatchImage extends BaseCameraActivity {
     	showWaitingAlertDialog();
     	isWaitingAlertDialogShown = true;
     }
+    
+    if(isSinglePhoneDialogShown){
+      singlePhoneDialog = Util.showSinglePhoneDialog(this,
+          currState,projPreferences);
+           singlePhoneDialog.show();
+           isSinglePhoneDialogShown = true;
+    }
   }
 
   @Override
