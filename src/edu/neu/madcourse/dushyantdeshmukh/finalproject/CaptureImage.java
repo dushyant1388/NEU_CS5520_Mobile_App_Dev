@@ -31,11 +31,13 @@ public class CaptureImage extends BaseCameraActivity {
 	private Dialog endGameDialog;
 	int currState;
 	private AlertDialog swapPhonesAlertDialog;
+	SoundHelper soundHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		soundHelper = new SoundHelper(projPreferences);
 		// set final_proj_capture layout as an overlayed layout
 		// on top of the camera preview layout
 		controlInflater = LayoutInflater.from(getBaseContext());
@@ -82,7 +84,9 @@ public class CaptureImage extends BaseCameraActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.d(TAG, "Within onResume() ");
+		Log.d(TAG, "Inside onResume() ");
+		soundHelper.playBgMusic(context);
+		
 		if (isSwapAlertDialogShown){
 			swapPhonesAlertDialog = Util.showSwapPhonesAlertDialog(this, this,
 					false,projPreferences);
@@ -112,7 +116,9 @@ public class CaptureImage extends BaseCameraActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Log.d(TAG, "Within onPause() ");
+		Log.d(TAG, "Inside onPause() ");
+		soundHelper.stopMusic();
+		
 		if (swapPhonesAlertDialog != null) {
 			swapPhonesAlertDialog.dismiss();
 		}

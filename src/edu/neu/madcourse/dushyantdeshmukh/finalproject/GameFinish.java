@@ -27,6 +27,7 @@ public class GameFinish extends Activity implements OnClickListener {
   boolean isSinglePhoneMode;
   boolean isOpponentGameOver;
   int totalNoOfImgs;
+  SoundHelper soundHelper;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +35,9 @@ public class GameFinish extends Activity implements OnClickListener {
     setContentView(R.layout.final_proj_game_finish);
 
     context = this;
-    totalNoOfImgs = Prefs.getNoOfImgs(this);
     projPreferences = getSharedPreferences();
+    soundHelper = new SoundHelper(projPreferences);
+    totalNoOfImgs = Prefs.getNoOfImgs(this);
     isSinglePhoneMode = projPreferences.getBoolean(
         ProjectConstants.IS_SINGLE_PHONE_MODE, false);
 
@@ -78,6 +80,7 @@ public class GameFinish extends Activity implements OnClickListener {
   @Override
   protected void onResume() {
     super.onResume();
+    soundHelper.playBgMusic(context);
     showFinalResultToPlayer();
   }
 
@@ -124,6 +127,7 @@ public class GameFinish extends Activity implements OnClickListener {
   @Override
   protected void onPause() {
     super.onPause();
+    soundHelper.stopMusic();
   }
 
   @Override

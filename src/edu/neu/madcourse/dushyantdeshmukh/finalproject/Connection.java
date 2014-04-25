@@ -49,6 +49,7 @@ public class Connection extends Activity implements OnClickListener {
 	private AlertDialog swapAlertDialog, showAcceptRejectDialog;
 	private boolean isSwapAlertDialogShown = false;
 	GoogleCloudMessaging gcm;
+	SoundHelper soundHelper;
 	Context context;
 
 	public Connection() {
@@ -60,6 +61,8 @@ public class Connection extends Activity implements OnClickListener {
 		setContentView(R.layout.final_proj_connection);
 
 		context = this;
+		projPreferences = getSharedPreferences();
+		soundHelper = new SoundHelper(projPreferences);
 
 		// Set up click listeners for all the buttons
 		opponentNameEditText = (EditText) findViewById(R.id.final_proj_opponent_name_edittext);
@@ -75,8 +78,6 @@ public class Connection extends Activity implements OnClickListener {
 
 		welcomeUserTextView = (TextView) findViewById(R.id.final_proj_welcome_user);
 		messageTextView = (TextView) findViewById(R.id.final_proj_msg);
-
-		projPreferences = getSharedPreferences();
 
 		// This will handle the broadcast
 		receiver = new BroadcastReceiver() {
@@ -136,7 +137,8 @@ public class Connection extends Activity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		soundHelper.playBgMusic(context);
+		
 		checkPlayServices();
 
 		if (checkPlayServices()) {
@@ -197,6 +199,8 @@ public class Connection extends Activity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		soundHelper.stopMusic();
+		
 		unregisterReceiver(receiver);
 		Log.d(TAG, "onPause...");
 		Log.d(TAG, "onPause...SwapAlertDialog value: " + swapAlertDialog);

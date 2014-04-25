@@ -53,6 +53,7 @@ public class MatchImage extends BaseCameraActivity {
   private AlertDialog singlePhoneDialog;
   int currState;
   String oppRegId;
+  SoundHelper soundHelper;
 
   Timer myTimer = new Timer();
   final Handler myTimerHandler = new Handler();
@@ -90,7 +91,8 @@ public class MatchImage extends BaseCameraActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    soundHelper = new SoundHelper(projPreferences);
+    
     // set final_proj_image_to_match and final_proj_match layouts as
     // overlayed layouts on top of the camera preview layout
     controlInflater = LayoutInflater.from(getBaseContext());
@@ -163,6 +165,8 @@ public class MatchImage extends BaseCameraActivity {
   @Override
   protected void onResume() {
     super.onResume();
+    soundHelper.playMatchMusic(context);
+    
     // This needs to be in the activity that will end up receiving the
     // broadcast
     registerReceiver(receiver, new IntentFilter(
@@ -180,6 +184,8 @@ public class MatchImage extends BaseCameraActivity {
   @Override
   protected void onPause() {
     super.onPause();
+    soundHelper.stopMusic();
+    
     unregisterReceiver(receiver);
     Log.d(TAG, "Inside onPause(), startTime = " + startTime);
     projPreferences.edit().putBoolean(ProjectConstants.IS_ACTIVITY_PAUSED, true).commit();

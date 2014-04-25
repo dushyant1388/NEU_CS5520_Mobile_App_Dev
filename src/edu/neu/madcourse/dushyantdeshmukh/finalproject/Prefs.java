@@ -1,6 +1,7 @@
 package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -16,18 +17,32 @@ public class Prefs extends PreferenceActivity {
   private static final String OPT_NO_OF_IMGS_DEFAULT = "3";
   private static final String OPT_MATCHING_DIFF = "matching_difficulty";
   private static final String OPT_MATCHING_DIFF_DEFAULT = "2";
+  SharedPreferences projPreferences;
+  SoundHelper soundHelper;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    
+    projPreferences = getSharedPreferences(ProjectConstants.FINAL_PROJECT,
+        Context.MODE_PRIVATE);
+    soundHelper = new SoundHelper(projPreferences);
+    
     addPreferencesFromResource(R.xml.final_proj_preferences);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
+    soundHelper.playBgMusic(this);
   }
 
+  @Override
+  protected void onPause() {
+    super.onPause();
+    soundHelper.stopMusic();
+  }
+  
   /**
    * Get the current value of the music option
    * 

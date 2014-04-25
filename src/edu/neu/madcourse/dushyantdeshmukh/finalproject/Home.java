@@ -25,6 +25,7 @@ public class Home extends Activity implements OnClickListener {
   private AlertDialog singlePhoneDialog;
   private SharedPreferences projPreferences;
   boolean showTutorial;
+  SoundHelper soundHelper;
 
   public Home() {
   }
@@ -36,6 +37,7 @@ public class Home extends Activity implements OnClickListener {
 
     context = this;
     projPreferences = getSharedPreferences();
+    soundHelper = new SoundHelper(projPreferences);
 
     // Set up click listeners for all the buttons
     dualPhoneModeButton = (ImageButton) findViewById(R.id.final_proj_dual_phone_mode_button);
@@ -55,6 +57,7 @@ public class Home extends Activity implements OnClickListener {
   	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		Log.d(TAG, "Inside onSaveInstance()");
 		projPreferences
 				.edit()
 				.putBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN,
@@ -64,6 +67,7 @@ public class Home extends Activity implements OnClickListener {
   	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState){
 		super.onRestoreInstanceState(savedInstanceState);
+		Log.d(TAG, "Inside onRestoreInstance()");
 		isSinglePhoneDialogShown = projPreferences.getBoolean(ProjectConstants.IS_SINGLE_PHONE_DIALOG_SHOWN, false);
 	}
 
@@ -71,6 +75,9 @@ public class Home extends Activity implements OnClickListener {
   @Override
   protected void onPause() {
     super.onPause();
+    Log.d(TAG, "Inside onPause()");
+    soundHelper.stopMusic();
+    
     if(singlePhoneDialog != null){
     	singlePhoneDialog.dismiss();
     }
@@ -83,6 +90,8 @@ public class Home extends Activity implements OnClickListener {
   @Override
   protected void onResume() {
     super.onResume();
+    Log.d(TAG, "Inside onResume()");
+    soundHelper.playBgMusic(context);
     
     if(isSinglePhoneDialogShown){
     	singlePhoneDialog = Util.showSinglePhoneDialog(this,

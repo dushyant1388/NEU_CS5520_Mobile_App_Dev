@@ -42,6 +42,7 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   private boolean isSinglePhoneDialogShown = false;
   private AlertDialog singlePhoneDialog;
   boolean isSinglePhoneMode;
+  SoundHelper soundHelper;
 
   static {
     initializeOpenCV();
@@ -50,9 +51,8 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    context = this;
-    projPreferences = getSharedPreferences();
+    soundHelper = new SoundHelper(projPreferences);
+    
     isSinglePhoneMode = projPreferences.getBoolean(
         ProjectConstants.IS_SINGLE_PHONE_MODE, false);
     Log.d(TAG, "isSinglePhoneMode = " + isSinglePhoneMode);
@@ -107,6 +107,8 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   @Override
   protected void onResume() {
     super.onResume();
+    soundHelper.playBgMusic(context);
+    
     showMatchBtn(isImg1Present);
     
     if(isSinglePhoneDialogShown){
@@ -130,6 +132,8 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   @Override
   protected void onPause() {
     super.onPause();
+    soundHelper.stopMusic();
+    
     if(singlePhoneDialog != null){
     	singlePhoneDialog.dismiss();
     }

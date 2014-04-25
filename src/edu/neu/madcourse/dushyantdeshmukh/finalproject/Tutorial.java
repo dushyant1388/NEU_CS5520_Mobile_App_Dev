@@ -29,6 +29,7 @@ public class Tutorial extends Activity implements OnClickListener {
   private AlertDialog singlePhoneDialog;
   boolean isSinglePhoneMode;
   int currStepNo = 1;
+  SoundHelper soundHelper;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class Tutorial extends Activity implements OnClickListener {
 
     context = this;
     projPreferences = getSharedPreferences();
+    soundHelper = new SoundHelper(projPreferences);
+    
     isSinglePhoneMode = projPreferences.getBoolean(
         ProjectConstants.IS_SINGLE_PHONE_MODE, false);
     Log.d(TAG, "isSinglePhoneMode = " + isSinglePhoneMode);
@@ -82,6 +85,7 @@ public class Tutorial extends Activity implements OnClickListener {
   @Override
   protected void onPause() {
     super.onPause();
+    soundHelper.stopMusic();
     
     if(singlePhoneDialog != null){
     	singlePhoneDialog.dismiss();
@@ -95,6 +99,8 @@ public class Tutorial extends Activity implements OnClickListener {
   @Override
   protected void onResume() {
     super.onResume();
+    soundHelper.playBgMusic(context);
+    
     currStepNo--;
     showNextStep();
     if(isSinglePhoneDialogShown){
