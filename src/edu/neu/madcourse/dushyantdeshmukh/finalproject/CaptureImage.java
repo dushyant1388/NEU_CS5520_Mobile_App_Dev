@@ -171,7 +171,7 @@ public class CaptureImage extends BaseCameraActivity {
 			showCapturedImg(false);
 			break;
 		case R.id.final_proj_capture_game_end:
-			endGameDialog = Util.showCustomQuitDialog(CaptureImage.this);
+			endGameDialog = Util.showCustomQuitDialog(CaptureImage.this,false,false);
 			endGameDialog.show();
 			break;
 		}

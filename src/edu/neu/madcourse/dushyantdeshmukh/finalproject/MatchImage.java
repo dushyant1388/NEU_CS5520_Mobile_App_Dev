@@ -424,7 +424,7 @@ private void skipToNextimg() {
 	                public void onClick(DialogInterface dialog, int id) {
 	                  dialog.cancel();
 	                  isWaitingAlertDialogShown = false;
-	                  quitAlertDialog = Util.showCustomQuitDialog(MatchImage.this);
+	                  quitAlertDialog = Util.showCustomQuitDialog(MatchImage.this,false,true);
 	                  quitAlertDialog.show();	              
 	                }
 	              });

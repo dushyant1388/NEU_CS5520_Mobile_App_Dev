@@ -27,6 +27,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -954,7 +955,7 @@ public class Util {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int id) {
-								quitDialog = showCustomQuitDialog(staticActivity);
+								quitDialog = showCustomQuitDialog(staticActivity,true,false);
 								quitDialog.show();
 							}
 						});
@@ -963,9 +964,11 @@ public class Util {
 		return alertDialog;
 	}
 	
-	public static Dialog showCustomQuitDialog(Activity context){
+	public static Dialog showCustomQuitDialog(Activity context,boolean isSinglePhoneModeOn, boolean isWaitingEventOn){
 		staticContext = context;
-		final Dialog quitDialog = new Dialog(context);
+		final boolean isSinglePhoneMode = isSinglePhoneModeOn; 
+		final boolean isWaitingMode = isWaitingEventOn; 
+ 		final Dialog quitDialog = new Dialog(context);
 		quitDialog.setContentView(R.layout.final_proj_custom_quit_dialog);
 		quitDialog.setTitle(ProjectConstants.QUIT_TITLE);
 
@@ -992,7 +995,17 @@ public class Util {
 		noButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				quitDialog.dismiss();
+				quitDialog.cancel();
+				if(isSinglePhoneMode){
+					AlertDialog singlePhoneDialog = showSinglePhoneDialog(staticActivity, currState, staticSP);
+					singlePhoneDialog.show();
+				}else{
+					Editor editor = staticSP.edit();
+					if(isWaitingMode){
+						editor.putBoolean(ProjectConstants.IS_WAITING_ALERT_DIALOG_SHOWN, true);
+					}
+					editor.commit();
+				}
 			}
 		});
 		
