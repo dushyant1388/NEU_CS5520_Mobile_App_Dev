@@ -37,6 +37,8 @@ public class GameFinish extends Activity implements OnClickListener {
     context = this;
     projPreferences = getSharedPreferences();
     soundHelper = new SoundHelper(projPreferences);
+    soundHelper.playGameFinishSound(context);
+    
     totalNoOfImgs = Prefs.getNoOfImgs(this);
     isSinglePhoneMode = projPreferences.getBoolean(
         ProjectConstants.IS_SINGLE_PHONE_MODE, false);

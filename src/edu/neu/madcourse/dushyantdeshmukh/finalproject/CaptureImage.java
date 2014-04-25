@@ -160,6 +160,7 @@ public class CaptureImage extends BaseCameraActivity {
 		switch (v.getId()) {
 		case R.id.final_proj_capture:
 			Log.d(TAG, "Clicked on Capture button... taking picture...");
+			soundHelper.playCaptureSound(context);
 			takePicture();
 			break;
 		case R.id.final_proj_accept:

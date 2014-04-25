@@ -148,10 +148,12 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
     switch (v.getId()) {
     case R.id.final_proj_capture:
       Log.d(TAG, "Clicked on Capture button... taking picture...");
+      soundHelper.playCaptureSound(context);
       takePicture();
       break;
     case R.id.final_proj_match:
       Log.d(TAG, "Clicked on Match button... taking & matching picture...");
+      soundHelper.playCaptureSound(context);
       takePicture();
       break;
     case R.id.final_proj_clear:
@@ -220,6 +222,11 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   }
 
   private void showResult(boolean isMatching) {
+    if (isMatching) {
+      soundHelper.playMatchSuccessSound(context);
+    } else {
+      soundHelper.playMatchFailSound(context);
+    }
     String msg = (isMatching ? "Images matched!" : "Images did NOT match!");
     Util.showToast(context, msg, 3000);
   }

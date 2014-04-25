@@ -241,6 +241,7 @@ public class MatchImage extends BaseCameraActivity {
     switch (v.getId()) {
     case R.id.final_proj_match:
       // Log.d(TAG, "Clicked on Capture button... taking picture...");
+      soundHelper.playCaptureSound(context);
       takePicture();
       break;
     case R.id.final_proj_skip:
@@ -324,7 +325,7 @@ private void skipToNextimg() {
     if (Util.imagesMatch(imgMat1, imgMat2, matchingDifficultyLevel)) {
       // if match successful, increment img count and set
       // isImgMatchedArr[currImgNo]
-
+      soundHelper.playMatchSuccessSound(context);
       progress.cancel();
       Util.showToast(context, ProjectConstants.MATCH_SUCCESS_MSG, 1500);
 
@@ -359,6 +360,7 @@ private void skipToNextimg() {
         renderImgToMatch(currImgIndex);
       }
     } else {
+      soundHelper.playMatchFailSound(context);
       progress.cancel();
       Util.showToast(context, ProjectConstants.MATCH_FAIL_MSG, 1500);
     }
