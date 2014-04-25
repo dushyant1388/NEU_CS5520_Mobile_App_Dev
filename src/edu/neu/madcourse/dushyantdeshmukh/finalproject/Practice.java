@@ -44,13 +44,10 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   boolean isSinglePhoneMode;
   SoundHelper soundHelper;
 
-  static {
-    initializeOpenCV();
-  }
-  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    initializeOpenCV();
     soundHelper = new SoundHelper(projPreferences);
     
     isSinglePhoneMode = projPreferences.getBoolean(

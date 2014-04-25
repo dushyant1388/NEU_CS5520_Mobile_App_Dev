@@ -401,18 +401,18 @@ Sample about text. Needs to be updated&#8230;</string>
     <string name="final_proj_end_matching_label">End Matching</string>
     <string name="final_proj_intro_screen_label">App Description</string>
     <string name="final_proj_app_description_text">APP DESCRIPTION \n\n
-        										\'Match Me If You Can\' \n 
-				  								Do you like using your phone camera to click pictures? 
-				  								\'Match Me If You Can\' will allow you play a scavenger hunt photo based exergame \n 
-				  								Play this two player game and click images of objects around the house. Both players will then hunt for the images clicked by one another. \n 
-				  								The player to find maximum images first wins. \n
-				  								It let\'s kids enjoy a fun playing experience while encouraging high levels of physical activity as they run around the house matching images. \n
-				  								\r\n
-				  								Target audience: 8 - 14 year old kids \r\n \r\n
-				  								Team Members: \r\n
-				  								Dushyant Deshmukh (deshmukh.d@husky.neu.edu) \n
-				  								Gaurav Rane (rane.g@husky.neu.edu) \n
-	</string>
+                                                \'Match Me If You Can\' \n 
+                                                Do you like clicking pictures with your phone\'s camera? 
+                                                With \'Match Me If You Can\' you can play a scavenger hunt photo based exergame \n 
+                                                Play this two player game and click images of objects around the house. Both players will then hunt for the images clicked by one another. \n 
+                                                The player to find maximum images first wins. \n
+                                                It let\'s kids enjoy a fun playing experience while encouraging high levels of physical activity as they run around the house matching images. \n
+                                                \r\n
+                                                Target audience: 8 - 14 year old kids \r\n \r\n
+                                                Team Members: \r\n
+                                                Dushyant Deshmukh (deshmukh.d@husky.neu.edu) \n
+                                                Gaurav Rane (rane.g@husky.neu.edu) \n
+    </string>
 	
     <!-- final proj - Preference screen strings -->
     <string name="pref_final_proj_music_title">Music On</string>

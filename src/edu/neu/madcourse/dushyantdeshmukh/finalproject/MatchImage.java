@@ -62,10 +62,8 @@ public class MatchImage extends BaseCameraActivity {
 
   final Runnable timeElapsedRunnable = new Runnable() {
     public void run() {
-     
-      Log.w(TAG, "Time set inside timer: " + Util.getTimeStr(Util.getTimeElapsed(startTime)));
       if(!isSinglePhoneDialogShown){
-		  // increment & update time elapsed text view
+        // increment & update time elapsed text view
     	  timeElapsedView.setText(Util.getTimeStr(Util.getTimeElapsed(startTime)));
       }else{
     	  int timeToShow = projPreferences.getInt(ProjectConstants.PLAYER_1_TIME, 0);
@@ -84,13 +82,10 @@ public class MatchImage extends BaseCameraActivity {
     myTimer.schedule(timeElapsedTimerTask, 0, 1000);
   }
 
-  static {
-    initializeOpenCV();
-  }
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    initializeOpenCV();
     soundHelper = new SoundHelper(projPreferences);
     
     // set final_proj_image_to_match and final_proj_match layouts as
@@ -259,6 +254,10 @@ public class MatchImage extends BaseCameraActivity {
     }
   }
 
+  @Override
+  public void onBackPressed() {
+  }
+  
   private void skipToNextEvent() {
 	  myTimer.cancel();
 	  int timeElapsed = Util.getTimeElapsed(startTime);

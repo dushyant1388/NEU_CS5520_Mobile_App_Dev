@@ -177,6 +177,10 @@ public class CaptureImage extends BaseCameraActivity {
 		}
 	}
 
+	@Override
+  public void onBackPressed() {
+  }
+	
 	private void storeCurrImg() {
 		currImgNo++;
 		imgCountView.setText("Img Count: " + currImgNo + "/" + totalNoOfImgs);
