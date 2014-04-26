@@ -136,7 +136,7 @@ public class Util {
 					String availableUsersVal = KeyValueAPI.get(
 							Constants.TEAM_NAME, Constants.PASSWORD, keyname);
 
-					if (availableUsersVal.contains("Error: No Such Key")) {
+					if (availableUsersVal.contains("Error:")) {
 						Log.d(TAG, "no such key: " + keyname);
 						// No player waiting... put your own regId
 						result = KeyValueAPI
@@ -230,7 +230,7 @@ public class Util {
 					String availableUsersVal = KeyValueAPI.get(
 							Constants.TEAM_NAME, Constants.PASSWORD, keyname);
 
-					if (availableUsersVal.contains("Error: No Such Key")) {
+					if (availableUsersVal.contains("Error:")) {
 						// Specified key does not exist on server
 						retVal = "Specified key does not exist on server.";
 					} else {
@@ -443,7 +443,7 @@ public class Util {
 					String topScorersVal = KeyValueAPI.get(Constants.TEAM_NAME,
 							Constants.PASSWORD, Constants.TOP_SCORERS_LIST);
 
-					if (topScorersVal.contains("Error: No Such Key")) {
+					if (topScorersVal.contains("Error:")) {
 						Log.d(TAG, "no such key: " + Constants.TOP_SCORERS_LIST);
 						// No player waiting... put your own regId
 						result = KeyValueAPI.put(Constants.TEAM_NAME,

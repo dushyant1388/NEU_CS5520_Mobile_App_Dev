@@ -2,19 +2,6 @@ package edu.neu.madcourse.dushyantdeshmukh.finalproject;
 
 import java.io.IOException;
 import java.util.HashMap;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-import edu.neu.madcourse.dushyantdeshmukh.R;
-import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.ChooseOpponent;
-import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
-import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Game;
-import edu.neu.madcourse.dushyantdeshmukh.utilities.AccelerometerManager;
-import edu.neu.madcourse.dushyantdeshmukh.utilities.InternetConnUtil;
-import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
-import edu.neu.mhealth.api.KeyValueAPI;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -35,6 +22,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import edu.neu.madcourse.dushyantdeshmukh.R;
+import edu.neu.madcourse.dushyantdeshmukh.two_player_wordgame.Constants;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.InternetConnUtil;
+import edu.neu.madcourse.dushyantdeshmukh.utilities.Util;
+import edu.neu.mhealth.api.KeyValueAPI;
 
 public class Connection extends Activity implements OnClickListener {
 
@@ -327,7 +322,7 @@ public class Connection extends Activity implements OnClickListener {
 								ProjectConstants.PASSWORD,
 								ProjectConstants.REGISTERED_USERS_LIST);
 
-						if (registeredUsersList.contains("Error: No Such Key")) {
+						if (registeredUsersList.contains("Error:")) {
 							// No player waiting... put your own regId
 							retVal = "Error finding player!";
 						} else {
