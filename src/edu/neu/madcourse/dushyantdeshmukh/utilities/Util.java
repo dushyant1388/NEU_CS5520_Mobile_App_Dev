@@ -130,19 +130,21 @@ public class Util {
 				String keyname = params[0];
 				String val1 = params[1];
 				String val2 = params[2];
-				String retVal = "";
+				String retVal = "Server Unavailable";
 				String result = "";
 				if (KeyValueAPI.isServerAvailable()) {
+					Log.d(TAG, "Inside server available");
 					String availableUsersVal = KeyValueAPI.get(
 							Constants.TEAM_NAME, Constants.PASSWORD, keyname);
 
-					if (availableUsersVal.contains("Error:")) {
+					if (availableUsersVal.toUpperCase().contains("ERROR:")) {
 						Log.d(TAG, "no such key: " + keyname);
+						Log.d(TAG, "availableUsersVal:error= " + availableUsersVal);
 						// No player waiting... put your own regId
 						result = KeyValueAPI
 								.put(Constants.TEAM_NAME, Constants.PASSWORD,
 										keyname, val1 + "::" + val2);
-						if (!result.contains("Error")) {
+						if (!result.toUpperCase().contains("ERROR")) {
 							// displayMsg("No player waiting... putting your regId "
 							// + myRegId + " in WAITING_PLAYER.");
 							retVal = "No player waiting... storing your Username::RegistrationId "
@@ -178,12 +180,14 @@ public class Util {
 							}
 						}
 						if (!valuePresent) {
+							Log.d(TAG, "Inside valuePresent = false");
 							if (availableUsersVal.trim() != "") {
 								availableUsersVal += ",";
 							}
 							// append val1-val2 to value of key 'keyname'
 							availableUsersVal += val1 + "::" + val2;
-
+							
+							Log.d(TAG, "storing availableUsersVal: " + availableUsersVal);
 							// store on server
 							result = KeyValueAPI.put(Constants.TEAM_NAME,
 									Constants.PASSWORD, keyname,
@@ -192,7 +196,7 @@ public class Util {
 							if (!result.contains("Error")) {
 								// displayMsg("Stored your Username-RegistrationId "
 								// + val1 + "::" + val2 + " on server.");
-								retVal = "Stored your Username::RegistrationId "
+								retVal = "SUCCESS: Stored your Username::RegistrationId "
 										+ val1 + "::" + val2 + " on server.";
 							} else {
 								// displayMsg("Error while putting your username-regId on server: "
@@ -209,7 +213,7 @@ public class Util {
 			@Override
 			protected void onPostExecute(String result) {
 				// mDisplay.append(msg + "\n");
-				Log.d(TAG, "addValuesToKeyOnServer" + result);
+				Log.d(TAG, "addValuesToKeyOnServer, result = " + result);
 			}
 		}.execute(keyname, val1, val2);
 	}
@@ -230,7 +234,7 @@ public class Util {
 					String availableUsersVal = KeyValueAPI.get(
 							Constants.TEAM_NAME, Constants.PASSWORD, keyname);
 
-					if (availableUsersVal.contains("Error:")) {
+					if (availableUsersVal.toUpperCase().contains("ERROR:")) {
 						// Specified key does not exist on server
 						retVal = "Specified key does not exist on server.";
 					} else {
@@ -443,7 +447,7 @@ public class Util {
 					String topScorersVal = KeyValueAPI.get(Constants.TEAM_NAME,
 							Constants.PASSWORD, Constants.TOP_SCORERS_LIST);
 
-					if (topScorersVal.contains("Error:")) {
+					if (topScorersVal.toUpperCase().contains("ERROR:")) {
 						Log.d(TAG, "no such key: " + Constants.TOP_SCORERS_LIST);
 						// No player waiting... put your own regId
 						result = KeyValueAPI.put(Constants.TEAM_NAME,
@@ -988,12 +992,12 @@ public class Util {
 				mainMainActivity
 						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				staticContext.startActivity(mainMainActivity);
-				if(!isSinglePhoneMode){	
+				/*if(!isSinglePhoneMode){	
 					Editor editor = staticSP.edit();
 		    	    editor.putBoolean(ProjectConstants.IS_MY_GAME_OVER, true);
 		    	    editor.putBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, false);
 		    	    editor.commit();
-				}
+				}*/
 			}
 		});
 		

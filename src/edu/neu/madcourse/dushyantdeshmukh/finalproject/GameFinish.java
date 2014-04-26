@@ -53,16 +53,11 @@ public class GameFinish extends Activity implements OnClickListener {
 
 		clearAllImages();
 
-		clearFlags();
+		//clearFlags();
 
 	}
 
-	private void clearFlags() {
-		Editor editor = projPreferences.edit();
-		editor.putBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, false);
-		editor.putBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, false);
-		editor.commit();
-	}
+	
 
 	/**
 	 * delete all images captured during the game
@@ -198,9 +193,9 @@ public class GameFinish extends Activity implements OnClickListener {
 
 	public String getResultDetailMsg(String p1Name, String p2Name, int p1Time,
 			int p2Time, int p1ImageCount, int p2ImageCount) {
-		String msg = p1Name + " captured " + p1ImageCount + " out of "
+		String msg = p1Name + " matched " + p1ImageCount + " out of "
 				+ totalNoOfImgs + " images in " + Util.getTimeStr(p1Time)
-				+ " mins \n" + p2Name + " captured " + p2ImageCount
+				+ " mins \n" + p2Name + " matched " + p2ImageCount
 				+ " out of " + totalNoOfImgs + " images in "
 				+ Util.getTimeStr(p2Time) + " mins";
 

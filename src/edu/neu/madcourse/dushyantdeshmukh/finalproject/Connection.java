@@ -232,9 +232,9 @@ public class Connection extends Activity implements OnClickListener {
 			} else {
 				this.username = userName;
 				userNameEditText.setText("");
+				saveUserNameToRegisteredUserList(userName, regId);
 				updateUserDetailsInSharedPreferences(userName);
 				displayUserName(userName);
-				saveUserNameToRegisteredUserList(userName, regId);
 				updateUIButtons();
 			}
 			break;
@@ -322,7 +322,7 @@ public class Connection extends Activity implements OnClickListener {
 								ProjectConstants.PASSWORD,
 								ProjectConstants.REGISTERED_USERS_LIST);
 
-						if (registeredUsersList.contains("Error:")) {
+						if (registeredUsersList.toUpperCase().contains("ERROR:")) {
 							// No player waiting... put your own regId
 							retVal = "Error finding player!";
 						} else {
