@@ -401,6 +401,7 @@ private void skipToNextimg() {
     // TODO: change time
     editor.putInt(ProjectConstants.PLAYER_TIME, timeElapsed);
     editor.putInt(ProjectConstants.PLAYER_IMAGE_COUNT, imagesMatched);
+    editor.putBoolean(ProjectConstants.IS_MY_GAME_OVER, true);
     editor.commit();
 
     Log.d(TAG, "PLAYER TIME: " + timeElapsed + "PLAYER_IMAGE_COUNT: "
