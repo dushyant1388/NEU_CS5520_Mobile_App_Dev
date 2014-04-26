@@ -16,6 +16,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical" >
 		
         <edu.neu.madcourse.dushyantdeshmukh.utilities.MyTextView
@@ -23,6 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
+            android:layout_marginTop="15dp"
             android:visibility="gone"
             android:padding="20dp" />
         
@@ -66,7 +68,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"
             android:layout_margin="10dp"
             android:text="@string/final_proj_back_to_main_menu_label" />
       

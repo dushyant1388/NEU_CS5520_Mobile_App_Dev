@@ -337,6 +337,7 @@ public class Util {
 			String opponentName, String opponentRegId) {
 		// Store opponent name and regId in SP
 		Editor ed = sp.edit();
+		Log.d(TAG, "Opp Name: " + opponentName);
 		ed.putString(Constants.PREF_OPPONENT_REG_ID, opponentRegId);
 		ed.putString(Constants.PREF_OPPONENT_NAME, opponentName);
 		ed.commit();
@@ -987,6 +988,12 @@ public class Util {
 				mainMainActivity
 						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				staticContext.startActivity(mainMainActivity);
+				if(!isSinglePhoneMode){	
+					Editor editor = staticSP.edit();
+		    	    editor.putBoolean(ProjectConstants.IS_MY_GAME_OVER, true);
+		    	    editor.putBoolean(ProjectConstants.IS_OPPONENT_GAME_OVER, false);
+		    	    editor.commit();
+				}
 			}
 		});
 		

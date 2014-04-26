@@ -47,6 +47,7 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Log.d(TAG, "inside oncreate: initializing openCV");
     initializeOpenCV();
     soundHelper = new SoundHelper(projPreferences);
     
@@ -225,7 +226,7 @@ public class Practice extends BaseCameraActivity implements OnClickListener {
       soundHelper.playMatchFailSound(context);
     }
     String msg = (isMatching ? "Images matched!" : "Images did NOT match!");
-    Util.showToast(context, msg, 3000);
+    Util.showToast(context, msg, 2000);
   }
 
   @Override

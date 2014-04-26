@@ -256,6 +256,7 @@ public abstract class BaseCameraActivity extends Activity implements
    * Initializes the openCV library
    */
   protected static void initializeOpenCV() {
+	  Log.d(TAG, "inside initializeOpenCV: initializing openCV");
     if (OpenCVLoader.initDebug()) {
       Log.i(TAG, "OpenCV library initialized successfully");
     } else {

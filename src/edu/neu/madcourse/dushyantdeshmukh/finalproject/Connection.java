@@ -233,7 +233,7 @@ public class Connection extends Activity implements OnClickListener {
 
 			if (userName.equals("")) {
 				Util.showToast(context, "Please enter a non empty userName!",
-						Toast.LENGTH_LONG);
+						2000);
 			} else {
 				this.username = userName;
 				userNameEditText.setText("");
@@ -250,7 +250,7 @@ public class Connection extends Activity implements OnClickListener {
 			if (oppUsername.equals("")) {
 				Util.showToast(context,
 						"Please enter a valid opponent username value!",
-						Toast.LENGTH_LONG);
+						2000);
 			} else {
 				opponentEditText.setText("");
 				findOpponent(oppUsername);
@@ -267,7 +267,7 @@ public class Connection extends Activity implements OnClickListener {
 	private void saveUserNameToRegisteredUserList(String userName, String regId) {
 		if (!InternetConnUtil.isNetworkAvailable(context)) {
 			Util.showToast(context, Constants.NETWORK_UNAVAILABLE_MSG,
-					Toast.LENGTH_LONG);
+					4000);
 			return;
 		}
 
@@ -302,7 +302,7 @@ public class Connection extends Activity implements OnClickListener {
 	private void findOpponent(String oppUsername) {
 		if (!InternetConnUtil.isNetworkAvailable(context)) {
 			Util.showToast(context, Constants.NETWORK_UNAVAILABLE_MSG,
-					Toast.LENGTH_LONG);
+					4000);
 			return;
 		}
 		Log.w(TAG, "user name: " + projPreferences.getString(ProjectConstants.USER_NAME, "LALALA"));
@@ -376,7 +376,7 @@ public class Connection extends Activity implements OnClickListener {
 											// displayMsg("Connected to user:" +
 											// oppName + " (" +
 											// oppRegId + ")");
-											retVal = "Sent connect request to opponent "
+											retVal = "Sent game request to "
 													+ oppName;
 											// sendPost("data=" + myRegId);
 										} catch (Exception e) {
@@ -411,13 +411,13 @@ public class Connection extends Activity implements OnClickListener {
 					Util.showToast(context, result, Toast.LENGTH_LONG);
 					if (!result.equals(ProjectConstants.OPPONENT_NOT_FOUND)) {
 						messageTextView
-								.setText("Waiting for opponent's response! ");
+								.setText("Waiting for opponent's response!");
 					}
 				}
 			}.execute(oppUsername, null, null);
 		} else {
 			Util.showToast(context, ProjectConstants.OPPONENT_SAME_AS_USER,
-					6000);
+					4000);
 		}
 	}
 
@@ -456,6 +456,11 @@ public class Connection extends Activity implements OnClickListener {
 								this.oppRegId).commit();
 				Log.d(TAG, "\n\n Setting this.oppRegId in SP: " + this.oppRegId
 						+ "\n\n");
+				
+				projPreferences
+				.edit()
+				.putString(ProjectConstants.POTENTIAL_OPPONENT_NAME,
+						this.oppName).commit();
 
 				// Show 'Connected to Opponent' msg and go to Game activity
 				// String opponentName = dataMap.get(Constants.KEY_USERNAME);
@@ -467,8 +472,8 @@ public class Connection extends Activity implements OnClickListener {
 				// Show 'Request reject' toast and stay on Choose Opponent
 				// activity
 				// String opponentName = dataMap.get(Constants.KEY_USERNAME);
-				Util.showToast(context, "Game request denied by user '"
-						+ oppName + "'.", Toast.LENGTH_LONG);
+				Util.showToast(context, "Game request denied by "
+						+ oppName + ".", 2500);
 			}
 		}
 	}
@@ -477,11 +482,10 @@ public class Connection extends Activity implements OnClickListener {
 		AlertDialog.Builder builder = new AlertDialog.Builder(Connection.this);
 		builder.setCancelable(true);
 		builder.setTitle("Game Request");
-		builder.setMessage("User '"
-				+ projPreferences.getString(
+		builder.setMessage(projPreferences.getString(
 						ProjectConstants.POTENTIAL_OPPONENT_NAME,
 						ProjectConstants.OPPONENT)
-				+ "' has sent a game request.");
+				+ " has sent a game request.");
 		builder.setPositiveButton("Accept",
 				new DialogInterface.OnClickListener() {
 					@Override
@@ -618,7 +622,7 @@ public class Connection extends Activity implements OnClickListener {
 						}
 						regId = gcm.register(ProjectConstants.SENDER_ID);
 						// msg = "Device registered, registration ID=" + regid;
-						msg = "Device registered for the first time...";
+						msg = "User name stored successfully!";
 						storeRegistrationId(context, regId);
 					} catch (IOException ex) {
 						msg = "Error :" + ex.getMessage();
@@ -637,7 +641,7 @@ public class Connection extends Activity implements OnClickListener {
 
 			}.execute(null, null, null);
 		} else {
-			Util.showToast(context, "No network available!", Toast.LENGTH_LONG);
+			Util.showToast(context, "No network available!", 4000);
 		}
 	}
 

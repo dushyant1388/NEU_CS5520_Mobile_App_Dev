@@ -193,7 +193,7 @@ public class CaptureImage extends BaseCameraActivity {
 		if (currImgNo >= totalNoOfImgs) {
 			// finished capturing images
 			Util.showToast(context, "Finished capturing " + totalNoOfImgs
-					+ " images", 3000);
+					+ " images", 1500);
 			if (isSinglePhoneMode) {
 				singlePhoneDialog = Util.showSinglePhoneDialog(this,
 			            Util.nextState(projPreferences),projPreferences);

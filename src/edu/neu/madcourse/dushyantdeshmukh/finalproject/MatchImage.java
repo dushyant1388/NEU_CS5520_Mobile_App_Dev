@@ -255,6 +255,9 @@ public class MatchImage extends BaseCameraActivity {
     	}else{
     		myTimer.cancel();
     		int timeElapsed = Util.getTimeElapsed(startTime);
+    		Editor editor = projPreferences.edit();
+    	    editor.putBoolean(ProjectConstants.IS_MY_GAME_OVER, true);
+    	    editor.commit();
     		handleDualPhoneEndOfMatching(timeElapsed);
     	}
       break;
@@ -350,7 +353,7 @@ private void skipToNextimg() {
         myTimer.cancel();
         // finished matching images
         Util.showToast(context, "Finished matching " + totalNoOfImgs
-            + " images", 3000);
+            + " images", 1500);
 
         int timeElapsed = Util.getTimeElapsed(startTime);
 
@@ -469,19 +472,19 @@ private void skipToNextimg() {
             Integer.parseInt(opponent_num_of_images));
         editor.commit();
 
-        if (imagesMatched == totalNoOfImgs) {
-          /*if (alertDialog != null) {
-            alertDialog.dismiss();
-          }*/
+        boolean isMyGameOver = projPreferences.getBoolean(ProjectConstants.IS_MY_GAME_OVER, false);
+        if (imagesMatched == totalNoOfImgs || isMyGameOver) {
           startGameFinishActivity();
         }
+        
       } else if (msgType.equals(ProjectConstants.MSG_TYPE_FP_MOVE)) {
         Log.d(TAG, "Inside MSG_TYPE_FP_MOVE = "
             + ProjectConstants.MSG_TYPE_FP_MOVE);
         // Show toast that opponent found out new Image
         String oppName = projPreferences.getString(ProjectConstants.PREF_OPPONENT_NAME, ProjectConstants.OPPONENT);
+        Log.d(TAG, "Handle Opp Response: Opp name: " + projPreferences.getString(ProjectConstants.PREF_OPPONENT_NAME, ProjectConstants.OPPONENT));
         String imageNumber = dataMap.get(ProjectConstants.NUMBER_OF_IMAGES);
-        Util.showToast(this,  oppName + " matched image number " + imageNumber + "!", Toast.LENGTH_LONG);
+        Util.showToast(this,  oppName + " matched image number " + imageNumber + "!", 1500);
       }
     }
   }
